@@ -103,7 +103,7 @@ class _CustomerSignUpScreennState extends State<CustomerSignUpScreen> {
                     backgroundImage: _image != null ? FileImage(_image!) : null,
                   ),
                   CustomSizedBox(
-                    width: customHeightWidth(context, width: true) / 1.2,
+                    width: customHeightWidth(context, width: true) * 0.06,
                   ),
                   Column(
                     children: [

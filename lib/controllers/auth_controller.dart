@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,12 +59,22 @@ class AuthController {
     dismissLoading();
   }
 
+  Future<DocumentSnapshot<Map<String, dynamic>>> userInfo() async {
+    loading();
+    dynamic jwt = await readFromSharedPreferences('customerUid');
+    String customerUid = jwt;
+    var collectionReference = FirebaseFirestore.instance.collection('users');
+    var profileData = collectionReference.doc(customerUid).get();
+
+    return profileData;
+  }
+
   Future<void> logout(context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     loading();
     await auth.signOut();
     await saveToSharedPreferences(sharedPrefCustomerUid, null);
-    navigationPush(context, screenWidget: CustomerSignUpScreen());
     dismissLoading();
+    navigationPush(context, screenWidget: CustomerSignUpScreen());
   }
 }

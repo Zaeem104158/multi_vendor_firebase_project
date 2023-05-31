@@ -10,10 +10,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String AppLogo = "assets/images/logo.png";
-
+//Application image paths
+const String appLogo_image = "assets/images/logo.png";
+const String user_placeholder_image =
+    'assets/images/user_placeholder_image.png';
+//Shared Preference Stored Datas
 const String sharedPrefCustomerUid = 'customerUid';
-
+//DashBoard Bottom Names
 const String bottomHome = 'Home';
 const String bottomSearch = 'Category';
 const String bottomShop = 'Shop';
