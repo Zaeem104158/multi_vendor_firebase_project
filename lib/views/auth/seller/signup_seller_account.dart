@@ -23,24 +23,13 @@ class SellerSignUpScreen extends StatefulWidget {
 }
 
 class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
-  late TextEditingController _fullNameTextEditingController =
-      TextEditingController();
-
-  late TextEditingController _emailTextEditingController =
-      TextEditingController();
-
-  late TextEditingController _passwordTextEditingController =
-      TextEditingController();
-
   final AuthController _authController = AuthController();
-  final FocusNode _focusNode = FocusNode();
-  File? _image;
 
   Future _getImage(ImageSource source) async {
     final pickedImage = await ImagePicker().pickImage(source: source);
     setState(() {
       if (pickedImage != null) {
-        _image = File(pickedImage.path);
+        _authController.image = File(pickedImage.path);
       }
     });
   }
@@ -52,10 +41,10 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
 
   @override
   void dispose() {
-    _fullNameTextEditingController.dispose();
-    _emailTextEditingController.dispose();
-    _passwordTextEditingController.dispose();
-    _focusNode.unfocus();
+    _authController.fullNameTextEditingController.dispose();
+    _authController.emailTextEditingController.dispose();
+    _authController.passwordTextEditingController.dispose();
+    _authController.focusNode.unfocus();
     super.dispose();
   }
 
@@ -99,7 +88,9 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
                   CircleAvatar(
                     backgroundColor: blackColor.withOpacity(0.4),
                     radius: 60.0,
-                    backgroundImage: _image != null ? FileImage(_image!) : null,
+                    backgroundImage: _authController.image != null
+                        ? FileImage(_authController.image!)
+                        : null,
                   ),
                   CustomSizedBox(
                     width: customHeightWidth(context, width: true) * 0.06,
@@ -156,7 +147,8 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
               formFieldBorderRadius: 15.0,
               focusedBorderColor: Colors.green,
               focusedBorderWidth: 2,
-              textEditingController: _fullNameTextEditingController,
+              textEditingController:
+                  _authController.fullNameTextEditingController,
               isValidate: false,
             ),
             CustomTextFormFieldComponent(
@@ -174,7 +166,7 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
               formFieldBorderRadius: 15.0,
               focusedBorderColor: Colors.green,
               focusedBorderWidth: 2,
-              textEditingController: _emailTextEditingController,
+              textEditingController: _authController.emailTextEditingController,
             ),
             CustomPasswordFormFieldComponent(
               padding: EdgeInsets.all(16.0),
@@ -193,23 +185,26 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
               focusedBorderWidth: 2.0,
               enabledBorderColor: blackColor.withOpacity(0.6),
               enabledBorderWidth: 2.0,
-              textEditingController: _passwordTextEditingController,
+              textEditingController:
+                  _authController.passwordTextEditingController,
             ),
             CustomSizedBox(
               height: customHeightWidth(context, height: true) / 150,
             ),
             GestureDetector(
               onTap: isSignUpValidated(
-                      fullName: _fullNameTextEditingController.text,
-                      email: _emailTextEditingController.text,
-                      password: _passwordTextEditingController.text,
-                      imageFile: _image)
+                      fullName:
+                          _authController.fullNameTextEditingController.text,
+                      email: _authController.emailTextEditingController.text,
+                      password:
+                          _authController.passwordTextEditingController.text,
+                      imageFile: _authController.image)
                   ? () {
                       var response = _authController.signUpSeller(
-                          _fullNameTextEditingController.text,
-                          _emailTextEditingController.text,
-                          _passwordTextEditingController.text,
-                          _image);
+                          _authController.fullNameTextEditingController.text,
+                          _authController.emailTextEditingController.text,
+                          _authController.passwordTextEditingController.text,
+                          _authController.image);
                       closeSoftKeyBoard();
                       if (response != null) {
                         Timer(Duration(seconds: 3), () {
@@ -224,10 +219,13 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
                 width: customHeightWidth(context, width: true) - 40.0,
                 decoration: BoxDecoration(
                     color: isSignUpValidated(
-                            fullName: _fullNameTextEditingController.text,
-                            email: _emailTextEditingController.text,
-                            password: _passwordTextEditingController.text,
-                            imageFile: _image)
+                            fullName: _authController
+                                .fullNameTextEditingController.text,
+                            email:
+                                _authController.emailTextEditingController.text,
+                            password: _authController
+                                .passwordTextEditingController.text,
+                            imageFile: _authController.image)
                         ? Colors.green
                         : Colors.grey,
                     borderRadius: BorderRadius.circular(15.0)),

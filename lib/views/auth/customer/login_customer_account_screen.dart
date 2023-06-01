@@ -11,7 +11,7 @@ import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
-import 'package:firebase_multi_vendor_project/views/dashboard/customer_bottom_widget_screen.dart';
+import 'package:firebase_multi_vendor_project/views/home/customer_bottom_widget_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomerLoginScreen extends StatefulWidget {
@@ -22,14 +22,8 @@ class CustomerLoginScreen extends StatefulWidget {
 }
 
 class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
-  late TextEditingController _emailTextEditingController =
-      TextEditingController();
-
-  late TextEditingController _passwordTextEditingController =
-      TextEditingController();
-
   final AuthController _authController = AuthController();
-  final FocusNode _focusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -37,9 +31,9 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
 
   @override
   void dispose() {
-    _emailTextEditingController.dispose();
-    _passwordTextEditingController.dispose();
-    _focusNode.dispose();
+    _authController.emailTextEditingController.dispose();
+    _authController.passwordTextEditingController.dispose();
+    _authController.focusNode.dispose();
     super.dispose();
   }
 
@@ -95,7 +89,7 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
               formFieldBorderRadius: 15.0,
               focusedBorderColor: Colors.green,
               focusedBorderWidth: 2,
-              textEditingController: _emailTextEditingController,
+              textEditingController: _authController.emailTextEditingController,
             ),
             CustomPasswordFormFieldComponent(
               padding: EdgeInsets.all(16.0),
@@ -114,20 +108,21 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
               focusedBorderWidth: 2.0,
               enabledBorderColor: blackColor.withOpacity(0.6),
               enabledBorderWidth: 2.0,
-              textEditingController: _passwordTextEditingController,
+              textEditingController:
+                  _authController.passwordTextEditingController,
             ),
             CustomSizedBox(
               height: customHeightWidth(context, height: true) / 80,
             ),
             GestureDetector(
               onTap: isLoginValidated(
-                email: _emailTextEditingController.text,
-                password: _passwordTextEditingController.text,
+                email: _authController.emailTextEditingController.text,
+                password: _authController.passwordTextEditingController.text,
               )
                   ? () {
                       var response = _authController.loginCustomer(
-                          _emailTextEditingController.text,
-                          _passwordTextEditingController.text);
+                          _authController.emailTextEditingController.text,
+                          _authController.passwordTextEditingController.text);
                       closeSoftKeyBoard();
                       if (response != null) {
                         Timer(Duration(seconds: 3), () {
@@ -142,8 +137,10 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
                 width: customHeightWidth(context, width: true) - 40.0,
                 decoration: BoxDecoration(
                     color: isLoginValidated(
-                            email: _emailTextEditingController.text,
-                            password: _passwordTextEditingController.text)
+                            email:
+                                _authController.emailTextEditingController.text,
+                            password: _authController
+                                .passwordTextEditingController.text)
                         ? Colors.green
                         : Colors.grey,
                     borderRadius: BorderRadius.circular(15.0)),

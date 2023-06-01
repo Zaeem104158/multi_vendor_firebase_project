@@ -3,9 +3,9 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_screen.dart';
-import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
-import 'package:firebase_multi_vendor_project/views/profie/profile_screen.dart';
-import 'package:firebase_multi_vendor_project/views/shop/shop_screen.dart';
+import 'package:firebase_multi_vendor_project/views/home/customer_home_screen.dart';
+import 'package:firebase_multi_vendor_project/views/profie/customer_profile_screen.dart';
+import 'package:firebase_multi_vendor_project/views/shop/customer_shop_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBottomWidgetScreen extends StatefulWidget {
@@ -21,11 +21,11 @@ class _CustomerBottomWidgetScreenState
   final AuthController authController = AuthController();
   int selectedIndex = 0;
   final List<Widget> screens = [
-    HomeScreen(),
+    CustomerHomeScreen(),
     CategoryScreen(),
-    ShopScreen(),
+    CustomerShopScreen(),
     CartScreen(),
-    ProfileScreen()
+    CustomerProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {

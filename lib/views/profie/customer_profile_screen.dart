@@ -10,14 +10,14 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class CustomerProfileScreen extends StatefulWidget {
+  const CustomerProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<CustomerProfileScreen> createState() => _CustomerProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   final AuthController authController = AuthController();
 
   @override

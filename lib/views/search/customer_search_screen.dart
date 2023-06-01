@@ -2,8 +2,8 @@ import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+class CustomerSearchScreen extends StatelessWidget {
+  const CustomerSearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

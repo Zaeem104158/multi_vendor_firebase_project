@@ -6,8 +6,20 @@ import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_account.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 class AuthController {
+  final TextEditingController emailTextEditingController =
+      TextEditingController();
+
+  final TextEditingController passwordTextEditingController =
+      TextEditingController();
+
+  final TextEditingController fullNameTextEditingController =
+      TextEditingController();
+  File? image;
+  final FocusNode focusNode = FocusNode();
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;

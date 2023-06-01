@@ -2,10 +2,10 @@ import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_screen.dart';
-import 'package:firebase_multi_vendor_project/views/dashboard/seller_dashboard_screen.dart';
-import 'package:firebase_multi_vendor_project/views/dashboard/seller_upload_products_screen.dart';
-import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
-import 'package:firebase_multi_vendor_project/views/shop/shop_screen.dart';
+import 'package:firebase_multi_vendor_project/views/sellerdashboard/seller_dashboard_screen.dart';
+import 'package:firebase_multi_vendor_project/views/home/customer_home_screen.dart';
+import 'package:firebase_multi_vendor_project/views/sellerdashboard/upload/seller_upload_products_screen.dart';
+import 'package:firebase_multi_vendor_project/views/shop/customer_shop_screen.dart';
 import 'package:flutter/material.dart';
 
 class SellerBottomWidgetScreen extends StatefulWidget {
@@ -20,9 +20,9 @@ class _SellerBottomWidgetScreenState extends State<SellerBottomWidgetScreen> {
   final AuthController authController = AuthController();
   int selectedIndex = 0;
   final List<Widget> screens = [
-    HomeScreen(),
+    CustomerHomeScreen(),
     CategoryScreen(),
-    ShopScreen(),
+    CustomerShopScreen(),
     SellerDashBoardScreen(),
     SellerUploadProductsScreen()
   ];
