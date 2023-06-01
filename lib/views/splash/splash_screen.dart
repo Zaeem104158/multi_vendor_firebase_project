@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    startTime(context);
+    // startTime(context);
     isInternetConnected(context).then((internet) {
       if (internet) {
         // Internet Present Case

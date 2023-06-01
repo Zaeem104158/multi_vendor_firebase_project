@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         builder: EasyLoading.init(),
         theme: ThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+              counterStyle: TextStyle(
+                  color: blackColor, fontWeight: regularBoldFontWeight)),
           fontFamily: 'RobotoMono',
           primarySwatch: Colors.blue,
         ),

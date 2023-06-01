@@ -63,7 +63,6 @@ class _CustomPasswordFormFieldComponentState
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
-          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
               label: CustomTextComponet(
                   textTitle: widget.formFieldLabel,

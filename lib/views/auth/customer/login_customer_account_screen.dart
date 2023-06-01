@@ -3,23 +3,25 @@ import 'package:firebase_multi_vendor_project/components/icon_button_component.d
 import 'package:firebase_multi_vendor_project/components/password_form_field_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
-import 'package:firebase_multi_vendor_project/components/textform_field_component.dart';
+import 'package:firebase_multi_vendor_project/components/text_formfield_component.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/email_password_validator.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
-import 'package:firebase_multi_vendor_project/views/dashboard/dashboard_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
+import 'package:firebase_multi_vendor_project/views/dashboard/customer_bottom_widget_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomerLoginScreen extends StatefulWidget {
   CustomerLoginScreen({super.key});
 
   @override
-  State<CustomerLoginScreen> createState() => _CustomerLoginScreenScreenState();
+  State<CustomerLoginScreen> createState() => _CustomerLoginScreenState();
 }
 
-class _CustomerLoginScreenScreenState extends State<CustomerLoginScreen> {
+class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
   late TextEditingController _emailTextEditingController =
       TextEditingController();
 
@@ -81,6 +83,7 @@ class _CustomerLoginScreenScreenState extends State<CustomerLoginScreen> {
               padding: EdgeInsets.all(16.0),
               isBorderEnable: true,
               formFieldLabel: "Email",
+              isEmail: true,
               formFieldLabelColor: blackColor,
               formFieldLabelWeight: FontWeight.bold,
               formFieldLabelPadding: EdgeInsets.all(2),
@@ -122,14 +125,14 @@ class _CustomerLoginScreenScreenState extends State<CustomerLoginScreen> {
                 password: _passwordTextEditingController.text,
               )
                   ? () {
-                      var response = _authController.loginUser(
+                      var response = _authController.loginCustomer(
                           _emailTextEditingController.text,
                           _passwordTextEditingController.text);
                       closeSoftKeyBoard();
                       if (response != null) {
                         Timer(Duration(seconds: 3), () {
                           navigationPush(context,
-                              screenWidget: DashBoardScreen());
+                              screenWidget: CustomerBottomWidgetScreen());
                         });
                       }
                     }
@@ -167,7 +170,8 @@ class _CustomerLoginScreenScreenState extends State<CustomerLoginScreen> {
                 CustomTextComponet(
                   isClickAble: true,
                   onPressed: () {
-                    navigationPop(context);
+                    navigationPush(context,
+                        screenWidget: CustomerSignUpScreen());
                   },
                   textTitle: "Sign Up",
                   fontColor: Colors.grey,
@@ -186,10 +190,12 @@ class _CustomerLoginScreenScreenState extends State<CustomerLoginScreen> {
                   textPadding: EdgeInsets.all(16.0),
                   fontWeight: regularBoldFontWeight,
                   fontColor: blackColor,
+                  isClickAble: false,
                 ),
                 CustomTextComponet(
                   isClickAble: true,
-                  onPressed: () {},
+                  onPressed: () => navigationPush(context,
+                      screenWidget: SellerSignUpScreen()),
                   textTitle: "Sign Up",
                   fontColor: Colors.grey,
                   textPadding: EdgeInsets.all(16.0),

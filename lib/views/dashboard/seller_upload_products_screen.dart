@@ -1,0 +1,280 @@
+import 'dart:developer';
+import 'dart:io';
+import 'package:firebase_multi_vendor_project/components/design_component.dart';
+import 'package:firebase_multi_vendor_project/components/text_component.dart';
+import 'package:firebase_multi_vendor_project/components/text_formfield_component.dart';
+import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+class SellerUploadProductsScreen extends StatefulWidget {
+  SellerUploadProductsScreen({super.key});
+
+  @override
+  State<SellerUploadProductsScreen> createState() =>
+      _SellerUploadProductsScreenState();
+}
+
+class _SellerUploadProductsScreenState
+    extends State<SellerUploadProductsScreen> {
+  final AuthController authController = AuthController();
+
+  final TextEditingController productNameController = TextEditingController();
+
+  final TextEditingController productPriceController = TextEditingController();
+
+  final TextEditingController productQuantityController =
+      TextEditingController();
+
+  final TextEditingController productDescriptionController =
+      TextEditingController();
+  File? _image;
+  final picker = ImagePicker();
+  List<XFile> _multipleImages = [];
+  String _selectedItem = 'men';
+  List<String> _dropdownItems = ['men', 'women', 'kids', 'phone'];
+  Future getImage(ImageSource source, {bool isMultipleImages = false}) async {
+    try {
+      if (!isMultipleImages) {
+        final pickedFile = await picker.pickImage(source: source);
+        setState(() {
+          if (pickedFile != null) {
+            _image = File(pickedFile.path);
+            // log("Image path : $_image");
+          } else {
+            log('No image selected.');
+          }
+        });
+      } else {
+        final pickedFiles = await picker.pickMultiImage();
+        setState(() {
+          if (pickedFiles.length != 0) {
+            _multipleImages = pickedFiles;
+            log("Image paths: $_multipleImages");
+          } else {
+            log('No image selected.');
+          }
+        });
+      }
+    } catch (e) {
+      log("Something went wrong");
+    }
+  }
+
+  Widget displayMultipleImages() {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _multipleImages.length,
+        itemBuilder: (context, int index) {
+          return Image.file(
+            File(_multipleImages[index].path),
+            fit: BoxFit.fill,
+            filterQuality: FilterQuality.high,
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    height: customHeightWidth(context, height: true) * 0.3,
+                    width: customHeightWidth(context, width: true) * 0.5,
+                    color: blueGreyColor.withOpacity(0.9),
+                    child: _multipleImages.isNotEmpty && _image == null
+                        ? displayMultipleImages()
+                        : CustomTextComponet(
+                            isClickAble: false,
+                            isCenterText: true,
+                            textTitle: "You haven't pick \n \nany image",
+                            fontColor: blackColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                  ),
+                  Column(
+                    children: [
+                      Column(
+                        children: [
+                          CustomTextComponet(
+                            textTitle: "Select Category\nHere",
+                            textPadding: EdgeInsets.all(4),
+                          ),
+                          DropdownButton<String>(
+                            value: _selectedItem,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedItem = newValue!;
+                              });
+                            },
+                            items: _dropdownItems.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: CustomTextComponet(
+                                  textTitle: "$value".toUpperCase(),
+                                  textPadding: EdgeInsets.all(2),
+                                  isCenterText: true,
+                                  isClickAble: true,
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        ],
+                      ),
+                      ElevatedButton.icon(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(blackColor)),
+                          onPressed: () {
+                            _multipleImages = [];
+                          },
+                          icon: Icon(Icons.delete_forever),
+                          label: CustomTextComponet(
+                            isCenterText: true,
+                            isClickAble: true,
+                            fontColor: whiteColor,
+                            textTitle: "Delete Image",
+                          ))
+                    ],
+                  ),
+                ],
+              ),
+              Divider(
+                color: cyanColor,
+                thickness: 2,
+              ),
+              CustomTextFormFieldComponent(
+                padding: EdgeInsets.all(16.0),
+                isBorderEnable: true,
+                formFieldLabel: "Product Name",
+                maxLine: 2,
+                isEmail: false,
+                formFieldLabelColor: blackColor,
+                formFieldLabelWeight: FontWeight.bold,
+                formFieldLabelPadding: EdgeInsets.all(2),
+                formFieldLabelSize: 16,
+                formFieldHintColor: blackColor.withOpacity(0.4),
+                formFieldHintSize: 12,
+                formFieldHintWeight: FontWeight.bold,
+                formFieldhHintText: "Enter your product name",
+                formFieldBorderRadius: 30.0,
+                focusedBorderColor: Colors.green,
+                focusedBorderWidth: 2,
+                textEditingController: productNameController,
+              ),
+              CustomTextFormFieldComponent(
+                padding: EdgeInsets.all(16.0),
+                isBorderEnable: true,
+                formFieldLabel: "Quantity",
+                maxLine: 1,
+                isEmail: false,
+                keyboardType: TextInputType.number,
+                formFieldLabelColor: blackColor,
+                formFieldLabelWeight: FontWeight.bold,
+                formFieldLabelPadding: EdgeInsets.all(2),
+                formFieldLabelSize: 16,
+                formFieldHintColor: blackColor.withOpacity(0.4),
+                formFieldHintSize: 12,
+                formFieldHintWeight: FontWeight.bold,
+                formFieldhHintText: "Enter your product quantity",
+                formFieldBorderRadius: 30.0,
+                focusedBorderColor: Colors.green,
+                focusedBorderWidth: 2,
+                textEditingController: productQuantityController,
+              ),
+              CustomTextFormFieldComponent(
+                padding: EdgeInsets.all(16.0),
+                isBorderEnable: true,
+                formFieldLabel: "Price",
+                maxLenght: 10,
+                maxLine: 1,
+                isEmail: false,
+                keyboardType: TextInputType.number,
+                formFieldLabelColor: blackColor,
+                formFieldLabelWeight: FontWeight.bold,
+                formFieldLabelPadding: EdgeInsets.all(2),
+                formFieldLabelSize: 16,
+                formFieldHintColor: blackColor.withOpacity(0.4),
+                formFieldHintSize: 12,
+                formFieldHintWeight: FontWeight.bold,
+                formFieldhHintText: "Enter your product price",
+                formFieldBorderRadius: 30.0,
+                focusedBorderColor: Colors.green,
+                focusedBorderWidth: 2,
+                textEditingController: productPriceController,
+              ),
+              CustomTextFormFieldComponent(
+                padding: EdgeInsets.all(16.0),
+                isBorderEnable: true,
+                formFieldLabel: "Description",
+                maxLenght: 300,
+                maxLine: 5,
+                isEmail: false,
+                isValidate: true,
+                formFieldLabelColor: blackColor,
+                formFieldLabelWeight: FontWeight.bold,
+                formFieldLabelPadding: EdgeInsets.all(2),
+                formFieldLabelSize: 16,
+                formFieldHintColor: blackColor.withOpacity(0.4),
+                formFieldHintSize: 12,
+                formFieldHintWeight: FontWeight.bold,
+                formFieldhHintText: "Enter your product description",
+                formFieldBorderRadius: 30.0,
+                focusedBorderColor: Colors.green,
+                focusedBorderWidth: 2,
+                textEditingController: productDescriptionController,
+              ),
+              CustomTextComponet(
+                textTitle: "Logout",
+                onPressed: () => authController.logoutSeller(context),
+                isClickAble: true,
+              )
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                getImage(ImageSource.gallery, isMultipleImages: true);
+              },
+              backgroundColor: blackColor,
+              child: Icon(
+                Icons.photo_library,
+                color: whiteColor,
+              ),
+            ),
+            CustomSizedBox(
+              width: customHeightWidth(context, width: true) * 0.05,
+            ),
+            FloatingActionButton(
+              heroTag: null,
+              backgroundColor: blackColor,
+              onPressed: () {
+                getImage(ImageSource.camera);
+              },
+              child: Icon(
+                Icons.upload,
+                color: whiteColor,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

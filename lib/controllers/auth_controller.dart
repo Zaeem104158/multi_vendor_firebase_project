@@ -1,10 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
-import 'package:firebase_multi_vendor_project/views/auth/signup_customer_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_account.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthController {
@@ -30,7 +30,8 @@ class AuthController {
     return downloadUrl;
   }
 
-  signUpUser(
+  //Customer function
+  signUpCustomer(
       String fullName, String email, String password, File? imageFile) async {
     loading();
     //SingnUP method
@@ -41,12 +42,19 @@ class AuthController {
     // Future<String> is need to be set in string data type.
     String imageDownloadUrl = await downloadUrl;
     //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
-    await firestore.collection('users').doc(userCredential.user!.uid).set(
-        {'fullName': fullName, 'email': email, 'imageFile': imageDownloadUrl});
+    await firestore.collection('customers').doc(userCredential.user!.uid).set({
+      'cid': userCredential.user!.uid,
+      'fullName': fullName,
+      'email': email,
+      'imageFile': imageDownloadUrl,
+      'phoneNumber': '',
+      'address': ''
+    });
     dismissLoading();
   }
 
-  loginUser(String email, String password) async {
+  //Customer function
+  loginCustomer(String email, String password) async {
     loading();
     UserCredential loginResponse =
         await auth.signInWithEmailAndPassword(email: email, password: password);
@@ -55,26 +63,83 @@ class AuthController {
     if (loginResponse != null) {
       await saveToSharedPreferences(
           sharedPrefCustomerUid, loginResponse.user!.uid);
+      await saveToSharedPreferences(sharedPrefSellerUid, null);
     }
     dismissLoading();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> userInfo() async {
+  //Seller function
+  signUpSeller(
+      String fullName, String email, String password, File? imageFile) async {
     loading();
-    dynamic jwt = await readFromSharedPreferences('customerUid');
-    String customerUid = jwt;
-    var collectionReference = FirebaseFirestore.instance.collection('users');
-    var profileData = collectionReference.doc(customerUid).get();
+    //SingnUP method
+    UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    //Upload image url into Firebase Storage.
+    Future<String> downloadUrl = uploadImageToFirebase(imageFile!);
+    // Future<String> is need to be set in string data type.
+    String imageDownloadUrl = await downloadUrl;
+    //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
+    await firestore.collection('sellers').doc(userCredential.user!.uid).set({
+      'sid': userCredential.user!.uid,
+      'fullName': fullName,
+      'email': email,
+      'imageFile': imageDownloadUrl,
+      'phoneNumber': '',
+      'address': ''
+    });
+    dismissLoading();
+  }
 
+  //Seller function
+  loginSeller(String email, String password) async {
+    loading();
+    UserCredential loginResponse =
+        await auth.signInWithEmailAndPassword(email: email, password: password);
+
+    // ignore: unnecessary_null_comparison
+    if (loginResponse != null) {
+      await saveToSharedPreferences(
+          sharedPrefSellerUid, loginResponse.user!.uid);
+      await saveToSharedPreferences(sharedPrefCustomerUid, null);
+    }
+    dismissLoading();
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> userCustomerInfo() async {
+    loading();
+
+    dynamic jwt = await readFromSharedPreferences(sharedPrefCustomerUid);
+    String userJwt = jwt;
+    var collectionReference = FirebaseFirestore.instance.collection(customers);
+    var profileData = collectionReference.doc(userJwt).get();
     return profileData;
   }
 
-  Future<void> logout(context) async {
+  Future<DocumentSnapshot<Map<String, dynamic>>> userSellerInfo() async {
+    loading();
+    dynamic jwt = await readFromSharedPreferences(sharedPrefSellerUid);
+    String userJwt = jwt;
+    var collectionReference = FirebaseFirestore.instance.collection(sellers);
+    var profileData = collectionReference.doc(userJwt).get();
+    return profileData;
+  }
+
+  Future<void> logoutCustomer(context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     loading();
     await auth.signOut();
     await saveToSharedPreferences(sharedPrefCustomerUid, null);
-    dismissLoading();
     navigationPush(context, screenWidget: CustomerSignUpScreen());
+    dismissLoading();
+  }
+
+  Future<void> logoutSeller(context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    loading();
+    await auth.signOut();
+    await saveToSharedPreferences(sharedPrefSellerUid, null);
+    navigationPush(context, screenWidget: SellerLoginScreen());
+    dismissLoading();
   }
 }

@@ -1,21 +1,23 @@
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
-import 'package:firebase_multi_vendor_project/views/cart_screen.dart';
-import 'package:firebase_multi_vendor_project/views/category_screen.dart';
-import 'package:firebase_multi_vendor_project/views/home_screen.dart';
-import 'package:firebase_multi_vendor_project/views/profile_screen.dart';
-import 'package:firebase_multi_vendor_project/views/shop_screen.dart';
+import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
+import 'package:firebase_multi_vendor_project/views/category/category_screen.dart';
+import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
+import 'package:firebase_multi_vendor_project/views/profie/profile_screen.dart';
+import 'package:firebase_multi_vendor_project/views/shop/shop_screen.dart';
 import 'package:flutter/material.dart';
 
-class DashBoardScreen extends StatefulWidget {
-  DashBoardScreen({super.key});
+class CustomerBottomWidgetScreen extends StatefulWidget {
+  CustomerBottomWidgetScreen({super.key});
 
   @override
-  State<DashBoardScreen> createState() => _DashBoardScreenState();
+  State<CustomerBottomWidgetScreen> createState() =>
+      _CustomerBottomWidgetScreenState();
 }
 
-class _DashBoardScreenState extends State<DashBoardScreen> {
+class _CustomerBottomWidgetScreenState
+    extends State<CustomerBottomWidgetScreen> {
   final AuthController authController = AuthController();
   int selectedIndex = 0;
   final List<Widget> screens = [
@@ -50,7 +52,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 icon: Icon(
                   Icons.search,
                 ),
-                label: bottomSearch),
+                label: bottomCategory),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.shop,

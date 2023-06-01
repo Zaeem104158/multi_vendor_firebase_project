@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_multi_vendor_project/components/custom_box_container.dart';
 import 'package:firebase_multi_vendor_project/components/custom_divider.dart';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
@@ -26,15 +23,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: authController.userInfo(),
+        future: authController.userCustomerInfo(),
         builder: ((context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return CustomTextComponet(
               textTitle: "Something Went wrong",
               isClickAble: false,
+              isCenterText: true,
             );
           } else if (snapshot.hasData && !snapshot.data!.exists) {
             return CustomTextComponet(
+              isCenterText: true,
               textTitle: "Document doesn't exist",
               isClickAble: false,
             );
@@ -303,7 +302,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: cyanColor,
                               ),
                               GestureDetector(
-                                onTap: () => authController.logout(context),
+                                onTap: () =>
+                                    authController.logoutCustomer(context),
                                 child: ListTile(
                                   title: CustomTextComponet(
                                     isClickAble: true,

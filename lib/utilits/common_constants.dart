@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
-import 'package:firebase_multi_vendor_project/views/auth/signup_customer_screen.dart';
-import 'package:firebase_multi_vendor_project/views/dashboard/dashboard_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
+import 'package:firebase_multi_vendor_project/views/dashboard/customer_bottom_widget_screen.dart';
+import 'package:firebase_multi_vendor_project/views/dashboard/seller_bottom_widget_screen.dart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,12 +17,18 @@ const String user_placeholder_image =
     'assets/images/user_placeholder_image.png';
 //Shared Preference Stored Datas
 const String sharedPrefCustomerUid = 'customerUid';
+const String sharedPrefSellerUid = 'sellerUid';
 //DashBoard Bottom Names
 const String bottomHome = 'Home';
-const String bottomSearch = 'Category';
+const String bottomCategory = 'Category';
 const String bottomShop = 'Shop';
 const String bottomCart = 'Cart';
 const String bottomProfile = 'Profile';
+const String bottomDashBoard = 'DashBoard';
+const String bottomUpload = 'Upload';
+// Firebase Collection Name
+const String customers = 'customers';
+const String sellers = 'sellers';
 void closeSoftKeyBoard() {
   FocusManager.instance.primaryFocus?.unfocus();
 
@@ -84,12 +91,17 @@ Future<dynamic> readFromSharedPreferences(String key) async {
 startTime(context) async {
   try {
     //Reading Shared Preference customerUid data.
-    dynamic jwt = await readFromSharedPreferences('customerUid');
+    dynamic customerJwt =
+        await readFromSharedPreferences(sharedPrefCustomerUid);
+    dynamic sellerJwt = await readFromSharedPreferences(sharedPrefSellerUid);
 
     // final _userController = Get.put(UserController());
-    if (jwt != null && jwt != 0) {
+    if (customerJwt != null && customerJwt != 0) {
       // _userController.getUserInfo("splash");
-      navigationPush(context, screenWidget: DashBoardScreen());
+      navigationPush(context, screenWidget: CustomerBottomWidgetScreen());
+    } else if (sellerJwt != null && sellerJwt != 0) {
+      // _userController.getUserInfo("splash");
+      navigationPush(context, screenWidget: SellerBottomWidgetScreen());
     } else {
       navigationPush(context, screenWidget: CustomerSignUpScreen());
     }

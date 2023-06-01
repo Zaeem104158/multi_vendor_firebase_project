@@ -24,29 +24,36 @@ class CustomTextFormFieldComponent extends StatelessWidget {
   final Color? enabledBorderColor;
   final TextEditingController? textEditingController;
   final bool isValidate;
+  final int? maxLenght;
+  final int? maxLine;
+  final TextInputType? keyboardType;
+  final bool isEmail;
 
-  CustomTextFormFieldComponent({
-    this.padding = const EdgeInsets.all(8),
-    this.formFieldLabel,
-    this.formFieldhHintText,
-    this.formFieldBorderRadius,
-    this.formFieldLabelColor = blackColor,
-    this.formFieldLabelSize = smallTextSize,
-    this.formFieldLabelWeight = regularFontWeight,
-    this.formFieldLabelHeight = null,
-    this.formFieldLabelPadding = const EdgeInsets.all(4),
-    this.formFieldHintColor = blackColor,
-    this.formFieldHintSize = smallerTextSize,
-    this.formFieldHintWeight = regularFontWeight,
-    this.formFieldHintHeight = null,
-    this.isBorderEnable = false,
-    this.focusedBorderColor,
-    this.focusedBorderWidth,
-    this.enabledBorderWidth,
-    this.enabledBorderColor,
-    this.textEditingController,
-    this.isValidate = true,
-  });
+  CustomTextFormFieldComponent(
+      {this.padding = const EdgeInsets.all(8),
+      this.formFieldLabel,
+      this.formFieldhHintText,
+      this.formFieldBorderRadius,
+      this.formFieldLabelColor = blackColor,
+      this.formFieldLabelSize = smallTextSize,
+      this.formFieldLabelWeight = regularFontWeight,
+      this.formFieldLabelHeight = null,
+      this.formFieldLabelPadding = const EdgeInsets.all(4),
+      this.formFieldHintColor = blackColor,
+      this.formFieldHintSize = smallerTextSize,
+      this.formFieldHintWeight = regularFontWeight,
+      this.formFieldHintHeight = null,
+      this.isBorderEnable = false,
+      this.focusedBorderColor,
+      this.focusedBorderWidth,
+      this.enabledBorderWidth,
+      this.enabledBorderColor,
+      this.textEditingController,
+      this.maxLenght,
+      this.maxLine,
+      this.isValidate = true,
+      this.isEmail = false,
+      this.keyboardType});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,7 +61,10 @@ class CustomTextFormFieldComponent extends StatelessWidget {
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
+          keyboardType: keyboardType,
           textInputAction: TextInputAction.next,
+          maxLength: maxLenght,
+          maxLines: maxLine,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: isBorderEnable == true
@@ -95,19 +105,29 @@ class CustomTextFormFieldComponent extends StatelessWidget {
                 : InputBorder.none,
           ),
           controller: textEditingController,
-          validator: isValidate
+          validator: isValidate && isEmail
               ? (value) {
                   if (value == null) {
                     return "Empty input.";
-                  } else if (value.isEmpty) {
-                    return "Empty input.";
                   } else if (!regEmailExp.hasMatch(value)) {
                     return "Invalide email.";
+                  } else if (value.isEmpty) {
+                    return "Empty input.";
                   } else {
                     return null;
                   }
                 }
-              : null,
+              : isValidate && !isEmail
+                  ? (value) {
+                      if (value == null) {
+                        return "Empty input.";
+                      } else if (value.isEmpty) {
+                        return "Empty input.";
+                      } else {
+                        return null;
+                      }
+                    }
+                  : null,
         ),
       ),
     );

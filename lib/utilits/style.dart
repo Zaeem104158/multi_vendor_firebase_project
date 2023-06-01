@@ -24,3 +24,4 @@ const whiteColor = Colors.white;
 const cyanColor = Colors.cyan;
 const greyColor = Colors.grey;
 const redColor = Colors.red;
+const blueGreyColor = Colors.blueGrey;
