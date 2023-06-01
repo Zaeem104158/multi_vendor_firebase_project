@@ -1,4 +1,5 @@
 List<String> mainCategoryList = [
+  'Main',
   'Men',
   'Women',
   'Kids',
@@ -8,6 +9,7 @@ List<String> mainCategoryList = [
   'Accessories',
 ];
 List<String> menSubCategoryList = [
+  'Sub',
   'Shirt',
   'T-shirt',
   'Jacket',
@@ -19,6 +21,7 @@ List<String> menSubCategoryList = [
   'Panjabi'
 ];
 List<String> womenSubCategoryList = [
+  'Sub',
   'Sharee',
   'Three Piece',
   'Shalwar Kameez',
@@ -32,15 +35,21 @@ List<String> womenSubCategoryList = [
   'Bras',
   'Sleep Wear'
 ];
-List<String> kidsSubCategoryList = ['Shirt', 'Pant', 'Panjabi'];
+List<String> kidsSubCategoryList = ['Sub', 'Shirt', 'Pant', 'Panjabi'];
 
 List<String> electornicsSubCategoryList = [
+  'Sub',
   'Phone',
   'Laptop',
   'Tv',
   'Ac',
 ];
-List<String> shoesSubCategoryList = ['Men', 'Women', 'Kids'];
+List<String> shoesSubCategoryList = ['Sub', 'Men', 'Women', 'Kids'];
 
-List<String> accessoriesSubCategoryList = ['HeadPhone', 'Watch', 'Speaker'];
-List<String> beautySubCategoryList = ['Man', 'Woman'];
+List<String> accessoriesSubCategoryList = [
+  'Sub',
+  'HeadPhone',
+  'Watch',
+  'Speaker'
+];
+List<String> beautySubCategoryList = ['Sub', 'Man', 'Woman'];

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -16,7 +17,35 @@ class SellerProductsUploadController {
   File? image;
   final picker = ImagePicker();
   List<XFile> multipleImages = [];
-  String mainCategoryValue = 'Men';
-  String subCategoryValue = 'Shirt';
+  String mainCategoryValue = 'Main';
+  String subCategoryValue = 'Sub';
   List<String> subCategoryList = [];
+
+  void uploadProduct() {
+    if (mainCategoryValue != '' &&
+        subCategoryValue != '' &&
+        multipleImages.isNotEmpty &&
+        productNameController.text != '' &&
+        productQuantityController.text != '' &&
+        productPriceController.text != '' &&
+        productDescriptionController.text != '') {
+      //log("All ok: $mainCategoryValue $subCategoryValue $multipleImages ${productNameController.text} ${productQuantityController.text} ${productPriceController.text} ${productDescriptionController.text} ");
+    } else {
+      log("All not ok");
+    }
+  }
+
+  bool isValidateUpload() {
+    if (mainCategoryValue != '' &&
+        subCategoryValue != '' &&
+        multipleImages.isNotEmpty &&
+        productNameController.text != '' &&
+        productQuantityController.text != '' &&
+        productPriceController.text != '' &&
+        productDescriptionController.text != '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
