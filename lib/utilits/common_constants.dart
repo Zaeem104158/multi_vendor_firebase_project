@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/customer_bottom_widget_screen.dart';
 import 'package:firebase_multi_vendor_project/views/sellerdashboard/seller_bottom_widget_screen.dart.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //Application image paths
@@ -26,20 +30,58 @@ const String bottomCart = 'Cart';
 const String bottomProfile = 'Profile';
 const String bottomDashBoard = 'DashBoard';
 const String bottomUpload = 'Upload';
-// Firebase Collection Name
-const String customers = 'customers';
-const String sellers = 'sellers';
+// Firebase Collection Name keys
+//customer keys
+const String customersDirectory = 'customers';
+const String customersCollectionFieldCid = 'cid';
+const String customersCollectionFieldFullName = 'fillName';
+const String customersCollectionFieldEmail = 'email';
+const String customersCollectionFieldImageFile = 'imageFile';
+const String customersCollectionFieldAddress = 'address';
+const String customersCollectionFieldPhoneNumber = 'phoneNumber';
+//Seller keys
+const String sellersDirectory = 'sellers';
+const String sellerCollectionFieldSid = 'sid';
+const String sellerCollectionFieldFullName = 'fullName';
+const String sellerCollectionFieldEmail = 'email';
+const String sellerCollectionFieldImageFile = 'imageFile';
+const String sellerCollectionFieldAddress = 'address';
+const String sellerCollectionFieldPhoneNumber = 'phoneNumber';
+// Seller upload product keys
+const String productImageDirectory = 'productImages';
+const String productsDataDirectory = 'productsData';
+const String productCollectionFieldMainCategory = 'mainCategory';
+const String productCollectionFieldSubCategory = 'subCategory';
+const String productCollectionFieldProductPrice = 'productPrice';
+const String productCollectionFieldProductName = 'productName';
+const String productCollectionFieldProductDescription = 'productDescription';
+const String productCollectionFieldProductInStock = 'productInstock';
+const String productCollectionFieldProductDiscount = 'productDiscount';
+const String productCollectionFieldProductImageFile = 'productImageFile';
+
+//
+const String customerProfileImageDirectory = 'profileImages/customers';
+const String sellerProfileImageDirectory = 'profileImages/sellers';
+
+//Initialize
+final FirebaseAuth auth = FirebaseAuth.instance;
+final FirebaseFirestore firestore = FirebaseFirestore.instance;
+final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
+//Close keyboard
 void closeSoftKeyBoard() {
   FocusManager.instance.primaryFocus?.unfocus();
 
   SystemChannels.textInput.invokeMethod('TextInput.hide');
 }
 
+// Loading
 void loading({var value = "Please wait...", bool isHideKeyboard = true}) {
   if (isHideKeyboard) closeSoftKeyBoard();
   EasyLoading.show(status: value);
 }
 
+// Close Loading
 void dismissLoading() {
   EasyLoading.dismiss();
 }
@@ -88,6 +130,7 @@ Future<dynamic> readFromSharedPreferences(String key) async {
   return null;
 }
 
+// Start Time check weather the user is already log in or not.
 startTime(context) async {
   try {
     //Reading Shared Preference customerUid data.
@@ -95,12 +138,9 @@ startTime(context) async {
         await readFromSharedPreferences(sharedPrefCustomerUid);
     dynamic sellerJwt = await readFromSharedPreferences(sharedPrefSellerUid);
 
-    // final _userController = Get.put(UserController());
     if (customerJwt != null && customerJwt != 0) {
-      // _userController.getUserInfo("splash");
       navigationPush(context, screenWidget: CustomerBottomWidgetScreen());
     } else if (sellerJwt != null && sellerJwt != 0) {
-      // _userController.getUserInfo("splash");
       navigationPush(context, screenWidget: SellerBottomWidgetScreen());
     } else {
       navigationPush(context, screenWidget: CustomerSignUpScreen());
@@ -108,11 +148,11 @@ startTime(context) async {
   } catch (e) {
     Future.delayed(const Duration(), () {
       navigationPush(context, screenWidget: CustomerSignUpScreen());
-      //Get.offAll(() => const LoginScreen(), transition: sendTransition);
     });
   }
 }
 
+//check internet connection.
 Future<bool> isInternetConnected(BuildContext context,
     {bool isShowAlert = false}) async {
   bool isConnected = false;
@@ -132,6 +172,7 @@ Future<bool> isInternetConnected(BuildContext context,
   return isConnected;
 }
 
+// Show toaster messagge
 void showMessage(String? value, {bool isToast = false, bool isInfo = false}) {
   if (isInfo) {
     EasyLoading.showInfo("$value");
@@ -144,6 +185,7 @@ void showMessage(String? value, {bool isToast = false, bool isInfo = false}) {
   }
 }
 
+// Show warning Dialog
 showWarningDialog(BuildContext context) {
   Widget continueButton = CustomTextComponet(
     textTitle: "Retry",
@@ -210,3 +252,43 @@ showWarningDialog(BuildContext context) {
     );
   }
 }
+
+// Upload Image Function
+// uploadImageToFirebase(
+//     {File? imageFile,
+//     List<XFile>? multipleImageList,
+//     bool isMultiImage = false,
+//     String? directoryName}) async {
+//   String downloadUrl = "";
+//   List<String> downloadUrlList = [];
+
+//   // if (!isMultiImage) {
+//   // Create a unique filename for the image
+//   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+//   // Get a reference to the Firebase Storage bucket
+//   final Reference storageRef =
+//       firebaseStorage.ref().child('$directoryName/$fileName');
+
+//   // Create a task to upload the image file
+//   final UploadTask uploadTask = storageRef.putFile(imageFile!);
+
+//   // Wait for the upload task to complete and return the download URL
+//   final TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
+//   downloadUrl = await snapshot.ref.getDownloadURL();
+
+//   return downloadUrl;
+//   // } else {
+//   // for (var element in multipleImageList!) {
+//   //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+//   //   final Reference storageRef =
+//   //       firebaseStorage.ref().child('$productImageDirectory/$fileName');
+//   //   File elementPath = File(element.path);
+//   //   final UploadTask uploadTask = storageRef.putFile(elementPath);
+//   //   final TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
+//   //   downloadUrl = await snapshot.ref.getDownloadURL();
+//   //   downloadUrlList.add(downloadUrl);
+//   //}
+//   // return downloadUrlList;
+//   //}
+// }

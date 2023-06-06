@@ -24,13 +24,13 @@ class AuthController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
-  Future<String> uploadImageToFirebase(File imageFile) async {
+  Future<String> uploadImageToFirebase(File imageFile, directory) async {
     // Create a unique filename for the image
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     // Get a reference to the Firebase Storage bucket
     final Reference storageRef =
-        FirebaseStorage.instance.ref().child('profileImages/$fileName');
+        FirebaseStorage.instance.ref().child('$directory/$fileName');
 
     // Create a task to upload the image file
     final UploadTask uploadTask = storageRef.putFile(imageFile);
@@ -50,17 +50,21 @@ class AuthController {
     UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
     //Upload image url into Firebase Storage.
-    Future<String> downloadUrl = uploadImageToFirebase(imageFile!);
+    Future<String> downloadUrl =
+        uploadImageToFirebase(imageFile!, customerProfileImageDirectory);
     // Future<String> is need to be set in string data type.
     String imageDownloadUrl = await downloadUrl;
     //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
-    await firestore.collection('customers').doc(userCredential.user!.uid).set({
-      'cid': userCredential.user!.uid,
-      'fullName': fullName,
-      'email': email,
-      'imageFile': imageDownloadUrl,
-      'phoneNumber': '',
-      'address': ''
+    await firestore
+        .collection(customersDirectory)
+        .doc(userCredential.user!.uid)
+        .set({
+      customersCollectionFieldCid: userCredential.user!.uid,
+      customersCollectionFieldFullName: fullName,
+      customersCollectionFieldEmail: email,
+      customersCollectionFieldImageFile: imageDownloadUrl,
+      customersCollectionFieldPhoneNumber: '',
+      customersCollectionFieldAddress: ''
     });
     dismissLoading();
   }
@@ -88,17 +92,21 @@ class AuthController {
     UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
     //Upload image url into Firebase Storage.
-    Future<String> downloadUrl = uploadImageToFirebase(imageFile!);
+    Future<String> downloadUrl =
+        uploadImageToFirebase(imageFile!, sellerProfileImageDirectory);
     // Future<String> is need to be set in string data type.
     String imageDownloadUrl = await downloadUrl;
     //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
-    await firestore.collection('sellers').doc(userCredential.user!.uid).set({
-      'sid': userCredential.user!.uid,
-      'fullName': fullName,
-      'email': email,
-      'imageFile': imageDownloadUrl,
-      'phoneNumber': '',
-      'address': ''
+    await firestore
+        .collection(sellersDirectory)
+        .doc(userCredential.user!.uid)
+        .set({
+      sellerCollectionFieldSid: userCredential.user!.uid,
+      sellerCollectionFieldFullName: fullName,
+      sellerCollectionFieldEmail: email,
+      sellerCollectionFieldImageFile: imageDownloadUrl,
+      sellerCollectionFieldPhoneNumber: '',
+      sellerCollectionFieldAddress: ''
     });
     dismissLoading();
   }
@@ -123,7 +131,8 @@ class AuthController {
 
     dynamic jwt = await readFromSharedPreferences(sharedPrefCustomerUid);
     String userJwt = jwt;
-    var collectionReference = FirebaseFirestore.instance.collection(customers);
+    var collectionReference =
+        FirebaseFirestore.instance.collection(customersDirectory);
     var profileData = collectionReference.doc(userJwt).get();
     return profileData;
   }
@@ -132,7 +141,8 @@ class AuthController {
     loading();
     dynamic jwt = await readFromSharedPreferences(sharedPrefSellerUid);
     String userJwt = jwt;
-    var collectionReference = FirebaseFirestore.instance.collection(sellers);
+    var collectionReference =
+        FirebaseFirestore.instance.collection(sellersDirectory);
     var profileData = collectionReference.doc(userJwt).get();
     return profileData;
   }

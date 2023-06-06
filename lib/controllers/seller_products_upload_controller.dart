@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,31 +15,64 @@ class SellerProductsUploadController {
 
   final TextEditingController productDescriptionController =
       TextEditingController();
+  final TextEditingController productDiscountController =
+      TextEditingController();
+
   File? image;
   final picker = ImagePicker();
-  List<XFile> multipleImages = [];
-  String mainCategoryValue = 'Main';
-  String subCategoryValue = 'Sub';
+  List<XFile>? multipleImagesList = [];
+  String mainCategoryValue = 'MainCategory';
+  String subCategoryValue = 'SubCategory';
   List<String> subCategoryList = [];
 
-  void uploadProduct() {
+  void uploadProduct({
+    String? directoryName,
+    String? productName,
+    String? productDescription,
+    String? productPrice,
+    String? productQuantity,
+    String? mainCategory,
+    String? subCategory,
+    String? productDiscount,
+    String? selleSId,
+  }) async {
+    loading();
     if (mainCategoryValue != '' &&
         subCategoryValue != '' &&
-        multipleImages.isNotEmpty &&
+        multipleImagesList!.isNotEmpty &&
         productNameController.text != '' &&
         productQuantityController.text != '' &&
         productPriceController.text != '' &&
+        productDiscountController.text != '' &&
         productDescriptionController.text != '') {
-      //log("All ok: $mainCategoryValue $subCategoryValue $multipleImages ${productNameController.text} ${productQuantityController.text} ${productPriceController.text} ${productDescriptionController.text} ");
+      // List<String> productImageFileList = uploadImageToFirebase(
+      //     isMultiImage: true,
+      //     multipleImageList: multipleImagesList,
+      //     directoryName: productImageDirectory);
+      // CollectionReference productReference =
+      //     firestore.collection(directoryName!);
+      // await productReference.doc().set({
+      //   sellerCollectionFieldSid: selleSId,
+      //   productCollectionFieldMainCategory: mainCategory,
+      //   productCollectionFieldSubCategory: subCategory,
+      //   productCollectionFieldProductName: productName,
+      //   productCollectionFieldProductDescription: productDescription,
+      //   productCollectionFieldProductPrice: productPrice,
+      //   productCollectionFieldProductInStock: productQuantity,
+      //   productCollectionFieldProductImageFile: productImageFileList,
+      //   productCollectionFieldProductDiscount: productDiscount,
+      // });
+
+      // dismissLoading();
     } else {
-      log("All not ok");
+      log("Product Upload Error");
     }
   }
 
   bool isValidateUpload() {
     if (mainCategoryValue != '' &&
         subCategoryValue != '' &&
-        multipleImages.isNotEmpty &&
+        multipleImagesList!.isNotEmpty &&
         productNameController.text != '' &&
         productQuantityController.text != '' &&
         productPriceController.text != '' &&

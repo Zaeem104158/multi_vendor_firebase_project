@@ -5,6 +5,7 @@ import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_formfield_component.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/controllers/seller_products_upload_controller.dart';
+import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/sellerdashboard/upload/seller_category_list.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,6 @@ class _SellerUploadProductsScreenState
         setState(() {
           if (pickedFile != null) {
             _sellerProductsUploadController.image = File(pickedFile.path);
-            // log("Image path : $_image");
           } else {
             log('No image selected.');
           }
@@ -42,8 +42,7 @@ class _SellerUploadProductsScreenState
             await _sellerProductsUploadController.picker.pickMultiImage();
         setState(() {
           if (pickedFiles.length != 0) {
-            _sellerProductsUploadController.multipleImages = pickedFiles;
-            log("Image paths: ${_sellerProductsUploadController.multipleImages}");
+            _sellerProductsUploadController.multipleImagesList = pickedFiles;
           } else {
             log('No image selected.');
           }
@@ -57,59 +56,38 @@ class _SellerUploadProductsScreenState
   void selectCatagory(String? value) {
     _sellerProductsUploadController.mainCategoryValue = value!;
     if (_sellerProductsUploadController.mainCategoryValue == 'Men') {
-      setState(() {
-        _sellerProductsUploadController.subCategoryValue = 'Shirt';
-        _sellerProductsUploadController.subCategoryList = menSubCategoryList;
-      });
+      _sellerProductsUploadController.subCategoryList = menSubCategoryList;
     } else if (_sellerProductsUploadController.mainCategoryValue == 'Women') {
-      setState(() {
-        _sellerProductsUploadController.subCategoryValue = 'Sharee';
-        _sellerProductsUploadController.subCategoryList = womenSubCategoryList;
-      });
+      _sellerProductsUploadController.subCategoryList = womenSubCategoryList;
     } else if (_sellerProductsUploadController.mainCategoryValue == 'Kids') {
-      setState(() {
-        _sellerProductsUploadController.subCategoryValue = 'Shirt';
-        _sellerProductsUploadController.subCategoryList = kidsSubCategoryList;
-      });
+      _sellerProductsUploadController.subCategoryList = kidsSubCategoryList;
     } else if (_sellerProductsUploadController.mainCategoryValue ==
         'Electornics') {
-      setState(() {
-        _sellerProductsUploadController.subCategoryValue = 'Phone';
-        _sellerProductsUploadController.subCategoryList =
-            electornicsSubCategoryList;
-      });
+      _sellerProductsUploadController.subCategoryList =
+          electornicsSubCategoryList;
     } else if (_sellerProductsUploadController.mainCategoryValue == 'Shoes') {
-      setState(() {
-        _sellerProductsUploadController.subCategoryValue = 'Men';
-        _sellerProductsUploadController.subCategoryList = shoesSubCategoryList;
-      });
+      _sellerProductsUploadController.subCategoryList = shoesSubCategoryList;
     } else if (_sellerProductsUploadController.mainCategoryValue == 'Beauty') {
-      setState(() {
-        _sellerProductsUploadController.subCategoryValue = 'Man';
-        _sellerProductsUploadController.subCategoryList = beautySubCategoryList;
-      });
+      _sellerProductsUploadController.subCategoryList = beautySubCategoryList;
     } else if (_sellerProductsUploadController.mainCategoryValue ==
         'Accessories') {
-      setState(() {
-        _sellerProductsUploadController.subCategoryValue = 'HeadPhone';
-        _sellerProductsUploadController.subCategoryList =
-            accessoriesSubCategoryList;
-      });
+      _sellerProductsUploadController.subCategoryList =
+          accessoriesSubCategoryList;
     }
+    setState(() {
+      _sellerProductsUploadController.mainCategoryValue = value;
+      _sellerProductsUploadController.subCategoryValue = "SubCategory";
+    });
   }
-  // void selectCatagory(String? value) {
-  //   if (_sellerProductsUploadController.mainCategoryValue == 'Main') {
-  //     _sellerProductsUploadController.mainCategoryValue = mainCategoryList[1];
-  //   } else {}
-  // }
 
   Widget displayMultipleImages() {
     return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: _sellerProductsUploadController.multipleImages.length,
+        itemCount: _sellerProductsUploadController.multipleImagesList!.length,
         itemBuilder: (context, int index) {
           return Image.file(
-            File(_sellerProductsUploadController.multipleImages[index].path),
+            File(_sellerProductsUploadController
+                .multipleImagesList![index].path),
             fit: BoxFit.fill,
             filterQuality: FilterQuality.high,
           );
@@ -132,7 +110,7 @@ class _SellerUploadProductsScreenState
                     width: customHeightWidth(context, width: true) * 0.5,
                     color: blueGreyColor.withOpacity(0.9),
                     child: _sellerProductsUploadController
-                                .multipleImages.isNotEmpty &&
+                                .multipleImagesList!.isNotEmpty &&
                             _sellerProductsUploadController.image == null
                         ? displayMultipleImages()
                         : CustomTextComponet(
@@ -209,8 +187,8 @@ class _SellerUploadProductsScreenState
                                   MaterialStatePropertyAll(blackColor)),
                           onPressed: () {
                             setState(() {
-                              _sellerProductsUploadController.multipleImages =
-                                  [];
+                              _sellerProductsUploadController
+                                  .multipleImagesList = [];
                             });
                           },
                           icon: Icon(Icons.delete_forever),
@@ -294,6 +272,28 @@ class _SellerUploadProductsScreenState
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
                 isBorderEnable: true,
+                formFieldLabel: "Discount",
+                maxLenght: 10,
+                maxLine: 1,
+                isEmail: false,
+                keyboardType: TextInputType.number,
+                formFieldLabelColor: blackColor,
+                formFieldLabelWeight: FontWeight.bold,
+                formFieldLabelPadding: EdgeInsets.all(2),
+                formFieldLabelSize: 16,
+                formFieldHintColor: blackColor.withOpacity(0.4),
+                formFieldHintSize: 12,
+                formFieldHintWeight: FontWeight.bold,
+                formFieldhHintText: "Enter your discount price",
+                formFieldBorderRadius: 30.0,
+                focusedBorderColor: Colors.green,
+                focusedBorderWidth: 2,
+                textEditingController:
+                    _sellerProductsUploadController.productDiscountController,
+              ),
+              CustomTextFormFieldComponent(
+                padding: EdgeInsets.all(16.0),
+                isBorderEnable: true,
                 formFieldLabel: "Description",
                 maxLenght: 300,
                 maxLine: 5,
@@ -348,7 +348,24 @@ class _SellerUploadProductsScreenState
                       ? blackColor
                       : greyColor,
               onPressed: () {
-                _sellerProductsUploadController.uploadProduct();
+                //Working
+                _sellerProductsUploadController.uploadProduct(
+                  directoryName: productsDataDirectory,
+                  mainCategory:
+                      _sellerProductsUploadController.mainCategoryValue,
+                  subCategory: _sellerProductsUploadController.subCategoryValue,
+                  productName: _sellerProductsUploadController
+                      .productNameController.text,
+                  productDiscount: _sellerProductsUploadController
+                      .productDiscountController.text,
+                  productPrice: _sellerProductsUploadController
+                      .productPriceController.text,
+                  productDescription: _sellerProductsUploadController
+                      .productDescriptionController.text,
+                  productQuantity: _sellerProductsUploadController
+                      .productQuantityController.text,
+                  selleSId: sharedPrefSellerUid,
+                );
               },
               child: Icon(
                 Icons.upload,
