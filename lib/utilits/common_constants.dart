@@ -59,14 +59,9 @@ const String productCollectionFieldProductInStock = 'productInstock';
 const String productCollectionFieldProductDiscount = 'productDiscount';
 const String productCollectionFieldProductImageFile = 'productImageFile';
 
-//
+//Image Directory
 const String customerProfileImageDirectory = 'profileImages/customers';
 const String sellerProfileImageDirectory = 'profileImages/sellers';
-
-//Initialize
-final FirebaseAuth auth = FirebaseAuth.instance;
-final FirebaseFirestore firestore = FirebaseFirestore.instance;
-final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
 //Close keyboard
 void closeSoftKeyBoard() {
@@ -252,43 +247,3 @@ showWarningDialog(BuildContext context) {
     );
   }
 }
-
-// Upload Image Function
-// uploadImageToFirebase(
-//     {File? imageFile,
-//     List<XFile>? multipleImageList,
-//     bool isMultiImage = false,
-//     String? directoryName}) async {
-//   String downloadUrl = "";
-//   List<String> downloadUrlList = [];
-
-//   // if (!isMultiImage) {
-//   // Create a unique filename for the image
-//   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-
-//   // Get a reference to the Firebase Storage bucket
-//   final Reference storageRef =
-//       firebaseStorage.ref().child('$directoryName/$fileName');
-
-//   // Create a task to upload the image file
-//   final UploadTask uploadTask = storageRef.putFile(imageFile!);
-
-//   // Wait for the upload task to complete and return the download URL
-//   final TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
-//   downloadUrl = await snapshot.ref.getDownloadURL();
-
-//   return downloadUrl;
-//   // } else {
-//   // for (var element in multipleImageList!) {
-//   //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-//   //   final Reference storageRef =
-//   //       firebaseStorage.ref().child('$productImageDirectory/$fileName');
-//   //   File elementPath = File(element.path);
-//   //   final UploadTask uploadTask = storageRef.putFile(elementPath);
-//   //   final TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
-//   //   downloadUrl = await snapshot.ref.getDownloadURL();
-//   //   downloadUrlList.add(downloadUrl);
-//   //}
-//   // return downloadUrlList;
-//   //}
-// }

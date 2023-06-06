@@ -4,7 +4,7 @@ import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_formfield_component.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
-import 'package:firebase_multi_vendor_project/controllers/seller_products_upload_controller.dart';
+import 'package:firebase_multi_vendor_project/controllers/products_upload_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/sellerdashboard/upload/seller_category_list.dart';

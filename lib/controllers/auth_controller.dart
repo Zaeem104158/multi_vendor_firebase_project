@@ -24,7 +24,7 @@ class AuthController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
-  Future<String> uploadImageToFirebase(File imageFile, directory) async {
+  Future<String> uploadUserImageToFirebase(File imageFile, directory) async {
     // Create a unique filename for the image
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -51,7 +51,7 @@ class AuthController {
         email: email, password: password);
     //Upload image url into Firebase Storage.
     Future<String> downloadUrl =
-        uploadImageToFirebase(imageFile!, customerProfileImageDirectory);
+        uploadUserImageToFirebase(imageFile!, customerProfileImageDirectory);
     // Future<String> is need to be set in string data type.
     String imageDownloadUrl = await downloadUrl;
     //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
@@ -93,7 +93,7 @@ class AuthController {
         email: email, password: password);
     //Upload image url into Firebase Storage.
     Future<String> downloadUrl =
-        uploadImageToFirebase(imageFile!, sellerProfileImageDirectory);
+        uploadUserImageToFirebase(imageFile!, sellerProfileImageDirectory);
     // Future<String> is need to be set in string data type.
     String imageDownloadUrl = await downloadUrl;
     //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
