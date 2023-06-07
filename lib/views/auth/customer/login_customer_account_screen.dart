@@ -11,7 +11,7 @@ import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
-import 'package:firebase_multi_vendor_project/views/home/customer_bottom_widget_screen.dart';
+import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/customer_bottom_widget_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomerLoginScreen extends StatefulWidget {

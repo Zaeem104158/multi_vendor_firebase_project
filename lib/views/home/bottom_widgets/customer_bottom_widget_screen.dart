@@ -1,30 +1,31 @@
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_screen.dart';
-import 'package:firebase_multi_vendor_project/views/sellerdashboard/seller_dashboard_screen.dart';
-import 'package:firebase_multi_vendor_project/views/home/customer_home_screen.dart';
-import 'package:firebase_multi_vendor_project/views/sellerdashboard/upload/seller_upload_products_screen.dart';
+import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
+import 'package:firebase_multi_vendor_project/views/profie/customer_profile_screen.dart';
 import 'package:firebase_multi_vendor_project/views/shop/customer_shop_screen.dart';
 import 'package:flutter/material.dart';
 
-class SellerBottomWidgetScreen extends StatefulWidget {
-  SellerBottomWidgetScreen({super.key});
+class CustomerBottomWidgetScreen extends StatefulWidget {
+  CustomerBottomWidgetScreen({super.key});
 
   @override
-  State<SellerBottomWidgetScreen> createState() =>
-      _SellerBottomWidgetScreenState();
+  State<CustomerBottomWidgetScreen> createState() =>
+      _CustomerBottomWidgetScreenState();
 }
 
-class _SellerBottomWidgetScreenState extends State<SellerBottomWidgetScreen> {
+class _CustomerBottomWidgetScreenState
+    extends State<CustomerBottomWidgetScreen> {
   final AuthController authController = AuthController();
   int selectedIndex = 0;
   final List<Widget> screens = [
-    CustomerHomeScreen(),
+    HomeScreen(),
     CategoryScreen(),
     CustomerShopScreen(),
-    SellerDashBoardScreen(),
-    SellerUploadProductsScreen()
+    CartScreen(),
+    CustomerProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {
@@ -59,14 +60,14 @@ class _SellerBottomWidgetScreenState extends State<SellerBottomWidgetScreen> {
                 label: bottomShop),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.dashboard,
+                  Icons.shopping_cart,
                 ),
-                label: bottomDashBoard),
+                label: bottomCart),
             BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.upload_file,
+                  Icons.person,
                 ),
-                label: bottomUpload)
+                label: bottomProfile)
           ]),
       body: screens[selectedIndex],
     );

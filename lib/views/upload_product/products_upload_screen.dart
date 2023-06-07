@@ -3,27 +3,33 @@ import 'dart:io';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_formfield_component.dart';
-import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/controllers/products_upload_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
-import 'package:firebase_multi_vendor_project/views/sellerdashboard/upload/seller_category_list.dart';
+import 'package:firebase_multi_vendor_project/views/category/category_list/category_list.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class SellerUploadProductsScreen extends StatefulWidget {
-  SellerUploadProductsScreen({super.key});
+class ProductUploadScreen extends StatefulWidget {
+  ProductUploadScreen({super.key});
 
   @override
-  State<SellerUploadProductsScreen> createState() =>
-      _SellerUploadProductsScreenState();
+  State<ProductUploadScreen> createState() => _ProductUploadScreenState();
 }
 
-class _SellerUploadProductsScreenState
-    extends State<SellerUploadProductsScreen> {
+class _ProductUploadScreenState extends State<ProductUploadScreen> {
   final SellerProductsUploadController _sellerProductsUploadController =
       SellerProductsUploadController();
-  final AuthController _authController = AuthController();
+
+  @override
+  void dispose() {
+    _sellerProductsUploadController.productDescriptionController.dispose();
+    _sellerProductsUploadController.productDiscountController.dispose();
+    _sellerProductsUploadController.productQuantityController.dispose();
+    _sellerProductsUploadController.productPriceController.dispose();
+    _sellerProductsUploadController.productNameController.dispose();
+    super.dispose();
+  }
 
   Future getImage(ImageSource source, {bool isMultipleImages = false}) async {
     try {
@@ -313,11 +319,11 @@ class _SellerUploadProductsScreenState
                 textEditingController: _sellerProductsUploadController
                     .productDescriptionController,
               ),
-              CustomTextComponet(
-                textTitle: "Logout",
-                onPressed: () => _authController.logoutSeller(context),
-                isClickAble: true,
-              )
+              // CustomTextComponet(
+              //   textTitle: "Logout",
+              //   onPressed: () => _authController.logoutSeller(context),
+              //   isClickAble: true,
+              // )
             ],
           ),
         ),
@@ -347,26 +353,52 @@ class _SellerUploadProductsScreenState
                   _sellerProductsUploadController.isValidateUpload()
                       ? blackColor
                       : greyColor,
-              onPressed: () {
-                //Working
-                _sellerProductsUploadController.uploadProduct(
-                  directoryName: productsDataDirectory,
-                  mainCategory:
-                      _sellerProductsUploadController.mainCategoryValue,
-                  subCategory: _sellerProductsUploadController.subCategoryValue,
-                  productName: _sellerProductsUploadController
-                      .productNameController.text,
-                  productDiscount: _sellerProductsUploadController
-                      .productDiscountController.text,
-                  productPrice: _sellerProductsUploadController
-                      .productPriceController.text,
-                  productDescription: _sellerProductsUploadController
-                      .productDescriptionController.text,
-                  productQuantity: _sellerProductsUploadController
-                      .productQuantityController.text,
-                  selleSId: sharedPrefSellerUid,
-                );
-              },
+              onPressed: _sellerProductsUploadController.isValidateUpload()
+                  ? () async {
+                      dynamic sellerSid =
+                          await readFromSharedPreferences(sharedPrefSellerUid);
+                      _sellerProductsUploadController.uploadProduct(
+                        directoryName: productsDataDirectory,
+                        mainCategory:
+                            _sellerProductsUploadController.mainCategoryValue,
+                        subCategory:
+                            _sellerProductsUploadController.subCategoryValue,
+                        productName: _sellerProductsUploadController
+                            .productNameController.text,
+                        productDiscount: _sellerProductsUploadController
+                            .productDiscountController.text,
+                        productPrice: _sellerProductsUploadController
+                            .productPriceController.text,
+                        productDescription: _sellerProductsUploadController
+                            .productDescriptionController.text,
+                        productQuantity: _sellerProductsUploadController
+                            .productQuantityController.text,
+                        selleSId: sellerSid,
+                      );
+                      setState(() {
+                        _sellerProductsUploadController.mainCategoryValue =
+                            'MainCategory';
+                        _sellerProductsUploadController.subCategoryValue =
+                            'SubCategory';
+                        _sellerProductsUploadController.subCategoryList = [];
+                        _sellerProductsUploadController.multipleImagesList = [];
+                        _sellerProductsUploadController
+                            .productDescriptionController
+                            .clear();
+                        _sellerProductsUploadController
+                            .productDiscountController
+                            .clear();
+                        _sellerProductsUploadController
+                            .productQuantityController
+                            .clear();
+                        _sellerProductsUploadController.productPriceController
+                            .clear();
+                        _sellerProductsUploadController.productNameController
+                            .clear();
+                      });
+                      log("Pressed");
+                    }
+                  : () {},
               child: Icon(
                 Icons.upload,
                 color: whiteColor,

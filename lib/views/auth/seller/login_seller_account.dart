@@ -12,7 +12,7 @@ import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/login_customer_account_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
-import 'package:firebase_multi_vendor_project/views/sellerdashboard/seller_bottom_widget_screen.dart.dart';
+import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/seller_bottom_widget_screen.dart.dart';
 import 'package:flutter/material.dart';
 
 class SellerLoginScreen extends StatefulWidget {

@@ -3,11 +3,15 @@ import 'package:firebase_multi_vendor_project/components/icon_button_component.d
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/kids_gallery_widget.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/men_gallery_widget.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/phone_gallery_widget.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/women_gallery_widget.dart';
 import 'package:firebase_multi_vendor_project/views/search/customer_search_screen.dart';
 import 'package:flutter/material.dart';
 
-class CustomerHomeScreen extends StatelessWidget {
-  const CustomerHomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,26 +76,10 @@ class CustomerHomeScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(children: [
-          CustomTextComponet(
-            textTitle: "Men",
-            isClickAble: false,
-            isCenterText: true,
-          ),
-          CustomTextComponet(
-            textTitle: "Women",
-            isClickAble: false,
-            isCenterText: true,
-          ),
-          CustomTextComponet(
-            textTitle: "Kids",
-            isClickAble: false,
-            isCenterText: true,
-          ),
-          CustomTextComponet(
-            textTitle: "Phones",
-            isClickAble: false,
-            isCenterText: true,
-          ),
+          MenGalleryWidget(),
+          WomenGalleryWidget(),
+          KidsGalleryWidget(),
+          PhoneGalleryWidget()
         ]),
       ),
     );

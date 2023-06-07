@@ -93,7 +93,7 @@ class SellerProductsUploadController {
         productCollectionFieldProductInStock: productQuantity,
         productCollectionFieldProductImageFile: productImageFileList,
         productCollectionFieldProductDiscount: productDiscount,
-      }).whenComplete(() => null);
+      });
 
       dismissLoading();
     } else {
@@ -102,8 +102,8 @@ class SellerProductsUploadController {
   }
 
   bool isValidateUpload() {
-    if (mainCategoryValue != '' &&
-        subCategoryValue != '' &&
+    if (mainCategoryValue != 'MainCategory' &&
+        subCategoryValue != 'SubCategory' &&
         multipleImagesList!.isNotEmpty &&
         productNameController.text != '' &&
         productQuantityController.text != '' &&
