@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,15 +73,16 @@ class AuthController {
   //Customer function
   loginCustomer(String email, String password) async {
     loading();
-    UserCredential loginResponse =
-        await auth.signInWithEmailAndPassword(email: email, password: password);
-
-    // ignore: unnecessary_null_comparison
-    if (loginResponse != null) {
+    try {
+      UserCredential loginResponse = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
       await saveToSharedPreferences(
           sharedPrefCustomerUid, loginResponse.user!.uid);
       await saveToSharedPreferences(sharedPrefSellerUid, null);
+    } catch (error) {
+      log("$error");
     }
+
     dismissLoading();
   }
 

@@ -7,17 +7,17 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
 
-class KidsGalleryWidget extends StatefulWidget {
-  const KidsGalleryWidget({super.key});
+class BeautyGalleryWidget extends StatefulWidget {
+  const BeautyGalleryWidget({super.key});
 
   @override
-  State<KidsGalleryWidget> createState() => _KidsGalleryWidgetState();
+  State<BeautyGalleryWidget> createState() => _BeautyGalleryWidgetState();
 }
 
-class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
+class _BeautyGalleryWidgetState extends State<BeautyGalleryWidget> {
   final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
       .collection(productsDataDirectory)
-      .where(productCollectionFieldMainCategory, isEqualTo: 'Kids')
+      .where(productCollectionFieldMainCategory, isEqualTo: 'Beauty')
       .snapshots();
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,7 @@ class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
             isCenterText: true,
           );
         }
+
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 250,

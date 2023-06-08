@@ -7,17 +7,18 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
 
-class KidsGalleryWidget extends StatefulWidget {
-  const KidsGalleryWidget({super.key});
+class ElectornicsGalleryWidget extends StatefulWidget {
+  const ElectornicsGalleryWidget({super.key});
 
   @override
-  State<KidsGalleryWidget> createState() => _KidsGalleryWidgetState();
+  State<ElectornicsGalleryWidget> createState() =>
+      _ElectornicsGalleryWidgetState();
 }
 
-class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
+class _ElectornicsGalleryWidgetState extends State<ElectornicsGalleryWidget> {
   final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
       .collection(productsDataDirectory)
-      .where(productCollectionFieldMainCategory, isEqualTo: 'Kids')
+      .where(productCollectionFieldMainCategory, isEqualTo: 'Electornics')
       .snapshots();
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,7 @@ class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
             isCenterText: true,
           );
         }
+
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 250,
@@ -166,19 +168,18 @@ class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
                                     textPadding: EdgeInsets.zero,
                                     fontColor: blackColor.withOpacity(0.8),
                                   ),
-                                  CustomTextComponet(
-                                    textTitle:
-                                        "\$${productDataModelClass.productPrice}",
-                                    isCenterText: false,
-                                    isClickAble: false,
-                                    fontWeight: regularFontWeight,
-                                    fontSize: regularTextSize,
-                                    textPadding: EdgeInsets.zero,
-                                    textDecoration: TextDecoration.none,
-                                    fontColor: blackColor.withOpacity(0.8),
-                                  ),
                                 ],
                               ),
+                        CustomTextComponet(
+                          textTitle: "\$${productDataModelClass.productPrice}",
+                          isCenterText: false,
+                          isClickAble: false,
+                          fontWeight: regularFontWeight,
+                          fontSize: regularTextSize,
+                          textPadding: EdgeInsets.zero,
+                          textDecoration: TextDecoration.lineThrough,
+                          fontColor: blackColor.withOpacity(0.8),
+                        ),
                         CustomIconButtonComponet(
                           icon: Icons.favorite_outline,
                           iconColor: redColor,

@@ -6,6 +6,7 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class SellerProductsUploadController {
   final TextEditingController productNameController = TextEditingController();
@@ -41,7 +42,7 @@ class SellerProductsUploadController {
     List<String> downloadUrlList = [];
 
     for (var element in multipleImageList!) {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      String fileName = Uuid().v4();
       final Reference storageRef =
           firebaseStorage.ref().child('$productImageDirectory/$fileName');
       File elementPath = File(element.path);
@@ -79,11 +80,10 @@ class SellerProductsUploadController {
           multipleImageList: multipleImagesList,
           directoryName: productImageDirectory);
       List<dynamic> productImageFileList = await futureDynamicList;
-
-      print("Check here::${productImageFileList.runtimeType}");
+      String fileName = Uuid().v4();
       CollectionReference productReference =
           firestore.collection(directoryName!);
-      await productReference.doc().set({
+      await productReference.doc(fileName).set({
         sellerCollectionFieldSid: selleSId,
         productCollectionFieldMainCategory: mainCategory,
         productCollectionFieldSubCategory: subCategory,

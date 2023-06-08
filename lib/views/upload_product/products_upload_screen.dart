@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_formfield_component.dart';
+import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/controllers/products_upload_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
@@ -20,7 +21,7 @@ class ProductUploadScreen extends StatefulWidget {
 class _ProductUploadScreenState extends State<ProductUploadScreen> {
   final SellerProductsUploadController _sellerProductsUploadController =
       SellerProductsUploadController();
-
+  final AuthController _authController = AuthController();
   @override
   void dispose() {
     _sellerProductsUploadController.productDescriptionController.dispose();
@@ -319,11 +320,11 @@ class _ProductUploadScreenState extends State<ProductUploadScreen> {
                 textEditingController: _sellerProductsUploadController
                     .productDescriptionController,
               ),
-              // CustomTextComponet(
-              //   textTitle: "Logout",
-              //   onPressed: () => _authController.logoutSeller(context),
-              //   isClickAble: true,
-              // )
+              CustomTextComponet(
+                textTitle: "Logout",
+                onPressed: () => _authController.logoutSeller(context),
+                isClickAble: true,
+              )
             ],
           ),
         ),

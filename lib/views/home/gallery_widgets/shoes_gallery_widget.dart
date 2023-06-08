@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
@@ -7,17 +6,17 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
 
-class KidsGalleryWidget extends StatefulWidget {
-  const KidsGalleryWidget({super.key});
+class ShoesGalleryWidget extends StatefulWidget {
+  const ShoesGalleryWidget({super.key});
 
   @override
-  State<KidsGalleryWidget> createState() => _KidsGalleryWidgetState();
+  State<ShoesGalleryWidget> createState() => _ShoesGalleryWidgetState();
 }
 
-class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
+class _ShoesGalleryWidgetState extends State<ShoesGalleryWidget> {
   final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
       .collection(productsDataDirectory)
-      .where(productCollectionFieldMainCategory, isEqualTo: 'Kids')
+      .where(productCollectionFieldMainCategory, isEqualTo: 'Shoes')
       .snapshots();
   @override
   Widget build(BuildContext context) {
@@ -44,6 +43,7 @@ class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
             isCenterText: true,
           );
         }
+
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 250,
@@ -72,31 +72,12 @@ class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
                       child: Container(
                         constraints:
                             BoxConstraints(minHeight: 100, maxHeight: 250),
-                        child: CachedNetworkImage(
-                            imageUrl:
-                                productDataModelClass.productImageFile![0],
-                            color: Colors.black.withOpacity(0.2),
-                            colorBlendMode: BlendMode.darken,
-                            height: 200,
-                            width: 250,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => SizedBox(
-                                        //height: 80,
-                                        child: Padding(
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                            value: downloadProgress.progress,
-                                            color: redColor.withOpacity(0.3)),
-                                      ),
-                                    )),
-                            fit: BoxFit.fill),
-                        // Image.network(
-                        //   productDataModelClass.productImageFile![0],
-                        //   fit: BoxFit.fill,
-                        //   height: 200,
-                        //   width: 250,
-                        // ),
+                        child: Image.network(
+                          productDataModelClass.productImageFile![0],
+                          fit: BoxFit.fill,
+                          height: 200,
+                          width: 250,
+                        ),
                       ),
                     ),
                     CustomTextComponet(

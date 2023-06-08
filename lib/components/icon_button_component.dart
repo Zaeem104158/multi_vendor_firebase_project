@@ -12,7 +12,7 @@ class CustomIconButtonComponet extends StatelessWidget {
     required this.icon,
     this.iconPadding,
     this.iconSize = mediumIconSize,
-    this.iconColor = blackColor,
+    this.iconColor,
     this.onPressed,
   });
   @override
@@ -20,7 +20,7 @@ class CustomIconButtonComponet extends StatelessWidget {
     return Padding(
         padding: iconPadding ?? const EdgeInsets.all(0),
         child: IconButton(
-          icon: Icon(icon),
+          icon: Icon(icon, color: iconColor),
           iconSize: iconSize,
           onPressed: onPressed,
         ));

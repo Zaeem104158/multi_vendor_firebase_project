@@ -8,6 +8,7 @@ class ProductDataModelClass {
   String? productPrice;
   String? productInstock;
   String? productDiscount;
+  String? productSid;
   List<String>? productImageFile;
 
   ProductDataModelClass(
@@ -18,6 +19,7 @@ class ProductDataModelClass {
       this.productPrice,
       this.productInstock,
       this.productDiscount,
+      this.productSid,
       this.productImageFile});
 
   factory ProductDataModelClass.fromMap(Map<String, dynamic> map) {
@@ -29,6 +31,7 @@ class ProductDataModelClass {
         productPrice: map[productCollectionFieldProductPrice],
         productInstock: map[productCollectionFieldProductInStock],
         productDiscount: map[productCollectionFieldProductDiscount],
+        productSid: map[sellerCollectionFieldSid],
         productImageFile:
             map[productCollectionFieldProductImageFile].cast<String>());
   }

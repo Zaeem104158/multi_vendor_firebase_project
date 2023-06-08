@@ -10,6 +10,7 @@ class CustomTextComponet extends StatelessWidget {
   final Color? fontColor;
   final TextOverflow? textOverflow;
   final EdgeInsets? textPadding;
+  final TextDecoration? textDecoration;
   final bool isClickAble;
   final bool isCenterText;
   final VoidCallback? onPressed;
@@ -22,6 +23,7 @@ class CustomTextComponet extends StatelessWidget {
       this.fontHeight = null,
       this.fontColor = blackColor,
       this.textOverflow = TextOverflow.ellipsis,
+      this.textDecoration = TextDecoration.none,
       this.textPadding,
       this.isClickAble = false,
       this.onPressed,
@@ -37,6 +39,7 @@ class CustomTextComponet extends StatelessWidget {
                 child: Text(
                   textTitle ?? "",
                   style: TextStyle(
+                      decoration: textDecoration,
                       fontFamily: regularTextFontFamily,
                       fontSize: fontSize,
                       color: fontColor,
@@ -49,6 +52,7 @@ class CustomTextComponet extends StatelessWidget {
                 textTitle ?? "",
                 style: TextStyle(
                     fontFamily: regularTextFontFamily,
+                    decoration: textDecoration,
                     fontSize: fontSize,
                     color: fontColor,
                     fontWeight: fontWeight,

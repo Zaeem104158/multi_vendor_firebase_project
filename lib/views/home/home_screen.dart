@@ -3,9 +3,13 @@ import 'package:firebase_multi_vendor_project/components/icon_button_component.d
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/category/category_list/category_list.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/accessories_gallery_widget.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/beauty_gallery_widget.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/electornics_gallery_widget.dart';
 import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/kids_gallery_widget.dart';
 import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/men_gallery_widget.dart';
-import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/phone_gallery_widget.dart';
+import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/shoes_gallery_widget.dart';
 import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/women_gallery_widget.dart';
 import 'package:firebase_multi_vendor_project/views/search/customer_search_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,31 +20,34 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      //Length of how many tabs are here
-      length: 4,
-      //start index of the tab
+      length: mainCategoryList.length - 1,
       initialIndex: 0,
       child: Scaffold(
+        backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
         appBar: AppBar(
           bottom: TabBar(
-            tabs: [
-              CustomTextComponet(
-                isClickAble: true,
-                textTitle: "Men",
-              ),
-              CustomTextComponet(
-                isClickAble: true,
-                textTitle: "Women",
-              ),
-              CustomTextComponet(
-                isClickAble: true,
-                textTitle: "Kids",
-              ),
-              CustomTextComponet(
-                isClickAble: true,
-                textTitle: "Phones",
-              )
-            ],
+            indicatorColor: blueGreyColor.withOpacity(0.6),
+            isScrollable: true,
+            tabs: mainCategoryList
+                .sublist(1)
+                .map(
+                  (String item) => Container(
+                    height: customHeightWidth(context, height: true) * 0.03,
+                    width: customHeightWidth(context, width: true) * 0.25,
+                    decoration: BoxDecoration(
+                        color: blackColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: CustomTextComponet(
+                      isClickAble: true,
+                      isCenterText: true,
+                      textTitle: item,
+                      fontSize: smallTextSize,
+                      fontWeight: regularBoldFontWeight,
+                      textPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                )
+                .toList(),
           ),
           automaticallyImplyLeading: false,
           centerTitle: true,
@@ -79,7 +86,10 @@ class HomeScreen extends StatelessWidget {
           MenGalleryWidget(),
           WomenGalleryWidget(),
           KidsGalleryWidget(),
-          PhoneGalleryWidget()
+          ElectornicsGalleryWidget(),
+          ShoesGalleryWidget(),
+          BeautyGalleryWidget(),
+          AccessoriesGalleryWidget(),
         ]),
       ),
     );
