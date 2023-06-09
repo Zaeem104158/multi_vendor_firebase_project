@@ -46,7 +46,6 @@ dependencies:
   connectivity_plus: ^4.0.1
   uuid: ^3.0.7
   cached_network_image: ^3.2.3
-  flutter_image_slideshow: ^0.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
