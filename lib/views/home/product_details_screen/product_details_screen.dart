@@ -7,7 +7,9 @@ import 'package:firebase_multi_vendor_project/components/product_card_component.
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/models/productdata_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
+import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/home/full_product_image/full_image_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -47,164 +49,249 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     return Scaffold(
       backgroundColor: whiteColor.withOpacity(0.2),
-      appBar: AppBar(
-        backgroundColor: greyColor,
-        automaticallyImplyLeading: true,
-        title: CustomTextComponet(
-          textTitle: "Product Details Screen",
-          isCenterText: true,
-          fontWeight: regularBoldFontWeight,
-          fontColor: whiteColor,
-          fontSize: mediumTextSize,
-          isClickAble: false,
-        ),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            SizedBox(
-              width: 400,
-              height: 250,
-              child: PageView.builder(
-                  clipBehavior: Clip.none,
-                  controller: _pageController,
-                  onPageChanged: (page) {
-                    setState(() {
-                      activePage = page;
-                    });
-                  },
-                  itemCount: widget.productData!.productImageFile!.length,
-                  pageSnapping: true,
-                  itemBuilder: (context, pagePosition) {
-                    bool active = pagePosition == activePage;
-                    double margin = active ? 10 : 20;
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 80),
+              child: Column(
+                children: [
+                  //? Image SLider
+                  SizedBox(
+                    width: 400,
+                    height: 250,
+                    child: PageView.builder(
+                        clipBehavior: Clip.none,
+                        controller: _pageController,
+                        onPageChanged: (page) {
+                          setState(() {
+                            activePage = page;
+                          });
+                        },
+                        itemCount: widget.productData!.productImageFile!.length,
+                        pageSnapping: true,
+                        itemBuilder: (context, pagePosition) {
+                          bool active = pagePosition == activePage;
+                          double margin = active ? 10 : 20;
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AnimatedContainer(
-                        curve: Curves.easeInOutCubic,
-                        margin: EdgeInsets.all(margin),
-                        duration: Duration(milliseconds: 500),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          child: CachedNetworkImage(
-                              imageUrl: widget
-                                  .productData!.productImageFile![pagePosition],
-                              color: Colors.black.withOpacity(0.2),
-                              colorBlendMode: BlendMode.darken,
-                              height: 100,
-                              width: 100,
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => SizedBox(
-                                          //height: 80,
-                                          child: Padding(
-                                        padding: const EdgeInsets.all(0.0),
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                              color: redColor.withOpacity(0.3)),
-                                        ),
-                                      )),
-                              fit: BoxFit.fill),
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AnimatedContainer(
+                              curve: Curves.easeInOutCubic,
+                              margin: EdgeInsets.all(margin),
+                              duration: Duration(milliseconds: 500),
+                              child: GestureDetector(
+                                onTap: () {
+                                  navigationPush(context,
+                                      screenWidget: FullImageScreen(
+                                        imageFileList: widget
+                                            .productData!.productImageFile!,
+                                        activeImage: activePage,
+                                      ));
+                                },
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  child: CachedNetworkImage(
+                                      imageUrl: widget.productData!
+                                          .productImageFile![pagePosition],
+                                      color: Colors.black.withOpacity(0.2),
+                                      colorBlendMode: BlendMode.darken,
+                                      height: 100,
+                                      width: 100,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          SizedBox(
+                                              //height: 80,
+                                              child: Padding(
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color: redColor
+                                                      .withOpacity(0.3)),
+                                            ),
+                                          )),
+                                      fit: BoxFit.fill),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                  //? Image Slider Indicator
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: indicators(
+                          widget.productData!.productImageFile!.length,
+                          activePage)),
+                  //? Product Price, favorite icon, instock, descritpion
+                  Column(children: [
+                    CustomDivider(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      isCenter: true,
+                      withTextDivider: true,
+                      onlyDivider: false,
+                      text: "Product Description",
+                      thickness: 1,
+                      color: greyColor,
+                      textPadding: EdgeInsets.all(16),
+                      fontColor: blackColor.withOpacity(0.8),
+                      fontSize: mediumTextSize,
+                    ),
+                    CustomTextComponet(
+                      textTitle: widget.productData!.productName,
+                      fontWeight: regularBoldFontWeight,
+                      fontColor: greyColor,
+                      isCenterText: true,
+                      isClickAble: false,
+                      fontSize: largeTextSize,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomTextComponet(
+                            textTitle:
+                                "BDT \$${widget.productData!.productPrice}",
+                            fontWeight: regularBoldFontWeight,
+                            fontColor: greyColor,
+                            isCenterText: true,
+                            isClickAble: false,
+                            fontSize: mediumTextSize,
+                            textPadding: EdgeInsets.all(24),
+                          ),
+                          CustomIconButtonComponet(
+                            icon: Icons.favorite_outline,
+                            iconColor: redColor,
+                            iconSize: mediumIconSize,
+                            iconPadding: EdgeInsets.zero,
+                          ),
+                        ]),
+                    Container(
+                      width: customHeightWidth(context, width: true) * 0.8,
+                      decoration: BoxDecoration(
+                          color: blackColor,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(30.0))),
+                      child: CustomTextComponet(
+                        textTitle:
+                            "${widget.productData!.productInstock} products in stock",
+                        fontWeight: regularBoldFontWeight,
+                        fontColor: whiteColor,
+                        isCenterText: true,
+                        isClickAble: false,
+                        fontSize: mediumTextSize,
+                        textOverflow: TextOverflow.visible,
+                        textPadding: EdgeInsets.all(16),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: blackColor.withOpacity(0.5),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50.0),
+                              topRight: Radius.circular(50.0)),
+                        ),
+                        child: CustomTextComponet(
+                          textTitle:
+                              "Details:\n${widget.productData!.productDescription}",
+                          fontWeight: regularBoldFontWeight,
+                          fontColor: whiteColor,
+                          isCenterText: false,
+                          isClickAble: false,
+                          fontSize: mediumTextSize,
+                          textOverflow: TextOverflow.visible,
+                          textPadding: EdgeInsets.all(24),
                         ),
                       ),
-                    );
-                  }),
-            ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: indicators(
-                    widget.productData!.productImageFile!.length, activePage)),
-            Column(children: [
-              CustomDivider(
-                mainAxisAlignment: MainAxisAlignment.center,
-                isCenter: true,
-                withTextDivider: true,
-                onlyDivider: false,
-                text: "Product Description",
-                thickness: 1,
-                color: greyColor,
-                textPadding: EdgeInsets.all(16),
-                fontColor: blackColor.withOpacity(0.8),
-                fontSize: mediumTextSize,
-              ),
-              CustomTextComponet(
-                textTitle: widget.productData!.productName,
-                fontWeight: regularBoldFontWeight,
-                fontColor: greyColor,
-                isCenterText: true,
-                isClickAble: false,
-                fontSize: largeTextSize,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                CustomTextComponet(
-                  textTitle: "BDT \$${widget.productData!.productPrice}",
-                  fontWeight: regularBoldFontWeight,
-                  fontColor: greyColor,
-                  isCenterText: true,
-                  isClickAble: false,
-                  fontSize: mediumTextSize,
-                  textPadding: EdgeInsets.all(24),
-                ),
-                CustomIconButtonComponet(
-                  icon: Icons.favorite_outline,
-                  iconColor: redColor,
-                  iconSize: mediumIconSize,
-                  iconPadding: EdgeInsets.zero,
-                ),
-              ]),
-              Container(
-                width: customHeightWidth(context, width: true) * 0.8,
-                decoration: BoxDecoration(
-                    color: blackColor,
-                    borderRadius: BorderRadius.all(Radius.circular(30.0))),
-                child: CustomTextComponet(
-                  textTitle:
-                      "${widget.productData!.productInstock} products in stock",
-                  fontWeight: regularBoldFontWeight,
-                  fontColor: whiteColor,
-                  isCenterText: true,
-                  isClickAble: false,
-                  fontSize: mediumTextSize,
-                  textOverflow: TextOverflow.visible,
-                  textPadding: EdgeInsets.all(16),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: blackColor.withOpacity(0.5),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(50.0),
-                        topRight: Radius.circular(50.0)),
-                  ),
-                  child: CustomTextComponet(
-                    textTitle: widget.productData!.productDescription,
-                    fontWeight: regularBoldFontWeight,
-                    fontColor: whiteColor,
-                    isCenterText: false,
-                    isClickAble: false,
+                    )
+                  ]),
+                  //? Divider
+                  CustomDivider(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    isCenter: true,
+                    withTextDivider: true,
+                    onlyDivider: false,
+                    text: "Similler Product",
+                    thickness: 1,
+                    color: greyColor,
+                    textPadding: EdgeInsets.all(0),
+                    fontColor: blackColor.withOpacity(0.8),
                     fontSize: mediumTextSize,
-                    textOverflow: TextOverflow.visible,
-                    textPadding: EdgeInsets.all(24),
                   ),
-                ),
-              )
-            ]),
-            similerProduct(maincategory: 'Men', width: width)
-          ],
-        ),
+                  //? Similler Products
+                  similerProduct(
+                      maincategory: widget.productData!.mainCategory,
+                      subCategory: widget.productData!.subCategory,
+                      width: width),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 16,
+            child: CustomIconButtonComponet(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: blackColor,
+              onPressed: () {
+                navigationPop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+      bottomSheet: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CustomIconButtonComponet(
+            icon: Icons.shop,
+            iconColor: blackColor,
+            iconSize: mediumIconSize,
+            iconPadding: EdgeInsets.all(2),
+          ),
+          CustomIconButtonComponet(
+            icon: Icons.shopping_cart,
+            iconColor: blackColor,
+            iconSize: mediumIconSize,
+            iconPadding: EdgeInsets.all(2),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: customHeightWidth(context, height: true) / 20,
+              width: customHeightWidth(context, width: true) * 0.4,
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: cyanColor,
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: GestureDetector(
+                  onTap: () {},
+                  child: CustomTextComponet(
+                    isCenterText: true,
+                    isClickAble: true,
+                    textTitle: "Add to Cart",
+                    fontColor: whiteColor,
+                    fontSize: regularTextSize,
+                  )),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-Widget similerProduct({String? maincategory, double? width}) {
+Widget similerProduct(
+    {String? maincategory, String? subCategory, double? width}) {
   final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
       .collection(productsDataDirectory)
       .where(productCollectionFieldMainCategory, isEqualTo: maincategory)
+      .where(productCollectionFieldSubCategory, isEqualTo: subCategory)
       .snapshots();
   return StreamBuilder<QuerySnapshot>(
     stream: _productsStream,
