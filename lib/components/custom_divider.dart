@@ -8,16 +8,31 @@ class CustomDivider extends StatelessWidget {
   final double? width;
   final Color? color;
   final String? text;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  final Color? fontColor;
+  final EdgeInsets? textPadding;
+  final TextDecoration? textDecoration;
+  final bool isClickAble;
+  final bool isCenterText;
   final bool isCenter;
   final bool onlyDivider;
   final bool withTextDivider;
+
   final MainAxisAlignment? mainAxisAlignment;
   CustomDivider(
       {this.thickness,
       this.height,
       this.color,
       this.text,
+      this.fontColor,
+      this.fontWeight,
+      this.fontSize,
       this.isCenter = false,
+      this.isClickAble = false,
+      this.isCenterText = true,
+      this.textPadding,
+      this.textDecoration,
       this.mainAxisAlignment,
       this.onlyDivider = false,
       this.withTextDivider = false,
@@ -40,7 +55,13 @@ class CustomDivider extends StatelessWidget {
                 ),
                 CustomTextComponet(
                   textTitle: text,
-                  textPadding: EdgeInsets.all(2),
+                  textPadding: textPadding,
+                  fontColor: fontColor,
+                  fontSize: fontSize,
+                  fontWeight: fontWeight,
+                  isCenterText: true,
+                  isClickAble: false,
+                  textDecoration: textDecoration,
                 ),
                 SizedBox(
                   height: customHeightWidth(context, height: true) / 400,
