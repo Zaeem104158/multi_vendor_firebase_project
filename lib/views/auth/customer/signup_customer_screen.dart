@@ -74,12 +74,12 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                   textPadding: EdgeInsets.all(12),
                 ),
                 //Icon Component
-                CustomIconButtonComponet(
-                  icon: Icons.person,
-                  iconSize: mediumIconSize,
-                  iconColor: blackColor,
-                  iconPadding: EdgeInsets.all(12),
-                ),
+                // CustomIconButtonComponet(
+                //   icon: Icons.person,
+                //   iconSize: mediumIconSize,
+                //   iconColor: blackColor,
+                //   iconPadding: EdgeInsets.all(12),
+                // ),
               ],
             ),
             Padding(
@@ -243,9 +243,10 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
               children: [
                 CustomTextComponet(
                   textTitle: "Already have an account?",
-                  textPadding: EdgeInsets.all(16.0),
+                  textPadding: EdgeInsets.all(0.0),
                   fontWeight: regularBoldFontWeight,
                   fontColor: blackColor,
+                  fontSize: smallTextSize,
                 ),
                 CustomTextComponet(
                   isClickAble: true,
@@ -255,7 +256,7 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                   },
                   textTitle: "Login",
                   fontColor: Colors.grey,
-                  textPadding: EdgeInsets.all(16.0),
+                  textPadding: EdgeInsets.all(0.0),
                 )
               ],
             ),
@@ -274,6 +275,7 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                     fontWeight: regularBoldFontWeight,
                     fontColor: blackColor,
                     isClickAble: false,
+                    fontSize: smallTextSize,
                   ),
                 ),
                 CustomTextComponet(
@@ -282,7 +284,7 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                       screenWidget: SellerSignUpScreen()),
                   textTitle: "Sign Up",
                   fontColor: Colors.grey,
-                  textPadding: EdgeInsets.all(16.0),
+                  textPadding: EdgeInsets.all(0.0),
                 )
               ],
             ),
@@ -298,6 +300,7 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                   fontWeight: regularBoldFontWeight,
                   fontColor: blackColor,
                   isClickAble: false,
+                  fontSize: smallTextSize,
                 ),
                 CustomTextComponet(
                   isClickAble: true,
@@ -305,7 +308,7 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                       screenWidget: SellerLoginScreen()),
                   textTitle: "Login",
                   fontColor: Colors.grey,
-                  textPadding: EdgeInsets.all(16.0),
+                  textPadding: EdgeInsets.all(0.0),
                 )
               ],
             )

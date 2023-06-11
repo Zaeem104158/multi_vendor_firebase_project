@@ -10,6 +10,7 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/home/full_product_image/full_image_screen.dart';
+import 'package:firebase_multi_vendor_project/views/store/visit_store_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -190,6 +191,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
+                        width: double.infinity,
                         decoration: BoxDecoration(
                           color: blackColor.withOpacity(0.5),
                           borderRadius: BorderRadius.only(
@@ -228,6 +230,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       maincategory: widget.productData!.mainCategory,
                       subCategory: widget.productData!.subCategory,
                       width: width),
+                  SizedBox(
+                    height: 50,
+                  )
                 ],
               ),
             ),
@@ -248,10 +253,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CustomIconButtonComponet(
-            icon: Icons.shop,
+            icon: Icons.store,
             iconColor: blackColor,
             iconSize: mediumIconSize,
             iconPadding: EdgeInsets.all(2),
+            onPressed: () {
+              navigationPush(context,
+                  screenWidget: VisitStoreScreen(
+                    sellerId: widget.productData!.productSid,
+                  ));
+            },
           ),
           CustomIconButtonComponet(
             icon: Icons.shopping_cart,
@@ -314,6 +325,7 @@ Widget similerProduct(
         gridAspectRatio: 0.55,
         screenWidth: width,
         snapshot: snapshot,
+        scrollDirection: Axis.vertical,
       );
     },
   );

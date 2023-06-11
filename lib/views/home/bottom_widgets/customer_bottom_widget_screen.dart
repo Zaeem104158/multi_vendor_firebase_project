@@ -5,7 +5,7 @@ import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
 import 'package:firebase_multi_vendor_project/views/profie/customer_profile_screen.dart';
-import 'package:firebase_multi_vendor_project/views/shop/customer_shop_screen.dart';
+import 'package:firebase_multi_vendor_project/views/store/store_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBottomWidgetScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _CustomerBottomWidgetScreenState
   final List<Widget> screens = [
     HomeScreen(),
     CategoryScreen(),
-    CustomerShopScreen(),
+    StoreScreen(),
     CartScreen(),
     CustomerProfileScreen()
   ];

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //Application image paths
 const String appLogo_image = "assets/images/logo.png";
@@ -38,6 +39,7 @@ const String customersCollectionFieldPhoneNumber = 'phoneNumber';
 //Seller keys
 const String sellersDirectory = 'sellers';
 const String sellerCollectionFieldSid = 'sid';
+const String sellerCollectionFieldIsProductNew = 'isProductNew';
 const String sellerCollectionFieldFullName = 'fullName';
 const String sellerCollectionFieldEmail = 'email';
 const String sellerCollectionFieldImageFile = 'imageFile';
@@ -241,5 +243,16 @@ showWarningDialog(BuildContext context) {
         return alert;
       },
     );
+  }
+}
+
+void sendWhatsAppMessage(String phoneNumber, String message) async {
+  String url =
+      "whatsapp://send?phone=$phoneNumber&text=${Uri.encodeComponent(message)}";
+
+  try {
+    await launch(url.toString());
+  } catch (e) {
+    throw 'Could not launch $e';
   }
 }

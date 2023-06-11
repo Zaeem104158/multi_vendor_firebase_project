@@ -92,7 +92,7 @@ class _FullImageScreenState extends State<FullImageScreen> {
             ),
           ),
           SizedBox(
-            height: customHeightWidth(context, height: true) / 8,
+            height: customHeightWidth(context, height: true) / 50,
           ),
           SizedBox(
             width: customHeightWidth(context, height: true),

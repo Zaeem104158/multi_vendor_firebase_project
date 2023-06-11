@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/views/store/store_screen.dart';
 import 'package:firebase_multi_vendor_project/views/upload_product/products_upload_screen.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_screen.dart';
 import 'package:firebase_multi_vendor_project/views/dashboard/seller_dashboard_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
-import 'package:firebase_multi_vendor_project/views/shop/customer_shop_screen.dart';
 import 'package:flutter/material.dart';
 
 class SellerBottomWidgetScreen extends StatefulWidget {
@@ -24,7 +23,7 @@ class _SellerBottomWidgetScreenState extends State<SellerBottomWidgetScreen> {
   final List<Widget> screens = [
     HomeScreen(),
     CategoryScreen(),
-    CustomerShopScreen(),
+    StoreScreen(),
     SellerDashBoardScreen(),
     ProductUploadScreen()
   ];
