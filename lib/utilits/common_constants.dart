@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
+import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/customer_bottom_widget_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/seller_bottom_widget_screen.dart.dart';
@@ -48,6 +49,7 @@ const String sellerCollectionFieldPhoneNumber = 'phoneNumber';
 // Seller upload product keys
 const String productImageDirectory = 'productImages';
 const String productsDataDirectory = 'productsData';
+const String productCollectionFieldProductId = 'productId';
 const String productCollectionFieldMainCategory = 'mainCategory';
 const String productCollectionFieldSubCategory = 'subCategory';
 const String productCollectionFieldProductPrice = 'productPrice';
@@ -255,4 +257,18 @@ void sendWhatsAppMessage(String phoneNumber, String message) async {
   } catch (e) {
     throw 'Could not launch $e';
   }
+}
+
+void showSnack(context, String? content) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: cyanColor.withGreen(150),
+    content: CustomTextComponet(
+      textTitle: content ?? "",
+      fontColor: whiteColor,
+    ),
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(20))),
+    duration: Duration(seconds: 2),
+  ));
 }

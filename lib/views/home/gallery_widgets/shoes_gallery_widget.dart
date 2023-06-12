@@ -35,12 +35,16 @@ class _ShoesGalleryWidgetState extends State<ShoesGalleryWidget> {
           );
         }
         if (snapshot.data!.docs.isEmpty) {
-          return CustomTextComponet(
-            textTitle: "This category\nhas not data yet.",
-            fontSize: largeTextSize,
-            fontWeight: regularBoldFontWeight,
-            fontColor: redColor.withOpacity(0.5),
-            isCenterText: true,
+          return Container(
+            // color: cyanColor,
+            child: CustomTextComponet(
+              maxLine: 3,
+              textTitle: "This category\n\nhas not data yet.",
+              fontSize: largeTextSize,
+              fontWeight: regularBoldFontWeight,
+              fontColor: redColor,
+              isCenterText: true,
+            ),
           );
         }
 

@@ -84,6 +84,7 @@ class SellerProductsUploadController {
       CollectionReference productReference =
           firestore.collection(directoryName!);
       await productReference.doc(fileName).set({
+        productCollectionFieldProductId: fileName,
         sellerCollectionFieldSid: selleSId,
         productCollectionFieldMainCategory: mainCategory,
         productCollectionFieldSubCategory: subCategory,

@@ -11,6 +11,8 @@ class CustomTextComponet extends StatelessWidget {
   final TextOverflow? textOverflow;
   final EdgeInsets? textPadding;
   final TextDecoration? textDecoration;
+  final Color? lineThroughColor;
+  final int? maxLine;
   final bool isClickAble;
   final bool isCenterText;
   final VoidCallback? onPressed;
@@ -24,7 +26,9 @@ class CustomTextComponet extends StatelessWidget {
       this.fontColor = blackColor,
       this.textOverflow = TextOverflow.ellipsis,
       this.textDecoration = TextDecoration.none,
+      this.lineThroughColor = blackColor,
       this.textPadding,
+      this.maxLine,
       this.isClickAble = false,
       this.onPressed,
       this.isCenterText = false});
@@ -38,8 +42,10 @@ class CustomTextComponet extends StatelessWidget {
             ? Center(
                 child: Text(
                   textTitle ?? "",
+                  maxLines: maxLine ?? 1,
                   style: TextStyle(
                       decoration: textDecoration,
+                      decorationColor: lineThroughColor,
                       fontFamily: regularTextFontFamily,
                       fontSize: fontSize,
                       color: fontColor,
@@ -50,9 +56,11 @@ class CustomTextComponet extends StatelessWidget {
               )
             : Text(
                 textTitle ?? "",
+                maxLines: maxLine ?? 1,
                 style: TextStyle(
                     fontFamily: regularTextFontFamily,
                     decoration: textDecoration,
+                    decorationColor: lineThroughColor,
                     fontSize: fontSize,
                     color: fontColor,
                     fontWeight: fontWeight,

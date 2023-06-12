@@ -5,7 +5,7 @@ const regularTextFontFamily = 'RobotoMono';
 
 //Text Size
 const double regularTextSize = 18.0;
-const double mediumTextSize = 18.0;
+const double mediumTextSize = 20.0;
 const double smallTextSize = 12.0;
 const double smallerTextSize = 10.0;
 const double smallestTextSize = 8.0;

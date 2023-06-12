@@ -47,16 +47,14 @@ class ProductCardComponent extends StatelessWidget {
                 snapshot!.data!.docs[index];
             Map<String, dynamic> productData =
                 productDataObject.data() as Map<String, dynamic>;
-            final productDataModelClass =
-                ProductDataModelClass.fromMap(productData);
-            int discountPrice = int.parse(productDataModelClass.productPrice!) -
-                int.parse(productDataModelClass.productDiscount!);
+            final data = ProductDataModel.fromMap(productData);
+            int discountPrice = int.parse(data.productPrice!) -
+                int.parse(data.productDiscount!);
 
             return GestureDetector(
               onTap: () {
                 navigationPush(context,
-                    screenWidget: ProductDetailsScreen(
-                        productData: productDataModelClass));
+                    screenWidget: ProductDetailsScreen(productData: data));
               },
               child: Stack(
                 children: [
@@ -85,8 +83,7 @@ class ProductCardComponent extends StatelessWidget {
                               constraints: BoxConstraints(
                                   minHeight: 100, maxHeight: 250),
                               child: CachedNetworkImage(
-                                  imageUrl: productDataModelClass
-                                      .productImageFile![0],
+                                  imageUrl: data.productImageFile![0],
                                   color: Colors.black.withOpacity(0.2),
                                   colorBlendMode: BlendMode.darken,
                                   height: 200,
@@ -108,7 +105,7 @@ class ProductCardComponent extends StatelessWidget {
                           ),
                           //Product Name
                           CustomTextComponet(
-                            textTitle: productDataModelClass.productName!,
+                            textTitle: data.productName!,
                             isCenterText: true,
                             isClickAble: false,
                             fontWeight: regularFontWeight,
@@ -122,21 +119,17 @@ class ProductCardComponent extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomTextComponet(
-                                  textTitle:
-                                      productDataModelClass.productDiscount ==
-                                              "0"
-                                          ? "Regular Price:"
-                                          : "Discount Price:",
+                                  textTitle: data.productDiscount == "0"
+                                      ? "Regular Price:"
+                                      : "Discount Price:",
                                   isCenterText: false,
                                   isClickAble: false,
                                   fontWeight: regularBoldFontWeight,
                                   fontSize: smallTextSize,
                                   textPadding: EdgeInsets.all(0),
-                                  fontColor:
-                                      productDataModelClass.productDiscount ==
-                                              "0"
-                                          ? blackColor.withOpacity(0.8)
-                                          : redColor.shade900,
+                                  fontColor: data.productDiscount == "0"
+                                      ? blackColor.withOpacity(0.8)
+                                      : redColor.shade900,
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -147,23 +140,20 @@ class ProductCardComponent extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         CustomTextComponet(
-                                          textTitle:
-                                              "\$${productDataModelClass.productPrice}",
+                                          textTitle: "\$${data.productPrice}",
                                           isCenterText: false,
                                           isClickAble: false,
                                           fontWeight: regularFontWeight,
                                           fontSize: regularTextSize,
                                           textPadding: EdgeInsets.all(0),
-                                          textDecoration: productDataModelClass
-                                                      .productDiscount ==
-                                                  "0"
-                                              ? TextDecoration.none
-                                              : TextDecoration.lineThrough,
+                                          textDecoration:
+                                              data.productDiscount == "0"
+                                                  ? TextDecoration.none
+                                                  : TextDecoration.lineThrough,
                                           fontColor:
                                               blackColor.withOpacity(0.8),
                                         ),
-                                        productDataModelClass.productDiscount !=
-                                                "0"
+                                        data.productDiscount != "0"
                                             ? CustomTextComponet(
                                                 textTitle: "\$$discountPrice",
                                                 isCenterText: false,
@@ -190,7 +180,7 @@ class ProductCardComponent extends StatelessWidget {
                           )
                         ],
                       )),
-                  productDataModelClass.productNew!
+                  data.productNew!
                       ? Positioned(
                           child: Container(
                           height: 30,

@@ -5,16 +5,20 @@ import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/product_card_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
+import 'package:firebase_multi_vendor_project/models/productdata_view_model.dart';
 import 'package:firebase_multi_vendor_project/models/productdata_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/cart/cart_provider/cart_provider.dart';
+import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/full_product_image/full_image_screen.dart';
 import 'package:firebase_multi_vendor_project/views/store/visit_store_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final ProductDataModelClass? productData;
+  final ProductDataModel? productData;
 
   ProductDetailsScreen({super.key, this.productData});
 
@@ -140,7 +144,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       color: greyColor,
                       textPadding: EdgeInsets.all(16),
                       fontColor: blackColor.withOpacity(0.8),
-                      fontSize: mediumTextSize,
+                      fontSize: regularTextSize,
                     ),
                     CustomTextComponet(
                       textTitle: widget.productData!.productName,
@@ -264,11 +268,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ));
             },
           ),
-          CustomIconButtonComponet(
-            icon: Icons.shopping_cart,
-            iconColor: blackColor,
-            iconSize: mediumIconSize,
-            iconPadding: EdgeInsets.all(2),
+          Stack(
+            children: [
+              CustomIconButtonComponet(
+                icon: Icons.shopping_cart,
+                iconColor: blackColor,
+                iconSize: mediumIconSize,
+                iconPadding: EdgeInsets.all(2),
+                onPressed: () {
+                  navigationPush(context, screenWidget: CartScreen());
+                },
+              ),
+              Provider.of<CartProvider>(context, listen: true)
+                          .getItems
+                          .length !=
+                      0
+                  ? Positioned(
+                      left: 30,
+                      child: Container(
+                          //margin: EdgeInsets.all(3),
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: redColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: CustomTextComponet(
+                            textTitle:
+                                "${Provider.of<CartProvider>(context).getItems.length}",
+                            isCenterText: true,
+                            fontSize: smallerTextSize,
+                            fontColor: whiteColor,
+                            fontWeight: regularBoldFontWeight,
+                          )),
+                    )
+                  : SizedBox()
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -281,7 +316,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 borderRadius: BorderRadius.circular(50.0),
               ),
               child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // Here work
+
+                    bool hasProduct = false;
+                    Provider.of<CartProvider>(context, listen: false)
+                        .getItems
+                        .forEach((element) {
+                      element.productId == widget.productData!.productId
+                          ? hasProduct = true
+                          : hashCode;
+                    });
+                    hasProduct
+                        ? showSnack(context, "Already product added")
+                        : Provider.of<CartProvider>(context, listen: false)
+                            .addItem(
+                                context,
+                                productData: ProductDataViewModel(
+                                    selectQuantity: 1,
+                                    mainCategory:
+                                        widget.productData!.mainCategory,
+                                    subCategory:
+                                        widget.productData!.subCategory,
+                                    productDescription:
+                                        widget.productData!.productDescription,
+                                    productName:
+                                        widget.productData!.productName,
+                                    productPrice:
+                                        widget.productData!.productPrice,
+                                    productDiscount:
+                                        widget.productData!.productDiscount,
+                                    productSid: widget.productData!.productSid,
+                                    productId: widget.productData!.productId,
+                                    productInstock:
+                                        widget.productData!.productInstock,
+                                    productImageFile:
+                                        widget.productData!.productImageFile));
+                  },
                   child: CustomTextComponet(
                     isCenterText: true,
                     isClickAble: true,

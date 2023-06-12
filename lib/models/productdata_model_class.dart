@@ -1,6 +1,6 @@
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 
-class ProductDataModelClass {
+class ProductDataModel {
   String? productName;
   String? productDescription;
   String? mainCategory;
@@ -9,10 +9,11 @@ class ProductDataModelClass {
   String? productInstock;
   String? productDiscount;
   String? productSid;
+  String? productId;
   bool? productNew;
   List<String>? productImageFile;
 
-  ProductDataModelClass(
+  ProductDataModel(
       {this.productName,
       this.productDescription,
       this.mainCategory,
@@ -22,10 +23,11 @@ class ProductDataModelClass {
       this.productDiscount,
       this.productSid,
       this.productNew,
+      this.productId,
       this.productImageFile});
 
-  factory ProductDataModelClass.fromMap(Map<String, dynamic> map) {
-    return ProductDataModelClass(
+  factory ProductDataModel.fromMap(Map<String, dynamic> map) {
+    return ProductDataModel(
         productName: map[productCollectionFieldProductName],
         productDescription: map[productCollectionFieldProductDescription],
         mainCategory: map[productCollectionFieldMainCategory],
@@ -35,6 +37,7 @@ class ProductDataModelClass {
         productDiscount: map[productCollectionFieldProductDiscount],
         productSid: map[sellerCollectionFieldSid],
         productNew: map[sellerCollectionFieldIsProductNew],
+        productId: map[productCollectionFieldProductId],
         productImageFile:
             map[productCollectionFieldProductImageFile].cast<String>());
   }
