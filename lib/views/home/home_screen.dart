@@ -25,6 +25,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
         appBar: AppBar(
+          backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
           bottom: TabBar(
             indicatorColor: blueGreyColor.withOpacity(0.6),
             isScrollable: true,
@@ -51,7 +52,6 @@ class HomeScreen extends StatelessWidget {
           ),
           automaticallyImplyLeading: false,
           centerTitle: true,
-          backgroundColor: whiteColor,
           elevation: 0.0,
           title: GestureDetector(
             onTap: () {

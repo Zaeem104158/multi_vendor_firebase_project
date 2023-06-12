@@ -49,7 +49,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: whiteColor.withOpacity(0.2),
+      backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
       body: Stack(
         children: [
           SingleChildScrollView(

@@ -75,7 +75,9 @@ class ProductCardComponent extends StatelessWidget {
                         // ],
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          //Product Image
                           ClipRRect(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
@@ -104,6 +106,7 @@ class ProductCardComponent extends StatelessWidget {
                                   fit: BoxFit.fill),
                             ),
                           ),
+                          //Product Name
                           CustomTextComponet(
                             textTitle: productDataModelClass.productName!,
                             isCenterText: true,
@@ -112,73 +115,30 @@ class ProductCardComponent extends StatelessWidget {
                             fontSize: regularTextSize,
                             textPadding: EdgeInsets.all(4),
                           ),
-                          productDataModelClass.productDiscount! != "0"
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomTextComponet(
-                                      textTitle: "Regular Price:",
-                                      isCenterText: false,
-                                      isClickAble: false,
-                                      fontWeight: regularFontWeight,
-                                      fontSize: smallTextSize,
-                                      textPadding: EdgeInsets.all(4),
-                                      fontColor: blackColor.withOpacity(0.8),
-                                    ),
-                                    CustomTextComponet(
-                                      textTitle:
-                                          "\$${productDataModelClass.productPrice}",
-                                      isCenterText: false,
-                                      isClickAble: false,
-                                      fontWeight: regularFontWeight,
-                                      fontSize: regularTextSize,
-                                      textPadding:
-                                          EdgeInsets.only(left: 4, right: 4),
-                                      textDecoration:
-                                          TextDecoration.lineThrough,
-                                      fontColor: blackColor.withOpacity(0.8),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CustomTextComponet(
-                                              textTitle: "Discount Price:",
-                                              isCenterText: false,
-                                              isClickAble: false,
-                                              fontWeight: regularFontWeight,
-                                              fontSize: smallTextSize,
-                                              textPadding: EdgeInsets.all(0),
-                                              fontColor: redColor.shade800,
-                                            ),
-                                            CustomTextComponet(
-                                              textTitle: "\$$discountPrice",
-                                              isCenterText: false,
-                                              isClickAble: false,
-                                              fontWeight: regularFontWeight,
-                                              fontSize: regularTextSize,
-                                              textPadding: EdgeInsets.only(
-                                                  left: 0, right: 0),
-                                              fontColor: redColor.shade800,
-                                            ),
-                                          ],
-                                        ),
-                                        CustomIconButtonComponet(
-                                          icon: Icons.favorite_outline,
-                                          iconColor: redColor,
-                                          iconSize: mediumIconSize,
-                                          iconPadding:
-                                              EdgeInsets.only(left: 16),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              : Row(
+
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomTextComponet(
+                                  textTitle:
+                                      productDataModelClass.productDiscount ==
+                                              "0"
+                                          ? "Regular Price:"
+                                          : "Discount Price:",
+                                  isCenterText: false,
+                                  isClickAble: false,
+                                  fontWeight: regularBoldFontWeight,
+                                  fontSize: smallTextSize,
+                                  textPadding: EdgeInsets.all(0),
+                                  fontColor:
+                                      productDataModelClass.productDiscount ==
+                                              "0"
+                                          ? blackColor.withOpacity(0.8)
+                                          : redColor.shade900,
+                                ),
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -187,43 +147,47 @@ class ProductCardComponent extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         CustomTextComponet(
-                                          textTitle: "Regular Price:",
-                                          isCenterText: true,
-                                          isClickAble: false,
-                                          fontWeight: regularFontWeight,
-                                          fontSize: smallTextSize,
-                                          textPadding: EdgeInsets.only(
-                                              top: 24,
-                                              bottom: 8,
-                                              left: 4,
-                                              right: 4),
-                                          fontColor:
-                                              blackColor.withOpacity(0.8),
-                                        ),
-                                        CustomTextComponet(
                                           textTitle:
                                               "\$${productDataModelClass.productPrice}",
                                           isCenterText: false,
                                           isClickAble: false,
                                           fontWeight: regularFontWeight,
                                           fontSize: regularTextSize,
-                                          textPadding: EdgeInsets.only(
-                                              left: 4, right: 4),
-                                          textDecoration: TextDecoration.none,
+                                          textPadding: EdgeInsets.all(0),
+                                          textDecoration: productDataModelClass
+                                                      .productDiscount ==
+                                                  "0"
+                                              ? TextDecoration.none
+                                              : TextDecoration.lineThrough,
                                           fontColor:
                                               blackColor.withOpacity(0.8),
                                         ),
+                                        productDataModelClass.productDiscount !=
+                                                "0"
+                                            ? CustomTextComponet(
+                                                textTitle: "\$$discountPrice",
+                                                isCenterText: false,
+                                                isClickAble: false,
+                                                fontWeight: regularFontWeight,
+                                                fontSize: regularTextSize,
+                                                textPadding:
+                                                    EdgeInsets.all(0.0),
+                                                fontColor: redColor.shade500,
+                                              )
+                                            : SizedBox(),
                                       ],
                                     ),
                                     CustomIconButtonComponet(
                                       icon: Icons.favorite_outline,
                                       iconColor: redColor,
                                       iconSize: mediumIconSize,
-                                      iconPadding:
-                                          EdgeInsets.only(left: 24, top: 24),
+                                      iconPadding: EdgeInsets.all(0.0),
                                     ),
                                   ],
-                                )
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       )),
                   productDataModelClass.productNew!

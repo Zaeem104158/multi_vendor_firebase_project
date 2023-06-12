@@ -24,7 +24,7 @@ class VisitStoreScreen extends StatelessWidget {
           automaticallyImplyLeading: true,
           toolbarHeight: customHeightWidth(context, height: true) / 8,
           elevation: 0.0,
-          backgroundColor: greyColor,
+          backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
           leading: CustomIconButtonComponet(
             icon: Icons.arrow_back_ios_new,
             iconColor: blackColor,
@@ -85,7 +85,7 @@ class VisitStoreScreen extends StatelessWidget {
             return ProductCardComponent(
               productDataLength: snapshot.data!.docs.length,
               gridProductRow: 2,
-              gridAspectRatio: 0.48,
+              gridAspectRatio: 0.55,
               screenWidth: customHeightWidth(context, width: true),
               snapshot: snapshot,
             );

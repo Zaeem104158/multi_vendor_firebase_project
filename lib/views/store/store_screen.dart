@@ -20,7 +20,7 @@ class StoreScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         toolbarHeight: customHeightWidth(context, height: true) / 8,
         elevation: 0.0,
-        backgroundColor: greyColor,
+        backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
         title: CustomTextComponet(
           textTitle: "Store",
           isCenterText: true,

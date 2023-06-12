@@ -42,7 +42,9 @@ class _FullImageScreenState extends State<FullImageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
       appBar: AppBar(
+        elevation: 0.0,
         title: CustomTextComponet(
           textTitle: "Full Image",
           fontWeight: regularBoldFontWeight,
@@ -51,7 +53,7 @@ class _FullImageScreenState extends State<FullImageScreen> {
           isClickAble: false,
           fontSize: mediumTextSize,
         ),
-        backgroundColor: whiteColor,
+        backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
         leading: CustomIconButtonComponet(
           icon: Icons.arrow_back_ios_new,
           iconColor: blackColor,

@@ -58,6 +58,7 @@ class _SellerBottomWidgetScreenState extends State<SellerBottomWidgetScreen> {
       },
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
+            //backgroundColor: blueGreyColor.shade600,
             selectedItemColor: blackColor,
             unselectedItemColor: Colors.grey,
             selectedFontSize: 16.0,
