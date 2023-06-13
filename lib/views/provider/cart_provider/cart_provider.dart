@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:firebase_multi_vendor_project/models/productdata_view_model.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:flutter/material.dart';
 
 class CartProvider extends ChangeNotifier {
   List<ProductDataViewModel> _list = [];
+  List<ProductDataViewModel> _orderList = [];
 
   List<ProductDataViewModel> get getItems {
     return _list;
@@ -13,8 +16,18 @@ class CartProvider extends ChangeNotifier {
     return _list.length;
   }
 
+  void setOrderItems(List<ProductDataViewModel> _setlist) {
+    _orderList.addAll(_setlist);
+
+    notifyListeners();
+    // log("${_orderList.map((e) => e.productName).toList()}");
+  }
+
+  List<ProductDataViewModel> get getOrderItems {
+    return _orderList;
+  }
+
   void addItem(context, {required ProductDataViewModel productData}) {
-    //final product = ProductDataModel();
     ProductDataViewModel product = productData;
     _list.add(product);
     showSnack(context, "Product added in cart");
@@ -53,6 +66,21 @@ class CartProvider extends ChangeNotifier {
 
   void clearItem() {
     _list.clear();
+    notifyListeners();
+  }
+
+  // Select or decelect
+
+  void selectItem(String id) {
+    final item = _list.firstWhere((element) => element.productId == id);
+    item.isSelected = true;
+    notifyListeners();
+  }
+
+  void deselectItem(String id) {
+    final item = _list.firstWhere((element) => element.productId == id);
+    item.isSelected = false;
+
     notifyListeners();
   }
 }

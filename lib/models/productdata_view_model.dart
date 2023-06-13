@@ -9,6 +9,7 @@ class ProductDataViewModel {
   String? productSid;
   String? productId;
   int selectQuantity;
+  bool isSelected;
   bool? productNew;
   List<String>? productImageFile;
 
@@ -23,6 +24,7 @@ class ProductDataViewModel {
       this.productSid,
       this.productNew,
       this.productId,
+      this.isSelected = false,
       required this.selectQuantity,
       this.productImageFile});
 

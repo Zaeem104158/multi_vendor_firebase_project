@@ -56,7 +56,10 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         builder: EasyLoading.init(),
         theme: ThemeData(
-          bottomSheetTheme: BottomSheetThemeData(backgroundColor: greyColor),
+          colorScheme:
+              ColorScheme.light(onBackground: blueGreyColor.withOpacity(0.5)),
+          // bottomSheetTheme: BottomSheetThemeData(
+          //     backgroundColor: blueGreyColor.withOpacity(0.5)),
           inputDecorationTheme: InputDecorationTheme(
               counterStyle: TextStyle(
                   color: blackColor, fontWeight: regularBoldFontWeight)),

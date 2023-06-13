@@ -119,7 +119,7 @@ class WishListScreen extends StatelessWidget {
                                           height: 25,
                                           width: 30,
                                           decoration: BoxDecoration(
-                                              color: greyColor,
+                                              color: greyColor.shade300,
                                               borderRadius: BorderRadius.only(
                                                   topLeft:
                                                       Radius.circular(20.0),

@@ -3,7 +3,9 @@ import 'package:firebase_multi_vendor_project/components/custom_box_container.da
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
+import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/home/product_checkout/checkout_screen.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,44 +38,6 @@ class CartScreen extends StatelessWidget {
           )
         ],
       ),
-      bottomSheet:
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(
-          children: [
-            CustomTextComponet(
-              isCenterText: false,
-              isClickAble: false,
-              textPadding: EdgeInsets.all(4),
-              textTitle: "Total:\$",
-            ),
-            CustomTextComponet(
-              isCenterText: false,
-              isClickAble: false,
-              textPadding: EdgeInsets.all(0),
-              textTitle:
-                  "${Provider.of<CartProvider>(context, listen: true).totalPrice.toStringAsFixed(2)}",
-              fontColor: redColor,
-              fontWeight: regularBoldFontWeight,
-            ),
-          ],
-        ),
-        CustomBoxContainer(
-          height: customHeightWidth(context, height: true) / 20,
-          width: customHeightWidth(context, width: true) * 0.4,
-          color: blackColor,
-          padding: EdgeInsets.all(4),
-          borderRadius: BorderRadius.circular(50.0),
-          child: GestureDetector(
-              onTap: () {},
-              child: CustomTextComponet(
-                isCenterText: true,
-                isClickAble: true,
-                textTitle: "CHECKOUT",
-                fontColor: whiteColor,
-                fontSize: regularTextSize,
-              )),
-        ),
-      ]),
       body: context.watch<CartProvider>().getItems.isNotEmpty
           ? Consumer<CartProvider>(
               builder: (context, cartProvider, child) {
@@ -259,6 +223,57 @@ class CartScreen extends StatelessWidget {
                 )
               ],
             ),
+      bottomSheet:
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(
+          children: [
+            CustomTextComponet(
+              isCenterText: false,
+              isClickAble: false,
+              textPadding: EdgeInsets.all(4),
+              textTitle: "Total:\$",
+            ),
+            CustomTextComponet(
+              isCenterText: false,
+              isClickAble: false,
+              textPadding: EdgeInsets.all(0),
+              textTitle:
+                  "${Provider.of<CartProvider>(context, listen: true).totalPrice.toStringAsFixed(2)}",
+              fontColor: redColor,
+              fontWeight: regularBoldFontWeight,
+            ),
+          ],
+        ),
+        GestureDetector(
+          onTap: Provider.of<CartProvider>(context, listen: false).totalPrice !=
+                  0.00
+              ? () {
+                  navigationPush(context,
+                      screenWidget: ProductCheckOutScreen());
+                }
+              : null,
+          child: Container(
+            height: customHeightWidth(context, height: true) / 20,
+            width: customHeightWidth(context, width: true) * 0.4,
+            padding: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Provider.of<CartProvider>(context, listen: false)
+                          .totalPrice !=
+                      0.00
+                  ? blackColor
+                  : greyColor,
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            child: CustomTextComponet(
+              isCenterText: true,
+              isClickAble: true,
+              textTitle: "CHECKOUT",
+              fontColor: whiteColor,
+              fontSize: regularTextSize,
+            ),
+          ),
+        ),
+      ]),
     );
   }
 }
