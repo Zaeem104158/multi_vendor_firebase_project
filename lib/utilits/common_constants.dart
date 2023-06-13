@@ -253,7 +253,7 @@ void sendWhatsAppMessage(String phoneNumber, String message) async {
       "whatsapp://send?phone=$phoneNumber&text=${Uri.encodeComponent(message)}";
 
   try {
-    await launch(url.toString());
+    await launchUrl(Uri.parse(url.toString()));
   } catch (e) {
     throw 'Could not launch $e';
   }

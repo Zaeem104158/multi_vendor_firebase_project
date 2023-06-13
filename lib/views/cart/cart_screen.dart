@@ -4,7 +4,7 @@ import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
-import 'package:firebase_multi_vendor_project/views/cart/cart_provider/cart_provider.dart';
+import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

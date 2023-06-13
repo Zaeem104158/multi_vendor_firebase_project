@@ -3,10 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/models/productdata_model_class.dart';
+import 'package:firebase_multi_vendor_project/models/productdata_view_model.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/home/product_details_screen/product_details_screen.dart';
+import 'package:firebase_multi_vendor_project/views/provider/wishlist_provider/wishlist_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:collection/src/iterable_extensions.dart';
 
 class ProductCardComponent extends StatelessWidget {
   final int? productDataLength;
@@ -167,11 +171,77 @@ class ProductCardComponent extends StatelessWidget {
                                             : SizedBox(),
                                       ],
                                     ),
+                                    // CustomIconButtonComponet(
+                                    //   icon: context
+                                    //               .watch<WishListProvider>()
+                                    //               .getWishItems
+                                    //               .firstWhereOrNull((wish) =>
+                                    //                   wish.productId ==
+                                    //                   data.productId!) !=
+                                    //           null
+                                    //       ? Icons.favorite
+                                    //       : Icons.favorite_outline,
+                                    //   iconColor: redColor,
+                                    //   iconSize: mediumIconSize,
+                                    //   iconPadding: EdgeInsets.all(0.0),
+                                    // ),
                                     CustomIconButtonComponet(
-                                      icon: Icons.favorite_outline,
+                                      icon: context
+                                                  .watch<WishListProvider>()
+                                                  .getWishItems
+                                                  .firstWhereOrNull((wish) =>
+                                                      wish.productId ==
+                                                      data.productId) !=
+                                              null
+                                          ? Icons.favorite
+                                          : Icons.favorite_outline,
                                       iconColor: redColor,
                                       iconSize: mediumIconSize,
-                                      iconPadding: EdgeInsets.all(0.0),
+                                      iconPadding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        bool hasProduct = false;
+                                        Provider.of<WishListProvider>(context,
+                                                listen: false)
+                                            .getWishItems
+                                            .forEach((element) {
+                                          element.productId == data.productId
+                                              ? hasProduct = true
+                                              : hashCode;
+                                        });
+                                        hasProduct
+                                            ? context
+                                                .read<WishListProvider>()
+                                                .removeFromWish(data.productId!)
+                                            // ! Provider.of<WishlistProvuder>(context,listen: false).removeFromWish(widget.productData!.productId!) and above read context are same
+                                            //  ! Provider.of<WishlistProvuder>(context,listen: true).removeFromWish(widget.productData!.productId!) and  context.watch<WishlistProvider>().removeFromWish(widget.productData!.productId!)  are same thing
+                                            : Provider.of<WishListProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .addWishItem(context,
+                                                    productData:
+                                                        ProductDataViewModel(
+                                                      selectQuantity: 1,
+                                                      mainCategory:
+                                                          data.mainCategory,
+                                                      subCategory:
+                                                          data.subCategory,
+                                                      productDescription: data
+                                                          .productDescription,
+                                                      productName:
+                                                          data.productName,
+                                                      productPrice:
+                                                          data.productPrice,
+                                                      productDiscount:
+                                                          data.productDiscount,
+                                                      productSid:
+                                                          data.productSid,
+                                                      productId: data.productId,
+                                                      productInstock:
+                                                          data.productInstock,
+                                                      productImageFile:
+                                                          data.productImageFile,
+                                                    ));
+                                      },
                                     ),
                                   ],
                                 ),

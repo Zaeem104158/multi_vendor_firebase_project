@@ -7,7 +7,10 @@ import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/models/userInfo_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
+import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
+import 'package:firebase_multi_vendor_project/views/wishlist/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomerProfileScreen extends StatefulWidget {
@@ -114,26 +117,33 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              CustomBoxContainer(
-                                height:
-                                    customHeightWidth(context, height: true) /
-                                        20,
-                                width: customHeightWidth(context, width: true) *
-                                    0.2,
-                                color: blackColor.withOpacity(0.3),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(50.0),
-                                    bottomLeft: Radius.circular(50.0)),
-                                child: CustomTextComponet(
-                                  textTitle: "Cart",
-                                  isCenterText: true,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  isClickAble: true,
-                                  onPressed: () {},
+                              GestureDetector(
+                                onTap: () {
+                                  navigationPush(context,
+                                      screenWidget: CartScreen());
+                                },
+                                child: Container(
+                                  height:
+                                      customHeightWidth(context, height: true) /
+                                          20,
+                                  width:
+                                      customHeightWidth(context, width: true) *
+                                          0.2,
+                                  decoration: BoxDecoration(
+                                      color: blackColor.withOpacity(0.3),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(50.0),
+                                          bottomLeft: Radius.circular(50.0))),
+                                  child: CustomTextComponet(
+                                    textTitle: "Cart",
+                                    isCenterText: true,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    isClickAble: true,
+                                  ),
                                 ),
                               ),
-                              CustomBoxContainer(
+                              Container(
                                 height:
                                     customHeightWidth(context, height: true) /
                                         20,
@@ -150,23 +160,31 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                   onPressed: () {},
                                 ),
                               ),
-                              CustomBoxContainer(
-                                height:
-                                    customHeightWidth(context, height: true) /
-                                        20,
-                                width: customHeightWidth(context, width: true) *
-                                    0.2,
-                                color: blackColor.withOpacity(0.3),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(50.0),
-                                    bottomRight: Radius.circular(50.0)),
-                                child: CustomTextComponet(
-                                  textTitle: "Wishlist",
-                                  isCenterText: true,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  isClickAble: true,
-                                  onPressed: () {},
+                              GestureDetector(
+                                onTap: () {
+                                  navigationPush(context,
+                                      screenWidget: WishListScreen());
+                                },
+                                child: Container(
+                                  height:
+                                      customHeightWidth(context, height: true) /
+                                          20,
+                                  width:
+                                      customHeightWidth(context, width: true) *
+                                          0.2,
+                                  decoration: BoxDecoration(
+                                    color: blackColor.withOpacity(0.3),
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(50.0),
+                                        bottomRight: Radius.circular(50.0)),
+                                  ),
+                                  child: CustomTextComponet(
+                                    textTitle: "Wishlist",
+                                    isCenterText: true,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    isClickAble: true,
+                                  ),
                                 ),
                               ),
                             ],

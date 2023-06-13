@@ -10,12 +10,14 @@ import 'package:firebase_multi_vendor_project/models/productdata_model_class.dar
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
-import 'package:firebase_multi_vendor_project/views/cart/cart_provider/cart_provider.dart';
+import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
 import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/full_product_image/full_image_screen.dart';
+import 'package:firebase_multi_vendor_project/views/provider/wishlist_provider/wishlist_provider.dart';
 import 'package:firebase_multi_vendor_project/views/store/visit_store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/src/iterable_extensions.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final ProductDataModel? productData;
@@ -168,10 +170,64 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             textPadding: EdgeInsets.all(24),
                           ),
                           CustomIconButtonComponet(
-                            icon: Icons.favorite_outline,
+                            icon: context
+                                        .watch<WishListProvider>()
+                                        .getWishItems
+                                        .firstWhereOrNull((wish) =>
+                                            wish.productId ==
+                                            widget.productData!.productId) !=
+                                    null
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
                             iconColor: redColor,
                             iconSize: mediumIconSize,
                             iconPadding: EdgeInsets.zero,
+                            onPressed: () {
+                              bool hasProduct = false;
+                              Provider.of<WishListProvider>(context,
+                                      listen: false)
+                                  .getWishItems
+                                  .forEach((element) {
+                                element.productId ==
+                                        widget.productData!.productId
+                                    ? hasProduct = true
+                                    : hashCode;
+                              });
+                              hasProduct
+                                  ? context
+                                      .read<WishListProvider>()
+                                      .removeFromWish(
+                                          widget.productData!.productId!)
+                                  // ! Provider.of<WishlistProvuder>(context,listen: false).removeFromWish(widget.productData!.productId!) and above read context are same
+                                  //  ! Provider.of<WishlistProvuder>(context,listen: true).removeFromWish(widget.productData!.productId!) and  context.watch<WishlistProvider>().removeFromWish(widget.productData!.productId!)  are same thing
+                                  : Provider.of<WishListProvider>(context,
+                                          listen: false)
+                                      .addWishItem(context,
+                                          productData: ProductDataViewModel(
+                                            selectQuantity: 1,
+                                            mainCategory: widget
+                                                .productData!.mainCategory,
+                                            subCategory:
+                                                widget.productData!.subCategory,
+                                            productDescription: widget
+                                                .productData!
+                                                .productDescription,
+                                            productName:
+                                                widget.productData!.productName,
+                                            productPrice: widget
+                                                .productData!.productPrice,
+                                            productDiscount: widget
+                                                .productData!.productDiscount,
+                                            productSid:
+                                                widget.productData!.productSid,
+                                            productId:
+                                                widget.productData!.productId,
+                                            productInstock: widget
+                                                .productData!.productInstock,
+                                            productImageFile: widget
+                                                .productData!.productImageFile,
+                                          ));
+                            },
                           ),
                         ]),
                     Container(
@@ -317,8 +373,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
               child: GestureDetector(
                   onTap: () {
-                    // Here work
-
                     bool hasProduct = false;
                     Provider.of<CartProvider>(context, listen: false)
                         .getItems

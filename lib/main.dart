@@ -1,12 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
-import 'package:firebase_multi_vendor_project/views/cart/cart_provider/cart_provider.dart';
+import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
 import 'package:firebase_multi_vendor_project/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+
+import 'views/provider/wishlist_provider/wishlist_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,11 @@ void main() async {
     ChangeNotifierProvider(
       create: (context) {
         return CartProvider();
+      },
+    ),
+    ChangeNotifierProvider(
+      create: (context) {
+        return WishListProvider();
       },
     )
   ], child: MyApp()));
