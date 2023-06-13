@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_multi_vendor_project/models/productdata_view_model.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +16,7 @@ class CartProvider extends ChangeNotifier {
 
   void setOrderItems(List<ProductDataViewModel> _setlist) {
     _orderList.addAll(_setlist);
-
     notifyListeners();
-    // log("${_orderList.map((e) => e.productName).toList()}");
   }
 
   List<ProductDataViewModel> get getOrderItems {
@@ -82,5 +78,19 @@ class CartProvider extends ChangeNotifier {
     item.isSelected = false;
 
     notifyListeners();
+  }
+
+  double get totalOrderPrice {
+    var total = 0.00;
+    for (var product in _orderList) {
+      if (product.productDiscount! != "0") {
+        int price = int.parse(product.productPrice!) -
+            int.parse(product.productDiscount!);
+        total += price * product.selectQuantity;
+      } else {
+        total += int.parse(product.productPrice!) * product.selectQuantity;
+      }
+    }
+    return total;
   }
 }
