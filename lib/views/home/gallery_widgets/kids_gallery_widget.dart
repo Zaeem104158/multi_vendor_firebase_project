@@ -5,18 +5,14 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
 
-class KidsGalleryWidget extends StatefulWidget {
-  const KidsGalleryWidget({super.key});
+class KidsGalleryWidget extends StatelessWidget {
+  KidsGalleryWidget({super.key});
 
-  @override
-  State<KidsGalleryWidget> createState() => _KidsGalleryWidgetState();
-}
-
-class _KidsGalleryWidgetState extends State<KidsGalleryWidget> {
   final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
       .collection(productsDataDirectory)
       .where(productCollectionFieldMainCategory, isEqualTo: 'Kids')
       .snapshots();
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;

@@ -67,13 +67,13 @@ class ProductCardComponent extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.circular(20.0),
-                        // // boxShadow: [
-                        // //   BoxShadow(
-                        // //     color: Colors.grey.withOpacity(0.5),
-                        // //     spreadRadius: 5,
-                        // //     blurRadius: 10,
-                        // //     offset: Offset(0, 3), // changes position of shadow
-                        // //   ),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.grey.withOpacity(0.5),
+                        //     spreadRadius: 5,
+                        //     blurRadius: 10,
+                        //     offset: Offset(0, 3), // changes position of shadow
+                        //   ),
                         // ],
                       ),
                       child: Column(
@@ -171,20 +171,6 @@ class ProductCardComponent extends StatelessWidget {
                                             : SizedBox(),
                                       ],
                                     ),
-                                    // CustomIconButtonComponet(
-                                    //   icon: context
-                                    //               .watch<WishListProvider>()
-                                    //               .getWishItems
-                                    //               .firstWhereOrNull((wish) =>
-                                    //                   wish.productId ==
-                                    //                   data.productId!) !=
-                                    //           null
-                                    //       ? Icons.favorite
-                                    //       : Icons.favorite_outline,
-                                    //   iconColor: redColor,
-                                    //   iconSize: mediumIconSize,
-                                    //   iconPadding: EdgeInsets.all(0.0),
-                                    // ),
                                     CustomIconButtonComponet(
                                       icon: context
                                                   .watch<WishListProvider>()

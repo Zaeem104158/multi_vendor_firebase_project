@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,7 +31,17 @@ void main() async {
       create: (context) {
         return WishListProvider();
       },
-    )
+    ),
+    ChangeNotifierProvider(
+      create: (context) {
+        return UiProvider();
+      },
+    ),
+    ChangeNotifierProvider(
+      create: (context) {
+        return AuthController();
+      },
+    ),
   ], child: MyApp()));
 }
 

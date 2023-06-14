@@ -4,6 +4,8 @@ import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -130,37 +132,52 @@ class PaymentScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: whiteColor,
                     borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Column(
-                  children: [
-                    RadioListTile(
-                      value: 1,
-                      groupValue: 1,
-                      onChanged: (value) {},
-                      title: CustomTextComponet(
-                        textTitle: "Cash on Delivery",
+                child: Consumer<UiProvider>(
+                    builder: (context, radioListTileProvider, child) {
+                  return Column(
+                    children: [
+                      RadioListTile(
+                        value: 1,
+                        groupValue:
+                            radioListTileProvider.radioTileSelectedValue,
+                        onChanged: (value) {
+                          radioListTileProvider
+                              .updateRadioTileSelectedValue(value!);
+                        },
+                        title: CustomTextComponet(
+                          textTitle: "Cash on Delivery",
+                        ),
+                        subtitle: CustomTextComponet(
+                          textTitle: "Pay from home",
+                        ),
                       ),
-                      subtitle: CustomTextComponet(
-                        textTitle: "Pay from home",
+                      RadioListTile(
+                        value: 2,
+                        groupValue:
+                            radioListTileProvider.radioTileSelectedValue,
+                        onChanged: (value) {
+                          radioListTileProvider
+                              .updateRadioTileSelectedValue(value!);
+                        },
+                        title: CustomTextComponet(
+                          textTitle: "Pay on Bkash",
+                        ),
                       ),
-                    ),
-                    RadioListTile(
-                      value: 2,
-                      groupValue: 1,
-                      onChanged: (value) {},
-                      title: CustomTextComponet(
-                        textTitle: "Pay on Bkash",
+                      RadioListTile(
+                        value: 3,
+                        groupValue:
+                            radioListTileProvider.radioTileSelectedValue,
+                        onChanged: (value) {
+                          radioListTileProvider
+                              .updateRadioTileSelectedValue(value!);
+                        },
+                        title: CustomTextComponet(
+                          textTitle: "Pay on Card",
+                        ),
                       ),
-                    ),
-                    RadioListTile(
-                      value: 3,
-                      groupValue: 1,
-                      onChanged: (value) {},
-                      title: CustomTextComponet(
-                        textTitle: "Pay on Card",
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ),
             )
           ],

@@ -2,9 +2,11 @@ import 'package:firebase_multi_vendor_project/components/icon_button_component.d
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/email_password_validator.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CustomPasswordFormFieldComponent extends StatefulWidget {
+class CustomPasswordFormFieldComponent extends StatelessWidget {
   final EdgeInsets? padding;
   final String? formFieldLabel;
   final String? formFieldhHintText;
@@ -46,75 +48,65 @@ class CustomPasswordFormFieldComponent extends StatefulWidget {
     this.isBorderEnable = false,
     this.textEditingController,
   });
-
-  @override
-  State<CustomPasswordFormFieldComponent> createState() =>
-      _CustomPasswordFormFieldComponentState();
-}
-
-class _CustomPasswordFormFieldComponentState
-    extends State<CustomPasswordFormFieldComponent> {
-  bool isPasswordVisible = true;
-
   @override
   Widget build(BuildContext context) {
+    final uiProvider = Provider.of<UiProvider>(context, listen: true);
+
     return Padding(
-      padding: widget.padding ?? const EdgeInsets.all(8),
+      padding: padding ?? const EdgeInsets.all(8),
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
           decoration: InputDecoration(
               label: CustomTextComponet(
-                  textTitle: widget.formFieldLabel,
-                  fontColor: widget.formFieldLabelColor,
-                  fontSize: widget.formFieldLabelSize,
-                  fontWeight: widget.formFieldLabelWeight,
-                  fontHeight: widget.formFieldLabelHeight,
-                  textPadding: widget.formFieldLabelPadding),
-              hintText: widget.formFieldhHintText,
+                  textTitle: formFieldLabel,
+                  fontColor: formFieldLabelColor,
+                  fontSize: formFieldLabelSize,
+                  fontWeight: formFieldLabelWeight,
+                  fontHeight: formFieldLabelHeight,
+                  textPadding: formFieldLabelPadding),
+              hintText: formFieldhHintText,
               hintStyle: TextStyle(
-                color: widget.formFieldHintColor,
+                color: formFieldHintColor,
                 fontFamily: regularTextFontFamily,
-                fontSize: widget.formFieldHintSize,
-                fontWeight: widget.formFieldHintWeight,
-                height: widget.formFieldHintHeight,
+                fontSize: formFieldHintSize,
+                fontWeight: formFieldHintWeight,
+                height: formFieldHintHeight,
                 // overflow: TextOverflow.visible,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: widget.isBorderEnable == true
-                    ? BorderRadius.circular(widget.formFieldBorderRadius ?? 0.0)
+                borderRadius: isBorderEnable == true
+                    ? BorderRadius.circular(formFieldBorderRadius ?? 0.0)
                     : BorderRadius.circular(0.0),
                 borderSide: BorderSide(
-                    color: widget.enabledBorderColor ?? blackColor,
-                    width: widget.enabledBorderWidth ?? 1.0),
+                    color: enabledBorderColor ?? blackColor,
+                    width: enabledBorderWidth ?? 1.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: widget.isBorderEnable == true
-                    ? BorderRadius.circular(widget.formFieldBorderRadius ?? 0.0)
+                borderRadius: isBorderEnable == true
+                    ? BorderRadius.circular(formFieldBorderRadius ?? 0.0)
                     : BorderRadius.circular(0.0),
                 borderSide: BorderSide(
-                    color: widget.focusedBorderColor ?? blackColor,
-                    width: widget.focusedBorderWidth ?? 1.0),
+                    color: focusedBorderColor ?? blackColor,
+                    width: focusedBorderWidth ?? 1.0),
               ),
-              border: widget.isBorderEnable == true
+              border: isBorderEnable == true
                   ? OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                          widget.formFieldBorderRadius ?? 0.0))
+                      borderRadius:
+                          BorderRadius.circular(formFieldBorderRadius ?? 0.0))
                   : InputBorder.none,
               suffixIcon: GestureDetector(
-                onTap: () => setState(() {
-                  isPasswordVisible = !isPasswordVisible;
-                }),
+                onTap: () {
+                  uiProvider.updateIsVisibleValue();
+                },
                 child: CustomIconButtonComponet(
-                    icon: !isPasswordVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility),
+                    icon: uiProvider.isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off),
               )),
-
-          //controller: ,
-          obscureText: isPasswordVisible,
+          obscureText: !uiProvider.isPasswordVisible,
           obscuringCharacter: '*',
-          controller: widget.textEditingController,
+          controller: textEditingController,
           validator: (value) {
             if (value == null) {
               return "Empty input.";

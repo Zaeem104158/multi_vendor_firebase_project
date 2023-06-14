@@ -13,32 +13,15 @@ import 'package:firebase_multi_vendor_project/views/auth/customer/signup_custome
 import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/customer_bottom_widget_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CustomerLoginScreen extends StatefulWidget {
+class CustomerLoginScreen extends StatelessWidget {
   CustomerLoginScreen({super.key});
 
   @override
-  State<CustomerLoginScreen> createState() => _CustomerLoginScreenState();
-}
-
-class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
-  final AuthController _authController = AuthController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _authController.emailTextEditingController.dispose();
-    _authController.passwordTextEditingController.dispose();
-    _authController.focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController _authController =
+        Provider.of<AuthController>(context, listen: true);
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -121,6 +104,7 @@ class _CustomerLoginScreenState extends State<CustomerLoginScreen> {
               )
                   ? () {
                       var response = _authController.loginCustomer(
+                          context,
                           _authController.emailTextEditingController.text,
                           _authController.passwordTextEditingController.text);
                       closeSoftKeyBoard();

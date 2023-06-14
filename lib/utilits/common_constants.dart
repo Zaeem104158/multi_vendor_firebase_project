@@ -32,7 +32,7 @@ const String bottomUpload = 'Upload';
 //customer keys
 const String customersDirectory = 'customers';
 const String customersCollectionFieldCid = 'cid';
-const String customersCollectionFieldFullName = 'fillName';
+const String customersCollectionFieldFullName = 'fullName';
 const String customersCollectionFieldEmail = 'email';
 const String customersCollectionFieldImageFile = 'imageFile';
 const String customersCollectionFieldAddress = 'address';

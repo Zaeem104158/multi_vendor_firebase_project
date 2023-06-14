@@ -5,19 +5,14 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
 
-class ElectornicsGalleryWidget extends StatefulWidget {
-  const ElectornicsGalleryWidget({super.key});
+class ElectornicsGalleryWidget extends StatelessWidget {
+  ElectornicsGalleryWidget({super.key});
 
-  @override
-  State<ElectornicsGalleryWidget> createState() =>
-      _ElectornicsGalleryWidgetState();
-}
-
-class _ElectornicsGalleryWidgetState extends State<ElectornicsGalleryWidget> {
   final Stream<QuerySnapshot> _productsStream = FirebaseFirestore.instance
       .collection(productsDataDirectory)
       .where(productCollectionFieldMainCategory, isEqualTo: 'Electornics')
       .snapshots();
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;

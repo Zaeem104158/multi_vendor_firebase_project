@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/store/store_screen.dart';
 import 'package:firebase_multi_vendor_project/views/upload_product/products_upload_screen.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
@@ -8,18 +9,13 @@ import 'package:firebase_multi_vendor_project/views/category/category_screen.dar
 import 'package:firebase_multi_vendor_project/views/dashboard/seller_dashboard_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class SellerBottomWidgetScreen extends StatefulWidget {
+class SellerBottomWidgetScreen extends StatelessWidget {
   SellerBottomWidgetScreen({super.key});
 
-  @override
-  State<SellerBottomWidgetScreen> createState() =>
-      _SellerBottomWidgetScreenState();
-}
-
-class _SellerBottomWidgetScreenState extends State<SellerBottomWidgetScreen> {
   final AuthController authController = AuthController();
-  int selectedIndex = 0;
+
   final List<Widget> screens = [
     HomeScreen(),
     CategoryScreen(),
@@ -56,49 +52,50 @@ class _SellerBottomWidgetScreenState extends State<SellerBottomWidgetScreen> {
         );
         return shouldPop!;
       },
-      child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-            //backgroundColor: blueGreyColor.shade600,
-            selectedItemColor: blackColor,
-            unselectedItemColor: Colors.grey,
-            selectedFontSize: 16.0,
-            unselectedFontSize: 16.0,
-            type: BottomNavigationBarType.shifting,
-            currentIndex: selectedIndex,
-            onTap: (index) {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                  ),
-                  label: bottomHome),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.search,
-                  ),
-                  label: bottomCategory),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.shop,
-                  ),
-                  label: bottomShop),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.dashboard,
-                  ),
-                  label: bottomDashBoard),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.upload_file,
-                  ),
-                  label: bottomUpload)
-            ]),
-        body: screens[selectedIndex],
-      ),
+      child: Consumer<UiProvider>(
+          builder: (context, pageControllerProvider, child) {
+        return Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+              //backgroundColor: blueGreyColor.shade600,
+              selectedItemColor: blackColor,
+              unselectedItemColor: Colors.grey,
+              selectedFontSize: 16.0,
+              unselectedFontSize: 16.0,
+              type: BottomNavigationBarType.shifting,
+              currentIndex: pageControllerProvider.pageControlSelectedIndex,
+              onTap: (index) {
+                pageControllerProvider.updatePageControllerSelectedValue(index);
+              },
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.home,
+                    ),
+                    label: bottomHome),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.search,
+                    ),
+                    label: bottomCategory),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.shop,
+                    ),
+                    label: bottomShop),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.dashboard,
+                    ),
+                    label: bottomDashBoard),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.upload_file,
+                    ),
+                    label: bottomUpload)
+              ]),
+          body: screens[pageControllerProvider.pageControlSelectedIndex],
+        );
+      }),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/password_form_field_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
@@ -14,42 +13,15 @@ import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_acc
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class SellerSignUpScreen extends StatefulWidget {
+class SellerSignUpScreen extends StatelessWidget {
   SellerSignUpScreen({super.key});
 
   @override
-  State<SellerSignUpScreen> createState() => _SellerSignUpScreenState();
-}
-
-class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
-  final AuthController _authController = AuthController();
-
-  Future _getImage(ImageSource source) async {
-    final pickedImage = await ImagePicker().pickImage(source: source);
-    setState(() {
-      if (pickedImage != null) {
-        _authController.image = File(pickedImage.path);
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _authController.fullNameTextEditingController.dispose();
-    _authController.emailTextEditingController.dispose();
-    _authController.passwordTextEditingController.dispose();
-    _authController.focusNode.unfocus();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController _authController =
+        Provider.of<AuthController>(context, listen: true);
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -106,7 +78,7 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
                         child: CustomIconButtonComponet(
                           icon: Icons.camera_alt,
                           onPressed: () {
-                            _getImage(ImageSource.camera);
+                            _authController.getImage(ImageSource.camera);
                           },
                         ),
                       ),
@@ -122,7 +94,7 @@ class _SellerSignUpScreenState extends State<SellerSignUpScreen> {
                         child: CustomIconButtonComponet(
                           icon: Icons.photo_album,
                           onPressed: () {
-                            _getImage(ImageSource.gallery);
+                            _authController.getImage(ImageSource.gallery);
                           },
                         ),
                       ),

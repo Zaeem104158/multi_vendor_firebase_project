@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/password_form_field_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
@@ -15,42 +14,16 @@ import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_acc
 import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class CustomerSignUpScreen extends StatefulWidget {
+class CustomerSignUpScreen extends StatelessWidget {
   CustomerSignUpScreen({super.key});
 
   @override
-  State<CustomerSignUpScreen> createState() => _CustomerSignUpScreenState();
-}
-
-class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
-  final AuthController _authController = AuthController();
-
-  Future _getImage(ImageSource source) async {
-    final pickedImage = await ImagePicker().pickImage(source: source);
-    setState(() {
-      if (pickedImage != null) {
-        _authController.image = File(pickedImage.path);
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _authController.fullNameTextEditingController.dispose();
-    _authController.emailTextEditingController.dispose();
-    _authController.passwordTextEditingController;
-    _authController.focusNode.unfocus();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController _authController =
+        Provider.of<AuthController>(context, listen: true);
+
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -107,7 +80,7 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                         child: CustomIconButtonComponet(
                           icon: Icons.camera_alt,
                           onPressed: () {
-                            _getImage(ImageSource.camera);
+                            _authController.getImage(ImageSource.camera);
                           },
                         ),
                       ),
@@ -123,7 +96,7 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
                         child: CustomIconButtonComponet(
                           icon: Icons.photo_album,
                           onPressed: () {
-                            _getImage(ImageSource.gallery);
+                            _authController.getImage(ImageSource.gallery);
                           },
                         ),
                       ),
@@ -318,3 +291,26 @@ class _CustomerSignUpScreenState extends State<CustomerSignUpScreen> {
     );
   }
 }
+
+// Future _getImage(ImageSource source) async {
+//     final pickedImage = await ImagePicker().pickImage(source: source);
+//     setState(() {
+//       if (pickedImage != null) {
+//         _authController.image = File(pickedImage.path);
+//       }
+//     });
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+
+//   @override
+//   void dispose() {
+//     _authController.fullNameTextEditingController.dispose();
+//     _authController.emailTextEditingController.dispose();
+//     _authController.passwordTextEditingController;
+//     _authController.focusNode.unfocus();
+//     super.dispose();
+//   }

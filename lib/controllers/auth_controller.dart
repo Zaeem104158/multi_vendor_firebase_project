@@ -6,10 +6,13 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_account.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class AuthController {
+class AuthController extends ChangeNotifier {
   final TextEditingController emailTextEditingController =
       TextEditingController();
 
@@ -24,6 +27,15 @@ class AuthController {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
+  void getImage(ImageSource source) async {
+    final pickedImage = await ImagePicker().pickImage(source: source);
+
+    if (pickedImage != null) {
+      image = File(pickedImage.path);
+    }
+    notifyListeners();
+  }
 
   Future<String> uploadUserImageToFirebase(File imageFile, directory) async {
     // Create a unique filename for the image
@@ -71,8 +83,10 @@ class AuthController {
   }
 
   //Customer function
-  loginCustomer(String email, String password) async {
+  loginCustomer(context, String email, String password) async {
+    final uiProvider = Provider.of<UiProvider>(context, listen: false);
     loading();
+    uiProvider.updatePageControllerSelectedValue(0);
     try {
       UserCredential loginResponse = await auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -114,8 +128,10 @@ class AuthController {
   }
 
   //Seller function
-  loginSeller(String email, String password) async {
+  loginSeller(context, String email, String password) async {
+    final uiProvider = Provider.of<UiProvider>(context, listen: false);
     loading();
+    uiProvider.updatePageControllerSelectedValue(0);
     UserCredential loginResponse =
         await auth.signInWithEmailAndPassword(email: email, password: password);
 
@@ -125,6 +141,7 @@ class AuthController {
           sharedPrefSellerUid, loginResponse.user!.uid);
       await saveToSharedPreferences(sharedPrefCustomerUid, null);
     }
+
     dismissLoading();
   }
 
