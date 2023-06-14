@@ -86,7 +86,7 @@ class AuthController extends ChangeNotifier {
   loginCustomer(context, String email, String password) async {
     final uiProvider = Provider.of<UiProvider>(context, listen: false);
     loading();
-    uiProvider.updatePageControllerSelectedValue(0);
+    uiProvider.updateBottomNavigationBarSelectedValue(0);
     try {
       UserCredential loginResponse = await auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -131,7 +131,7 @@ class AuthController extends ChangeNotifier {
   loginSeller(context, String email, String password) async {
     final uiProvider = Provider.of<UiProvider>(context, listen: false);
     loading();
-    uiProvider.updatePageControllerSelectedValue(0);
+    uiProvider.updateBottomNavigationBarSelectedValue(0);
     UserCredential loginResponse =
         await auth.signInWithEmailAndPassword(email: email, password: password);
 

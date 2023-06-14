@@ -56,16 +56,17 @@ class CustomerBottomWidgetScreen extends StatelessWidget {
       },
       child: Consumer<UiProvider>(builder: (context, pageController, child) {
         return Scaffold(
-            body: screens[pageController.pageControlSelectedIndex],
+            body: screens[pageController.bottomNavigationControlSelectedIndex],
             bottomNavigationBar: BottomNavigationBar(
                 selectedItemColor: blackColor,
                 unselectedItemColor: Colors.grey,
                 selectedFontSize: 16.0,
                 unselectedFontSize: 16.0,
                 type: BottomNavigationBarType.shifting,
-                currentIndex: pageController.pageControlSelectedIndex,
+                currentIndex:
+                    pageController.bottomNavigationControlSelectedIndex,
                 onTap: (index) {
-                  pageController.updatePageControllerSelectedValue(index);
+                  pageController.updateBottomNavigationBarSelectedValue(index);
                 },
                 items: [
                   BottomNavigationBarItem(

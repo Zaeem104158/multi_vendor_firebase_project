@@ -7,6 +7,7 @@ import 'package:firebase_multi_vendor_project/models/productdata_view_model.dart
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/home/product_details_screen/product_details_screen.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/provider/wishlist_provider/wishlist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,8 @@ class ProductCardComponent extends StatelessWidget {
       this.scrollDirection = Axis.vertical});
   @override
   Widget build(BuildContext context) {
+    final UiProvider uiProvider =
+        Provider.of<UiProvider>(context, listen: false);
     const double horizontalPadding = 0;
     final double calcHeight =
         ((screenWidth! / gridProductRow!) - (horizontalPadding)) *
@@ -57,8 +60,8 @@ class ProductCardComponent extends StatelessWidget {
 
             return GestureDetector(
               onTap: () {
-                navigationPush(context,
-                    screenWidget: ProductDetailsScreen(productData: data));
+                uiProvider.updateSelectedProductModelData(data);
+                navigationPush(context, screenWidget: ProductDetailsScreen());
               },
               child: Stack(
                 children: [

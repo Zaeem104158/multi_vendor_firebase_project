@@ -6,54 +6,27 @@ import 'package:firebase_multi_vendor_project/components/icon_button_component.d
 import 'package:firebase_multi_vendor_project/components/product_card_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/models/productdata_view_model.dart';
-import 'package:firebase_multi_vendor_project/models/productdata_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
 import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/full_product_image/full_image_screen.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/provider/wishlist_provider/wishlist_provider.dart';
 import 'package:firebase_multi_vendor_project/views/store/visit_store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/src/iterable_extensions.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
-  final ProductDataModel? productData;
-
-  ProductDetailsScreen({super.key, this.productData});
-
-  @override
-  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
-}
-
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  late PageController _pageController;
-  int activePage = 1;
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(viewportFraction: 0.7, initialPage: 1);
-  }
-
-  List<Widget> indicators(imagesLength, currentIndex) {
-    return List<Widget>.generate(imagesLength, (index) {
-      return Container(
-        margin: EdgeInsets.all(3),
-        width: 10,
-        height: 10,
-        decoration: BoxDecoration(
-            color: currentIndex == index ? Colors.black : Colors.black26,
-            shape: BoxShape.circle),
-      );
-    });
-  }
+class ProductDetailsScreen extends StatelessWidget {
+  ProductDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-
+    final UiProvider uiProvider =
+        Provider.of<UiProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
       body: Stack(
@@ -70,16 +43,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     height: 250,
                     child: PageView.builder(
                         clipBehavior: Clip.none,
-                        controller: _pageController,
+                        controller: uiProvider.pageController,
                         onPageChanged: (page) {
-                          setState(() {
-                            activePage = page;
-                          });
+                          uiProvider.updatePageControllerSelectedValue(page);
                         },
-                        itemCount: widget.productData!.productImageFile!.length,
+                        itemCount:
+                            uiProvider.productData!.productImageFile!.length,
                         pageSnapping: true,
                         itemBuilder: (context, pagePosition) {
-                          bool active = pagePosition == activePage;
+                          bool active = pagePosition ==
+                              uiProvider.pageControlSelectedIndex;
                           double margin = active ? 10 : 20;
 
                           return Padding(
@@ -92,16 +65,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 onTap: () {
                                   navigationPush(context,
                                       screenWidget: FullImageScreen(
-                                        imageFileList: widget
-                                            .productData!.productImageFile!,
-                                        activeImage: activePage,
-                                      ));
+                                          // imageFileList: uiProvider
+                                          //     .productData!.productImageFile!,
+                                          // activeImage: activePage,
+                                          ));
                                 },
                                 child: ClipRRect(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20.0)),
                                   child: CachedNetworkImage(
-                                      imageUrl: widget.productData!
+                                      imageUrl: uiProvider.productData!
                                           .productImageFile![pagePosition],
                                       color: Colors.black.withOpacity(0.2),
                                       colorBlendMode: BlendMode.darken,
@@ -132,8 +105,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: indicators(
-                          widget.productData!.productImageFile!.length,
-                          activePage)),
+                          uiProvider.productData!.productImageFile!.length,
+                          uiProvider.pageControlSelectedIndex)),
                   //? Product Price, favorite icon, instock, descritpion
                   Column(children: [
                     CustomDivider(
@@ -149,7 +122,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       fontSize: regularTextSize,
                     ),
                     CustomTextComponet(
-                      textTitle: widget.productData!.productName,
+                      textTitle: uiProvider.productData!.productName,
                       fontWeight: regularBoldFontWeight,
                       fontColor: greyColor,
                       isCenterText: true,
@@ -161,7 +134,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         children: [
                           CustomTextComponet(
                             textTitle:
-                                "BDT \$${widget.productData!.productPrice}",
+                                "BDT \$${uiProvider.productData!.productPrice}",
                             fontWeight: regularBoldFontWeight,
                             fontColor: greyColor,
                             isCenterText: true,
@@ -175,7 +148,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         .getWishItems
                                         .firstWhereOrNull((wish) =>
                                             wish.productId ==
-                                            widget.productData!.productId) !=
+                                            uiProvider
+                                                .productData!.productId) !=
                                     null
                                 ? Icons.favorite
                                 : Icons.favorite_outline,
@@ -189,7 +163,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   .getWishItems
                                   .forEach((element) {
                                 element.productId ==
-                                        widget.productData!.productId
+                                        uiProvider.productData!.productId
                                     ? hasProduct = true
                                     : hashCode;
                               });
@@ -197,34 +171,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ? context
                                       .read<WishListProvider>()
                                       .removeFromWish(
-                                          widget.productData!.productId!)
-                                  // ! Provider.of<WishlistProvuder>(context,listen: false).removeFromWish(widget.productData!.productId!) and above read context are same
-                                  //  ! Provider.of<WishlistProvuder>(context,listen: true).removeFromWish(widget.productData!.productId!) and  context.watch<WishlistProvider>().removeFromWish(widget.productData!.productId!)  are same thing
+                                          uiProvider.productData!.productId!)
+                                  // ! Provider.of<WishlistProvuder>(context,listen: false).removeFromWish(uiProvider.productData!.productId!) and above read context are same
+                                  //  ! Provider.of<WishlistProvuder>(context,listen: true).removeFromWish(uiProvider.productData!.productId!) and  context.watch<WishlistProvider>().removeFromWish(uiProvider.productData!.productId!)  are same thing
                                   : Provider.of<WishListProvider>(context,
                                           listen: false)
                                       .addWishItem(context,
                                           productData: ProductDataViewModel(
                                             selectQuantity: 1,
-                                            mainCategory: widget
+                                            mainCategory: uiProvider
                                                 .productData!.mainCategory,
-                                            subCategory:
-                                                widget.productData!.subCategory,
-                                            productDescription: widget
+                                            subCategory: uiProvider
+                                                .productData!.subCategory,
+                                            productDescription: uiProvider
                                                 .productData!
                                                 .productDescription,
-                                            productName:
-                                                widget.productData!.productName,
-                                            productPrice: widget
+                                            productName: uiProvider
+                                                .productData!.productName,
+                                            productPrice: uiProvider
                                                 .productData!.productPrice,
-                                            productDiscount: widget
+                                            productDiscount: uiProvider
                                                 .productData!.productDiscount,
-                                            productSid:
-                                                widget.productData!.productSid,
-                                            productId:
-                                                widget.productData!.productId,
-                                            productInstock: widget
+                                            productSid: uiProvider
+                                                .productData!.productSid,
+                                            productId: uiProvider
+                                                .productData!.productId,
+                                            productInstock: uiProvider
                                                 .productData!.productInstock,
-                                            productImageFile: widget
+                                            productImageFile: uiProvider
                                                 .productData!.productImageFile,
                                           ));
                             },
@@ -238,7 +212,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               BorderRadius.all(Radius.circular(30.0))),
                       child: CustomTextComponet(
                         textTitle:
-                            "${widget.productData!.productInstock} products in stock",
+                            "${uiProvider.productData!.productInstock} products in stock",
                         fontWeight: regularBoldFontWeight,
                         fontColor: whiteColor,
                         isCenterText: true,
@@ -260,7 +234,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         child: CustomTextComponet(
                           textTitle:
-                              "Details:\n${widget.productData!.productDescription}",
+                              "Details:\n${uiProvider.productData!.productDescription}",
                           fontWeight: regularBoldFontWeight,
                           fontColor: whiteColor,
                           isCenterText: false,
@@ -287,8 +261,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                   //? Similler Products
                   similerProduct(
-                      maincategory: widget.productData!.mainCategory,
-                      subCategory: widget.productData!.subCategory,
+                      maincategory: uiProvider.productData!.mainCategory,
+                      subCategory: uiProvider.productData!.subCategory,
                       width: width),
                   SizedBox(
                     height: 50,
@@ -320,7 +294,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             onPressed: () {
               navigationPush(context,
                   screenWidget: VisitStoreScreen(
-                    sellerId: widget.productData!.productSid,
+                    sellerId: uiProvider.productData!.productSid,
                   ));
             },
           ),
@@ -377,7 +351,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Provider.of<CartProvider>(context, listen: false)
                         .getItems
                         .forEach((element) {
-                      element.productId == widget.productData!.productId
+                      element.productId == uiProvider.productData!.productId
                           ? hasProduct = true
                           : hashCode;
                     });
@@ -388,24 +362,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 context,
                                 productData: ProductDataViewModel(
                                     selectQuantity: 1,
-                                    mainCategory:
-                                        widget.productData!.mainCategory,
-                                    subCategory:
-                                        widget.productData!.subCategory,
-                                    productDescription:
-                                        widget.productData!.productDescription,
-                                    productName:
-                                        widget.productData!.productName,
+                                    mainCategory: uiProvider
+                                        .productData!.mainCategory,
+                                    subCategory: uiProvider
+                                        .productData!.subCategory,
+                                    productDescription: uiProvider
+                                        .productData!.productDescription,
+                                    productName: uiProvider
+                                        .productData!.productName,
                                     productPrice:
-                                        widget.productData!.productPrice,
+                                        uiProvider.productData!.productPrice,
                                     productDiscount:
-                                        widget.productData!.productDiscount,
-                                    productSid: widget.productData!.productSid,
-                                    productId: widget.productData!.productId,
+                                        uiProvider.productData!.productDiscount,
+                                    productSid:
+                                        uiProvider.productData!.productSid,
+                                    productId:
+                                        uiProvider.productData!.productId,
                                     productInstock:
-                                        widget.productData!.productInstock,
-                                    productImageFile:
-                                        widget.productData!.productImageFile));
+                                        uiProvider.productData!.productInstock,
+                                    productImageFile: uiProvider
+                                        .productData!.productImageFile));
                   },
                   child: CustomTextComponet(
                     isCenterText: true,

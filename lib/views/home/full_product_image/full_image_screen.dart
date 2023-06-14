@@ -2,45 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
+import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class FullImageScreen extends StatefulWidget {
-  final List<String>? imageFileList;
-  final int? activeImage;
-  FullImageScreen({this.imageFileList, this.activeImage});
-
-  @override
-  State<FullImageScreen> createState() => _FullImageScreenState();
-}
-
-class _FullImageScreenState extends State<FullImageScreen> {
-  late PageController _pageController;
-  int activePage = 1;
-  @override
-  void initState() {
-    super.initState();
-    activePage = widget.activeImage!;
-    _pageController =
-        PageController(viewportFraction: 0.7, initialPage: activePage);
-  }
-
-  List<Widget> indicators(imagesLength, currentIndex) {
-    return List<Widget>.generate(imagesLength, (index) {
-      return Container(
-        margin: EdgeInsets.all(3),
-        width: 10,
-        height: 10,
-        decoration: BoxDecoration(
-            color: currentIndex == index ? Colors.black : Colors.black26,
-            shape: BoxShape.circle),
-      );
-    });
-  }
+class FullImageScreen extends StatelessWidget {
+  FullImageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final UiProvider uiProvider =
+        Provider.of<UiProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
       appBar: AppBar(
@@ -73,11 +48,10 @@ class _FullImageScreenState extends State<FullImageScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 child: CachedNetworkImage(
-                    imageUrl: widget.imageFileList![activePage],
+                    imageUrl: uiProvider.productData!
+                        .productImageFile![uiProvider.pageControlSelectedIndex],
                     color: Colors.black.withOpacity(0.2),
                     colorBlendMode: BlendMode.darken,
-                    // height: 100,
-                    // width: 100,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => SizedBox(
                                 //height: 80,
@@ -101,16 +75,15 @@ class _FullImageScreenState extends State<FullImageScreen> {
             height: customHeightWidth(context, height: true) / 4,
             child: PageView.builder(
                 clipBehavior: Clip.none,
-                controller: _pageController,
+                controller: uiProvider.pageController,
                 onPageChanged: (page) {
-                  setState(() {
-                    activePage = page;
-                  });
+                  uiProvider.updatePageControllerSelectedValue(page);
                 },
-                itemCount: widget.imageFileList!.length,
+                itemCount: uiProvider.productData!.productImageFile!.length,
                 pageSnapping: true,
                 itemBuilder: (context, pagePosition) {
-                  bool active = pagePosition == activePage;
+                  bool active =
+                      pagePosition == uiProvider.pageControlSelectedIndex;
                   double margin = active ? 10 : 20;
 
                   return Padding(
@@ -122,7 +95,8 @@ class _FullImageScreenState extends State<FullImageScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         child: CachedNetworkImage(
-                            imageUrl: widget.imageFileList![pagePosition],
+                            imageUrl: uiProvider
+                                .productData!.productImageFile![pagePosition],
                             color: Colors.black.withOpacity(0.2),
                             colorBlendMode: BlendMode.darken,
                             // height: 100,
@@ -146,7 +120,9 @@ class _FullImageScreenState extends State<FullImageScreen> {
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: indicators(widget.imageFileList!.length, activePage)),
+              children: indicators(
+                  uiProvider.productData!.productImageFile!.length,
+                  uiProvider.pageControlSelectedIndex)),
         ],
       ),
     );

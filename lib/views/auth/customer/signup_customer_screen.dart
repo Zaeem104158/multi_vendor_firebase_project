@@ -291,26 +291,3 @@ class CustomerSignUpScreen extends StatelessWidget {
     );
   }
 }
-
-// Future _getImage(ImageSource source) async {
-//     final pickedImage = await ImagePicker().pickImage(source: source);
-//     setState(() {
-//       if (pickedImage != null) {
-//         _authController.image = File(pickedImage.path);
-//       }
-//     });
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
-//   void dispose() {
-//     _authController.fullNameTextEditingController.dispose();
-//     _authController.emailTextEditingController.dispose();
-//     _authController.passwordTextEditingController;
-//     _authController.focusNode.unfocus();
-//     super.dispose();
-//   }

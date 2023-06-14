@@ -62,9 +62,11 @@ class SellerBottomWidgetScreen extends StatelessWidget {
               selectedFontSize: 16.0,
               unselectedFontSize: 16.0,
               type: BottomNavigationBarType.shifting,
-              currentIndex: pageControllerProvider.pageControlSelectedIndex,
+              currentIndex:
+                  pageControllerProvider.bottomNavigationControlSelectedIndex,
               onTap: (index) {
-                pageControllerProvider.updatePageControllerSelectedValue(index);
+                pageControllerProvider
+                    .updateBottomNavigationBarSelectedValue(index);
               },
               items: [
                 BottomNavigationBarItem(
@@ -93,7 +95,8 @@ class SellerBottomWidgetScreen extends StatelessWidget {
                     ),
                     label: bottomUpload)
               ]),
-          body: screens[pageControllerProvider.pageControlSelectedIndex],
+          body: screens[
+              pageControllerProvider.bottomNavigationControlSelectedIndex],
         );
       }),
     );
