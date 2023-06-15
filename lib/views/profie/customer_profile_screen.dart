@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_multi_vendor_project/components/custom_box_container.dart';
 import 'package:firebase_multi_vendor_project/components/custom_divider.dart';
@@ -10,21 +12,17 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
+import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/wishlist/wishlist_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CustomerProfileScreen extends StatefulWidget {
+class CustomerProfileScreen extends StatelessWidget {
   const CustomerProfileScreen({super.key});
 
   @override
-  State<CustomerProfileScreen> createState() => _CustomerProfileScreenState();
-}
-
-class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
-  final AuthController authController = AuthController();
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController authController = AuthController();
     return FutureBuilder(
         future: authController.userCustomerInfo(),
         builder: ((context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -283,7 +281,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         ),
                         CustomBoxContainer(
                           height:
-                              customHeightWidth(context, height: true) / 4.8,
+                              customHeightWidth(context, height: true) / 3.5,
                           padding: EdgeInsets.all(24),
                           color: whiteColor,
                           borderRadius: BorderRadius.circular(15.0),
@@ -332,6 +330,36 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                   ),
                                   leading: CustomIconButtonComponet(
                                       icon: Icons.logout),
+                                ),
+                              ),
+                              ListTile(
+                                title: CustomTextComponet(
+                                  isClickAble: true,
+                                  textTitle: "Light | Dark",
+                                  fontColor: blackColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                                leading: Switch(
+                                  onChanged: (value) {
+                                    context
+                                                .read<UiProvider>()
+                                                .currentThemeMode ==
+                                            ThemeMode.light
+                                        ? context
+                                            .read<UiProvider>()
+                                            .toggleTheme(
+                                              ThemeMode.dark,
+                                            )
+                                        : context
+                                            .read<UiProvider>()
+                                            .toggleTheme(
+                                              ThemeMode.light,
+                                            );
+                                  },
+                                  value:
+                                      context.watch<UiProvider>().isSelectTheme,
+                                  //activeColor: cyanColor,
                                 ),
                               ),
                             ],

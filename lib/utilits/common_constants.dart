@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
@@ -63,6 +64,8 @@ const String productCollectionFieldProductImageFile = 'productImageFile';
 const String customerProfileImageDirectory = 'profileImages/customers';
 const String sellerProfileImageDirectory = 'profileImages/sellers';
 
+// Theme
+const String themeModeKey = 'themeModeKey';
 //Close keyboard
 void closeSoftKeyBoard() {
   FocusManager.instance.primaryFocus?.unfocus();
