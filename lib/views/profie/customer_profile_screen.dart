@@ -14,6 +14,7 @@ import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_prov
 import 'package:firebase_multi_vendor_project/views/wishlist/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CustomerProfileScreen extends StatelessWidget {
   const CustomerProfileScreen({super.key});
@@ -348,44 +349,24 @@ class CustomerProfileScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.center,
-                              //   children: [
-                              //     Radio(
-                              //       value: ThemeMode.light,
-                              //       groupValue:
-                              //           context.read<UiProvider>().themeMode,
-                              //       onChanged: (value) {
-                              //         context
-                              //             .read<UiProvider>()
-                              //             .saveThemeMode(value);
-                              //       },
-                              //     ),
-                              //     Text('Light'),
-                              //     Radio(
-                              //       value: ThemeMode.dark,
-                              //       groupValue:
-                              //           context.read<UiProvider>().themeMode,
-                              //       onChanged: (value) {
-                              //         context
-                              //             .read<UiProvider>()
-                              //             .saveThemeMode(value);
-                              //       },
-                              //     ),
-                              //     Text('Dark'),
-                              //     Radio(
-                              //       value: ThemeMode.system,
-                              //       groupValue:
-                              //           context.read<UiProvider>().themeMode,
-                              //       onChanged: (value) {
-                              //         context
-                              //             .read<UiProvider>()
-                              //             .saveThemeMode(value);
-                              //       },
-                              //     ),
-                              //     Text('System'),
-                              //   ],
-                              // ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      "${AppLocalizations.of(context)?.language}"),
+                                  Switch(
+                                    value: themeProvider
+                                            .currentLocale.languageCode ==
+                                        'bn',
+                                    onChanged: (value) {
+                                      Locale selectedLocale =
+                                          value ? Locale('bn') : Locale('en');
+                                      themeProvider
+                                          .saveLanguage(selectedLocale);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         )

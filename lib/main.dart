@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/l10n/l10n.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'views/provider/wishlist_provider/wishlist_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,9 +68,17 @@ class MyApp extends StatelessWidget {
           FocusManager.instance.primaryFocus!.unfocus();
         }
       },
-      child: Consumer<UiProvider>(builder: (context, themeProvider, child) {
+      child: Consumer<UiProvider>(builder: (context, uiProvider, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          locale: uiProvider.currentLocale,
+          supportedLocales: L10n.all,
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
           title: 'Flutter Demo',
           builder: EasyLoading.init(),
           theme: ThemeData(
@@ -78,7 +89,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           darkTheme: ThemeData.dark(),
-          themeMode: themeProvider.themeMode == ThemeModeType.light
+          themeMode: uiProvider.themeMode == ThemeModeType.light
               ? ThemeMode.light
               : ThemeMode.dark,
           home: SplashScreen(),

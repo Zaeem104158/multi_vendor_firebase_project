@@ -1,0 +1,15 @@
+{
+    "language": "English",
+    "@language": {
+        "description":"The Current language"
+        },
+    "light": "Light",
+    "@language": {
+        "description":"The Current language"
+        },
+    "dark": "Dark",
+    "@language": {
+        "description":"The Current language"
+        }
+
+}

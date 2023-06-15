@@ -31,6 +31,26 @@ class UiProvider extends ChangeNotifier {
     return _themeMode;
   }
 
+  Locale _currentLocale = Locale('en');
+
+  Locale get currentLocale => _currentLocale;
+
+  Future<void> loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? languageCode = prefs.getString(languageCodeKey);
+    if (languageCode != null) {
+      _currentLocale = Locale(languageCode);
+    }
+    notifyListeners();
+  }
+
+  Future<void> saveLanguage(Locale locale) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(languageCodeKey, locale.languageCode);
+    _currentLocale = locale;
+    notifyListeners();
+  }
+
   Future<void> saveThemeMode(ThemeModeType themeMode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt(themeModeKey, themeMode.index);

@@ -67,6 +67,7 @@ const String sellerProfileImageDirectory = 'profileImages/sellers';
 enum ThemeModeType { light, dark }
 
 const String themeModeKey = 'themeModeKey';
+const String languageCodeKey = 'languageCodeKey';
 //Close keyboard
 void closeSoftKeyBoard() {
   FocusManager.instance.primaryFocus?.unfocus();
