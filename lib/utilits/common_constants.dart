@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
@@ -65,6 +64,8 @@ const String customerProfileImageDirectory = 'profileImages/customers';
 const String sellerProfileImageDirectory = 'profileImages/sellers';
 
 // Theme
+enum ThemeModeType { light, dark }
+
 const String themeModeKey = 'themeModeKey';
 //Close keyboard
 void closeSoftKeyBoard() {
@@ -106,7 +107,7 @@ saveToSharedPreferences(String key, dynamic value) async {
 }
 
 // Read shared preferences.
-Future<dynamic> readFromSharedPreferences(String key) async {
+readFromSharedPreferences(String key) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   if (prefs.containsKey(key)) {
@@ -121,7 +122,7 @@ Future<dynamic> readFromSharedPreferences(String key) async {
     } else if (value is bool) {
       await prefs.setBool(key, value);
     } else if (value is List<String>) {
-      await prefs.setStringList(key, value);
+      return prefs.setStringList(key, value);
     }
   }
 

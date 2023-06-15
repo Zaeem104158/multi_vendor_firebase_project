@@ -1,31 +1,40 @@
-import 'dart:developer';
-
 import 'package:firebase_multi_vendor_project/models/productdata_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UiProvider extends ChangeNotifier {
   final PageController pageController =
       PageController(viewportFraction: 0.7, initialPage: 1);
-
   int bottomNavigationControlSelectedIndex = 0;
   int pageControlSelectedIndex = 1;
   int radioTileSelectedValue = 1;
   bool isPasswordVisible = false;
-
   ProductDataModel? productData;
-  ThemeMode currentThemeMode = ThemeMode.light;
-  bool isSelectTheme = false;
+
   void updateSelectedProductModelData(ProductDataModel data) {
     productData = data;
     notifyListeners();
   }
 
   // ! Theme change
-  void toggleTheme(ThemeMode themeMode) {
-    isSelectTheme = !isSelectTheme;
-    currentThemeMode = themeMode;
+  ThemeModeType _themeMode = ThemeModeType.light;
 
+  ThemeModeType get themeMode => _themeMode;
+
+  Future<ThemeModeType> loadThemeMode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int themeModeIndex =
+        prefs.getInt(themeModeKey) ?? ThemeModeType.light.index;
+    _themeMode = ThemeModeType.values[themeModeIndex];
+    notifyListeners();
+    return _themeMode;
+  }
+
+  Future<void> saveThemeMode(ThemeModeType themeMode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(themeModeKey, themeMode.index);
+    _themeMode = themeMode;
     notifyListeners();
   }
 

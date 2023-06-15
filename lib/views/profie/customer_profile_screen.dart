@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_multi_vendor_project/components/custom_box_container.dart';
 import 'package:firebase_multi_vendor_project/components/custom_divider.dart';
@@ -23,6 +21,7 @@ class CustomerProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = AuthController();
+    UiProvider themeProvider = Provider.of<UiProvider>(context);
     return FutureBuilder(
         future: authController.userCustomerInfo(),
         builder: ((context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -332,36 +331,61 @@ class CustomerProfileScreen extends StatelessWidget {
                                       icon: Icons.logout),
                                 ),
                               ),
-                              ListTile(
-                                title: CustomTextComponet(
-                                  isClickAble: true,
-                                  textTitle: "Light | Dark",
-                                  fontColor: blackColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                                leading: Switch(
-                                  onChanged: (value) {
-                                    context
-                                                .read<UiProvider>()
-                                                .currentThemeMode ==
-                                            ThemeMode.light
-                                        ? context
-                                            .read<UiProvider>()
-                                            .toggleTheme(
-                                              ThemeMode.dark,
-                                            )
-                                        : context
-                                            .read<UiProvider>()
-                                            .toggleTheme(
-                                              ThemeMode.light,
-                                            );
-                                  },
-                                  value:
-                                      context.watch<UiProvider>().isSelectTheme,
-                                  //activeColor: cyanColor,
-                                ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Select Theme Mode:'),
+                                  Switch(
+                                    value: themeProvider.themeMode ==
+                                        ThemeModeType.light,
+                                    onChanged: (value) {
+                                      ThemeModeType selectedThemeMode = value
+                                          ? ThemeModeType.light
+                                          : ThemeModeType.dark;
+                                      themeProvider
+                                          .saveThemeMode(selectedThemeMode);
+                                    },
+                                  ),
+                                ],
                               ),
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     Radio(
+                              //       value: ThemeMode.light,
+                              //       groupValue:
+                              //           context.read<UiProvider>().themeMode,
+                              //       onChanged: (value) {
+                              //         context
+                              //             .read<UiProvider>()
+                              //             .saveThemeMode(value);
+                              //       },
+                              //     ),
+                              //     Text('Light'),
+                              //     Radio(
+                              //       value: ThemeMode.dark,
+                              //       groupValue:
+                              //           context.read<UiProvider>().themeMode,
+                              //       onChanged: (value) {
+                              //         context
+                              //             .read<UiProvider>()
+                              //             .saveThemeMode(value);
+                              //       },
+                              //     ),
+                              //     Text('Dark'),
+                              //     Radio(
+                              //       value: ThemeMode.system,
+                              //       groupValue:
+                              //           context.read<UiProvider>().themeMode,
+                              //       onChanged: (value) {
+                              //         context
+                              //             .read<UiProvider>()
+                              //             .saveThemeMode(value);
+                              //       },
+                              //     ),
+                              //     Text('System'),
+                              //   ],
+                              // ),
                             ],
                           ),
                         )

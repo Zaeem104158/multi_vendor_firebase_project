@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
 import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
@@ -14,34 +15,38 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp()
       .then((value) => print("Firebase Initialized Completed"));
-
+  UiProvider uiProvider = UiProvider();
+  await uiProvider.loadThemeMode();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) {
-        return AuthController();
-      },
-    ),
-    ChangeNotifierProvider(
-      create: (context) {
-        return UiProvider();
-      },
-    ),
-    ChangeNotifierProvider(
-      create: (context) {
-        return CartProvider();
-      },
-    ),
-    ChangeNotifierProvider(
-      create: (context) {
-        return WishListProvider();
-      },
-    ),
-  ], child: MyApp()));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) {
+          return AuthController();
+        },
+      ),
+      ChangeNotifierProvider(
+        create: (context) {
+          return uiProvider;
+        },
+      ),
+      ChangeNotifierProvider(
+        create: (context) {
+          return CartProvider();
+        },
+      ),
+      ChangeNotifierProvider(
+        create: (context) {
+          return WishListProvider();
+        },
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -49,8 +54,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UiProvider uiProvider =
-        Provider.of<UiProvider>(context, listen: true);
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return GestureDetector(
@@ -62,21 +65,25 @@ class MyApp extends StatelessWidget {
           FocusManager.instance.primaryFocus!.unfocus();
         }
       },
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        builder: EasyLoading.init(),
-        theme: uiProvider.currentThemeMode == ThemeMode.light
-            ? ThemeData(
-                inputDecorationTheme: InputDecorationTheme(
-                    counterStyle: TextStyle(
-                        color: blackColor, fontWeight: regularBoldFontWeight)),
-                fontFamily: 'RobotoMono',
-                primarySwatch: Colors.blue,
-              )
-            : ThemeData.dark(),
-        home: SplashScreen(),
-      ),
+      child: Consumer<UiProvider>(builder: (context, themeProvider, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          builder: EasyLoading.init(),
+          theme: ThemeData(
+            inputDecorationTheme: InputDecorationTheme(
+                counterStyle: TextStyle(
+                    color: blackColor, fontWeight: regularBoldFontWeight)),
+            fontFamily: 'RobotoMono',
+            primarySwatch: Colors.blue,
+          ),
+          darkTheme: ThemeData.dark(),
+          themeMode: themeProvider.themeMode == ThemeModeType.light
+              ? ThemeMode.light
+              : ThemeMode.dark,
+          home: SplashScreen(),
+        );
+      }),
     );
   }
 }
