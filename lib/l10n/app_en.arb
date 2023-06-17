@@ -4,12 +4,12 @@
         "description":"The Current language"
         },
     "light": "Light",
-    "@language": {
-        "description":"The Current language"
+    "@light": {
+        "description":"This is light theme"
         },
     "dark": "Dark",
-    "@language": {
-        "description":"The Current language"
+    "@dark": {
+        "description":"This is dark theme"
         }
 
 }

@@ -332,40 +332,26 @@ class CustomerProfileScreen extends StatelessWidget {
                                       icon: Icons.logout),
                                 ),
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Select Theme Mode:'),
-                                  Switch(
-                                    value: themeProvider.themeMode ==
-                                        ThemeModeType.light,
-                                    onChanged: (value) {
-                                      ThemeModeType selectedThemeMode = value
-                                          ? ThemeModeType.light
-                                          : ThemeModeType.dark;
-                                      themeProvider
-                                          .saveThemeMode(selectedThemeMode);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      "${AppLocalizations.of(context)?.language}"),
-                                  Switch(
-                                    value: themeProvider
-                                            .currentLocale.languageCode ==
-                                        'bn',
-                                    onChanged: (value) {
-                                      Locale selectedLocale =
-                                          value ? Locale('bn') : Locale('en');
-                                      themeProvider
-                                          .saveLanguage(selectedLocale);
-                                    },
-                                  ),
-                                ],
+                              // Column(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     Text('Select Theme Mode:'),
+                              //     Switch(
+                              //       value: themeProvider.themeMode ==
+                              //           ThemeModeType.light,
+                              //       onChanged: (value) {
+                              //         ThemeModeType selectedThemeMode = value
+                              //             ? ThemeModeType.light
+                              //             : ThemeModeType.dark;
+                              //         themeProvider
+                              //             .saveThemeMode(selectedThemeMode);
+                              //       },
+                              //     ),
+                              //   ],
+                              // ),
+                              Text(
+                                AppLocalizations.of(context)!.language,
+                                style: TextStyle(color: Colors.red),
                               ),
                             ],
                           ),

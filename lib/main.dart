@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/l10n/l10n.dart';
+import 'package:firebase_multi_vendor_project/practice.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
@@ -18,8 +19,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp()
       .then((value) => print("Firebase Initialized Completed"));
-  UiProvider uiProvider = UiProvider();
-  await uiProvider.loadThemeMode();
+  // UiProvider uiProvider = UiProvider();
+  // await uiProvider.loadThemeMode();
+  // Loading a provider then return it in changenotifier.
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -34,7 +36,7 @@ void main() async {
       ),
       ChangeNotifierProvider(
         create: (context) {
-          return uiProvider;
+          return UiProvider()..loadThemeMode();
         },
       ),
       ChangeNotifierProvider(
@@ -70,30 +72,35 @@ class MyApp extends StatelessWidget {
       },
       child: Consumer<UiProvider>(builder: (context, uiProvider, child) {
         return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          locale: uiProvider.currentLocale,
-          supportedLocales: L10n.all,
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          title: 'Flutter Demo',
-          builder: EasyLoading.init(),
-          theme: ThemeData(
-            inputDecorationTheme: InputDecorationTheme(
-                counterStyle: TextStyle(
-                    color: blackColor, fontWeight: regularBoldFontWeight)),
-            fontFamily: 'RobotoMono',
-            primarySwatch: Colors.blue,
-          ),
-          darkTheme: ThemeData.dark(),
-          themeMode: uiProvider.themeMode == ThemeModeType.light
-              ? ThemeMode.light
-              : ThemeMode.dark,
-          home: SplashScreen(),
-        );
+            debugShowCheckedModeBanner: false,
+            //locale: uiProvider.currentLocale,
+            supportedLocales: L10n.all,
+            // initialRoute: Page1.page1Name,
+            // routes: {
+            //   Page1.page1Name: (context) => Page1(),
+            //   // Page2.page2Name: (context) => Page2(),
+            //   // Page3.page3Name: (context) => Page3(),
+            // },
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            title: 'Flutter Demo',
+            builder: EasyLoading.init(),
+            theme: ThemeData(
+              inputDecorationTheme: InputDecorationTheme(
+                  counterStyle: TextStyle(
+                      color: blackColor, fontWeight: regularBoldFontWeight)),
+              fontFamily: 'RobotoMono',
+              primarySwatch: Colors.blue,
+            ),
+            darkTheme: ThemeData.dark(),
+            themeMode: uiProvider.themeMode == ThemeModeType.light
+                ? ThemeMode.light
+                : ThemeMode.dark,
+            home: SplashScreen());
       }),
     );
   }
