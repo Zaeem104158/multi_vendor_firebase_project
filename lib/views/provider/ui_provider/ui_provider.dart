@@ -1,3 +1,4 @@
+import 'package:firebase_multi_vendor_project/l10n/l10n.dart';
 import 'package:firebase_multi_vendor_project/models/productdata_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,32 @@ class UiProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // App localization
+  Locale _locale = Locale("en");
+  Locale get locale => _locale;
+  Future<void> setLocale(Locale locale) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (!L10n.all.contains(locale)) return;
+
+    _locale = locale;
+    await prefs.setString(languageCodeKey, _locale.languageCode);
+    notifyListeners();
+  }
+
+  Future<ThemeModeType> loadLocalMode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String langCode = prefs.getString(languageCodeKey) ?? "en";
+    _locale = Locale(langCode);
+    notifyListeners();
+    return _themeMode;
+  }
+
+  void clearLocale() {
+    _locale = Locale("en");
+    notifyListeners();
+  }
+
   // ! Theme change
   ThemeModeType _themeMode = ThemeModeType.light;
 
@@ -30,26 +57,6 @@ class UiProvider extends ChangeNotifier {
     notifyListeners();
     return _themeMode;
   }
-
-  // Locale _currentLocale = Locale('en');
-
-  // Locale get currentLocale => _currentLocale;
-
-  // Future<void> loadLanguage() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? languageCode = prefs.getString(languageCodeKey);
-  //   if (languageCode != null) {
-  //     _currentLocale = Locale(languageCode);
-  //   }
-  //   notifyListeners();
-  // }
-
-  // Future<void> saveLanguage(Locale locale) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString(languageCodeKey, locale.languageCode);
-  //   _currentLocale = locale;
-  //   notifyListeners();
-  // }
 
   Future<void> saveThemeMode(ThemeModeType themeMode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

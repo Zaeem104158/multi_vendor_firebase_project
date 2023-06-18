@@ -10,6 +10,11 @@
     "dark": "Dark",
     "@dark": {
         "description":"This is dark theme"
+        },
+    "searchBarTitle": "What are you looking for?",
+    "@searchBarTitle": {
+        "description":"What are you looking for?"
         }
+        
 
 }

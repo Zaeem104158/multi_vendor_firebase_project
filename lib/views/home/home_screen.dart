@@ -13,6 +13,7 @@ import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/shoes_g
 import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/women_gallery_widget.dart';
 import 'package:firebase_multi_vendor_project/views/search/customer_search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -68,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextComponet(
-                      textTitle: "What are you looking for",
+                      textTitle: AppLocalizations.of(context)!.searchBarTitle,
                       isClickAble: true,
                       textPadding: EdgeInsets.only(left: 8, top: 2),
                       fontSize: 16.0,

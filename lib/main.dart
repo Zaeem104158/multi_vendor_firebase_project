@@ -17,10 +17,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp()
-      .then((value) => print("Firebase Initialized Completed"));
-  // UiProvider uiProvider = UiProvider();
-  // await uiProvider.loadThemeMode();
+  await Firebase.initializeApp();
+  UiProvider uiProvider = UiProvider();
+  await uiProvider.loadThemeMode();
+  await uiProvider.loadLocalMode();
   // Loading a provider then return it in changenotifier.
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -34,11 +34,7 @@ void main() async {
           return AuthController();
         },
       ),
-      ChangeNotifierProvider(
-        create: (context) {
-          return UiProvider()..loadThemeMode();
-        },
-      ),
+      ChangeNotifierProvider<UiProvider>.value(value: uiProvider),
       ChangeNotifierProvider(
         create: (context) {
           return CartProvider();
@@ -73,7 +69,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<UiProvider>(builder: (context, uiProvider, child) {
         return MaterialApp(
             debugShowCheckedModeBanner: false,
-            //locale: uiProvider.currentLocale,
+            locale: uiProvider.locale,
             supportedLocales: L10n.all,
             // initialRoute: Page1.page1Name,
             // routes: {

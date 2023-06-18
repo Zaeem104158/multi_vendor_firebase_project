@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_multi_vendor_project/components/custom_box_container.dart';
 import 'package:firebase_multi_vendor_project/components/custom_divider.dart';
@@ -5,11 +7,13 @@ import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/l10n/l10n.dart';
 import 'package:firebase_multi_vendor_project/models/userInfo_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
+import 'package:firebase_multi_vendor_project/views/profie/language_picker.dart';
 import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/wishlist/wishlist_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +26,10 @@ class CustomerProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = AuthController();
-    UiProvider themeProvider = Provider.of<UiProvider>(context);
+    UiProvider uiProvider = Provider.of<UiProvider>(context);
+    final flag = L10n.getFlag(Localizations.localeOf(context).languageCode);
+    final locale = uiProvider.locale;
+
     return FutureBuilder(
         future: authController.userCustomerInfo(),
         builder: ((context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -281,7 +288,7 @@ class CustomerProfileScreen extends StatelessWidget {
                         ),
                         CustomBoxContainer(
                           height:
-                              customHeightWidth(context, height: true) / 3.5,
+                              customHeightWidth(context, height: true) / 2.5,
                           padding: EdgeInsets.all(24),
                           color: whiteColor,
                           borderRadius: BorderRadius.circular(15.0),
@@ -332,30 +339,86 @@ class CustomerProfileScreen extends StatelessWidget {
                                       icon: Icons.logout),
                                 ),
                               ),
-                              // Column(
-                              //   mainAxisAlignment: MainAxisAlignment.center,
-                              //   children: [
-                              //     Text('Select Theme Mode:'),
-                              //     Switch(
-                              //       value: themeProvider.themeMode ==
-                              //           ThemeModeType.light,
-                              //       onChanged: (value) {
-                              //         ThemeModeType selectedThemeMode = value
-                              //             ? ThemeModeType.light
-                              //             : ThemeModeType.dark;
-                              //         themeProvider
-                              //             .saveThemeMode(selectedThemeMode);
-                              //       },
-                              //     ),
-                              //   ],
-                              // ),
-                              Text(
-                                AppLocalizations.of(context)!.language,
-                                style: TextStyle(color: Colors.red),
+                              CustomDivider(
+                                width: double.infinity,
+                                thickness: 1,
+                                color: cyanColor,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: CustomTextComponet(
+                                    isClickAble: true,
+                                    textTitle: "Theme Mode",
+                                    fontColor: blackColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  trailing: Switch(
+                                    value: uiProvider.themeMode ==
+                                        ThemeModeType.light,
+                                    onChanged: (value) {
+                                      ThemeModeType selectedThemeMode = value
+                                          ? ThemeModeType.light
+                                          : ThemeModeType.dark;
+                                      uiProvider
+                                          .saveThemeMode(selectedThemeMode);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              CustomDivider(
+                                withTextDivider: true,
+                                onlyDivider: false,
+                                width: double.infinity,
+                                thickness: 1,
+                                color: cyanColor,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                    title: CustomTextComponet(
+                                      isClickAble: true,
+                                      textTitle: "Language Mode",
+                                      fontColor: blackColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    trailing: DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        value: locale,
+                                        icon: Container(width: 12),
+                                        items: L10n.all.map(
+                                          (locale) {
+                                            final flag = L10n.getFlag(
+                                                locale.languageCode);
+
+                                            return DropdownMenuItem(
+                                              child: Center(
+                                                child: Text(
+                                                  flag,
+                                                  style:
+                                                      TextStyle(fontSize: 32),
+                                                ),
+                                              ),
+                                              value: locale,
+                                              onTap: () {
+                                                final provider =
+                                                    Provider.of<UiProvider>(
+                                                        context,
+                                                        listen: false);
+                                                provider.setLocale(locale);
+                                              },
+                                            );
+                                          },
+                                        ).toList(),
+                                        onChanged: (_) {},
+                                      ),
+                                    )),
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -365,5 +428,24 @@ class CustomerProfileScreen extends StatelessWidget {
           }
           return Container();
         }));
+  }
+}
+
+class LanguageWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final flag = L10n.getFlag(locale.languageCode);
+
+    return Center(
+      child: CircleAvatar(
+        backgroundColor: Colors.white,
+        radius: 72,
+        child: Text(
+          flag,
+          style: TextStyle(fontSize: 80),
+        ),
+      ),
+    );
   }
 }
