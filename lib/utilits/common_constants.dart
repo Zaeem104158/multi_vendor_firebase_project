@@ -58,6 +58,7 @@ const String productCollectionFieldProductDescription = 'productDescription';
 const String productCollectionFieldProductInStock = 'productInstock';
 const String productCollectionFieldProductDiscount = 'productDiscount';
 const String productCollectionFieldProductImageFile = 'productImageFile';
+const String productCollectionFieldProductNew = 'isProductNew';
 
 //Image Directory
 const String customerProfileImageDirectory = 'profileImages/customers';

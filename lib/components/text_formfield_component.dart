@@ -28,6 +28,7 @@ class CustomTextFormFieldComponent extends StatelessWidget {
   final int? maxLine;
   final TextInputType? keyboardType;
   final bool isEmail;
+  final Function(String)? onChanged;
 
   CustomTextFormFieldComponent(
       {this.padding = const EdgeInsets.all(8),
@@ -53,6 +54,7 @@ class CustomTextFormFieldComponent extends StatelessWidget {
       this.maxLine,
       this.isValidate = true,
       this.isEmail = false,
+      this.onChanged,
       this.keyboardType});
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,7 @@ class CustomTextFormFieldComponent extends StatelessWidget {
           textInputAction: TextInputAction.next,
           maxLength: maxLenght,
           maxLines: maxLine,
+          onChanged: onChanged,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: isBorderEnable == true

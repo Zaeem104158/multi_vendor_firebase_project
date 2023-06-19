@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_multi_vendor_project/components/custom_box_container.dart';
 import 'package:firebase_multi_vendor_project/components/custom_divider.dart';
@@ -13,7 +11,6 @@ import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
-import 'package:firebase_multi_vendor_project/views/profie/language_picker.dart';
 import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/wishlist/wishlist_screen.dart';
 import 'package:flutter/material.dart';

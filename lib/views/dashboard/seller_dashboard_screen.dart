@@ -1,4 +1,5 @@
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
+import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ class SellerDashBoardScreen extends StatefulWidget {
 }
 
 class _SellerDashBoardScreenState extends State<SellerDashBoardScreen> {
+  final AuthController _authController = AuthController();
   List<String> title = [
     "My store",
     "Orders",
@@ -61,13 +63,23 @@ class _SellerDashBoardScreenState extends State<SellerDashBoardScreen> {
                           size: 40,
                           color: cyanColor,
                         ),
-                        CustomTextComponet(
-                          isClickAble: true,
-                          isCenterText: true,
-                          textTitle: title[index].toUpperCase(),
-                          fontWeight: regularBoldFontWeight,
-                          fontColor: blackColor,
-                          fontSize: smallTextSize,
+                        GestureDetector(
+                          onTap: () {
+                            _authController.logoutSeller(context);
+                            //                CustomTextComponet(
+                            //   textTitle: "Logout",
+                            //   onPressed: () => _authController.logoutSeller(context),
+                            //   isClickAble: true,
+                            // )
+                          },
+                          child: CustomTextComponet(
+                            isClickAble: true,
+                            isCenterText: true,
+                            textTitle: title[index].toUpperCase(),
+                            fontWeight: regularBoldFontWeight,
+                            fontColor: blackColor,
+                            fontSize: smallTextSize,
+                          ),
                         )
                       ],
                     ),

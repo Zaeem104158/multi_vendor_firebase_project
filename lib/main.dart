@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/controllers/products_upload_controller.dart';
 import 'package:firebase_multi_vendor_project/l10n/l10n.dart';
-import 'package:firebase_multi_vendor_project/practice.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/provider/cart_provider/cart_provider.dart';
@@ -43,6 +43,11 @@ void main() async {
       ChangeNotifierProvider(
         create: (context) {
           return WishListProvider();
+        },
+      ),
+      ChangeNotifierProvider(
+        create: (context) {
+          return SellerProductsUploadController();
         },
       ),
     ],

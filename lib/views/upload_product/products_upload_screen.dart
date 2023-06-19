@@ -1,105 +1,19 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
+import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_formfield_component.dart';
-import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/controllers/products_upload_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_list/category_list.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class ProductUploadScreen extends StatefulWidget {
+class ProductUploadScreen extends StatelessWidget {
   ProductUploadScreen({super.key});
-
-  @override
-  State<ProductUploadScreen> createState() => _ProductUploadScreenState();
-}
-
-class _ProductUploadScreenState extends State<ProductUploadScreen> {
-  final SellerProductsUploadController _sellerProductsUploadController =
-      SellerProductsUploadController();
-  final AuthController _authController = AuthController();
-  @override
-  void dispose() {
-    _sellerProductsUploadController.productDescriptionController.dispose();
-    _sellerProductsUploadController.productDiscountController.dispose();
-    _sellerProductsUploadController.productQuantityController.dispose();
-    _sellerProductsUploadController.productPriceController.dispose();
-    _sellerProductsUploadController.productNameController.dispose();
-    super.dispose();
-  }
-
-  Future getImage(ImageSource source, {bool isMultipleImages = false}) async {
-    try {
-      if (!isMultipleImages) {
-        final pickedFile = await _sellerProductsUploadController.picker
-            .pickImage(source: source);
-        setState(() {
-          if (pickedFile != null) {
-            _sellerProductsUploadController.image = File(pickedFile.path);
-          } else {
-            log('No image selected.');
-          }
-        });
-      } else {
-        final pickedFiles =
-            await _sellerProductsUploadController.picker.pickMultiImage();
-        setState(() {
-          if (pickedFiles.length != 0) {
-            _sellerProductsUploadController.multipleImagesList = pickedFiles;
-          } else {
-            log('No image selected.');
-          }
-        });
-      }
-    } catch (e) {
-      log("Something went wrong");
-    }
-  }
-
-  void selectCatagory(String? value) {
-    _sellerProductsUploadController.mainCategoryValue = value!;
-    if (_sellerProductsUploadController.mainCategoryValue == 'Men') {
-      _sellerProductsUploadController.subCategoryList = menSubCategoryList;
-    } else if (_sellerProductsUploadController.mainCategoryValue == 'Women') {
-      _sellerProductsUploadController.subCategoryList = womenSubCategoryList;
-    } else if (_sellerProductsUploadController.mainCategoryValue == 'Kids') {
-      _sellerProductsUploadController.subCategoryList = kidsSubCategoryList;
-    } else if (_sellerProductsUploadController.mainCategoryValue ==
-        'Electornics') {
-      _sellerProductsUploadController.subCategoryList =
-          electornicsSubCategoryList;
-    } else if (_sellerProductsUploadController.mainCategoryValue == 'Shoes') {
-      _sellerProductsUploadController.subCategoryList = shoesSubCategoryList;
-    } else if (_sellerProductsUploadController.mainCategoryValue == 'Beauty') {
-      _sellerProductsUploadController.subCategoryList = beautySubCategoryList;
-    } else if (_sellerProductsUploadController.mainCategoryValue ==
-        'Accessories') {
-      _sellerProductsUploadController.subCategoryList =
-          accessoriesSubCategoryList;
-    }
-    setState(() {
-      _sellerProductsUploadController.mainCategoryValue = value;
-      _sellerProductsUploadController.subCategoryValue = "SubCategory";
-    });
-  }
-
-  Widget displayMultipleImages() {
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: _sellerProductsUploadController.multipleImagesList!.length,
-        itemBuilder: (context, int index) {
-          return Image.file(
-            File(_sellerProductsUploadController
-                .multipleImagesList![index].path),
-            fit: BoxFit.fill,
-            filterQuality: FilterQuality.high,
-          );
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,106 +23,141 @@ class _ProductUploadScreenState extends State<ProductUploadScreen> {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: customHeightWidth(context, height: true) * 0.3,
-                    width: customHeightWidth(context, width: true) * 0.5,
-                    color: blueGreyColor.withOpacity(0.9),
-                    child: _sellerProductsUploadController
-                                .multipleImagesList!.isNotEmpty &&
-                            _sellerProductsUploadController.image == null
-                        ? displayMultipleImages()
-                        : CustomTextComponet(
-                            isClickAble: false,
-                            isCenterText: true,
-                            textTitle: "You haven't pick \n \nany image",
-                            fontColor: blackColor,
-                            fontWeight: regularBoldFontWeight,
-                            fontSize: regularTextSize,
-                          ),
-                  ),
-                  Column(
-                    children: [
-                      //Main Category
-                      CustomTextComponet(
-                        textTitle: "Select Category\nHere",
-                        textPadding: EdgeInsets.all(4),
-                        fontWeight: regularBoldFontWeight,
-                        fontSize: regularTextSize,
+              Consumer<SellerProductsUploadController>(
+                  builder: (context, productCategoryProvider, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: productCategoryProvider
+                                    .multipleImagesList!.isNotEmpty &&
+                                productCategoryProvider.image == null
+                            ? displayMultipleImages(
+                                context, productCategoryProvider)
+                            : Container(
+                                height:
+                                    customHeightWidth(context, height: true) *
+                                        0.3,
+                                width: customHeightWidth(context, width: true) *
+                                    0.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  color: blueGreyColor.withOpacity(0.9),
+                                ),
+                                child: CustomTextComponet(
+                                  isClickAble: false,
+                                  isCenterText: true,
+                                  textTitle: "You haven't pick\n\nany image",
+                                  maxLine: 3,
+                                  fontColor: blackColor,
+                                  fontWeight: regularBoldFontWeight,
+                                  fontSize: regularTextSize,
+                                ),
+                              ),
                       ),
-                      DropdownButton<String>(
-                        borderRadius: BorderRadius.circular(20),
-                        value:
-                            _sellerProductsUploadController.mainCategoryValue,
-                        onChanged: (String? newValue) {
-                          selectCatagory(newValue);
-                        },
-                        items: mainCategoryList.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomTextComponet(
-                              textTitle: "$value".toUpperCase(),
-                              textPadding: EdgeInsets.all(2),
-                              fontWeight: regularFontWeight,
-                              fontSize: mediumTextSize,
+                    ),
+                    Column(
+                      children: [
+                        ElevatedButton.icon(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll(blackColor)),
+                            onPressed: () {
+                              productCategoryProvider.clearAll();
+                              log("${productCategoryProvider.isSubmitButtonVisible}");
+                            },
+                            icon: Icon(Icons.delete_forever),
+                            label: CustomTextComponet(
                               isCenterText: true,
                               isClickAble: true,
+                              fontColor: whiteColor,
+                              textTitle: "Clear All",
+                            )),
+                        Column(
+                          children: [
+                            //Main Category
+                            CustomTextComponet(
+                              textTitle: "Select Category\nHere",
+                              textPadding: EdgeInsets.all(4),
+                              maxLine: 2,
+                              fontWeight: regularBoldFontWeight,
+                              fontSize: regularTextSize,
                             ),
-                          );
-                        }).toList(),
-                      ),
-                      //Sub Category
-                      CustomTextComponet(
-                        textTitle: "Select Sub\nCategory Here",
-                        textPadding: EdgeInsets.all(4),
-                        fontWeight: regularBoldFontWeight,
-                        fontSize: regularTextSize,
-                      ),
-                      DropdownButton<String>(
-                        borderRadius: BorderRadius.circular(20),
-                        value: _sellerProductsUploadController.subCategoryValue,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _sellerProductsUploadController.subCategoryValue =
-                                newValue!;
-                          });
-                        },
-                        items: _sellerProductsUploadController.subCategoryList
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CustomTextComponet(
-                              textTitle: "$value".toUpperCase(),
-                              textPadding: EdgeInsets.all(2),
-                              isCenterText: true,
-                              isClickAble: true,
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: blackColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: DropdownButton<String>(
+                                dropdownColor: whiteColor,
+                                underline: SizedBox(),
+                                borderRadius: BorderRadius.circular(20),
+                                value:
+                                    productCategoryProvider.mainCategoryValue,
+                                onChanged: (String? newValue) {
+                                  productCategoryProvider
+                                      .selectSubCatagoryList(newValue);
+                                },
+                                items: mainCategoryList.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: CustomTextComponet(
+                                      textTitle: "$value".toUpperCase(),
+                                      textPadding: EdgeInsets.only(left: 4),
+                                      fontWeight: regularBoldFontWeight,
+                                      fontSize: smallTextSize,
+                                      isCenterText: true,
+                                      isClickAble: true,
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                      ElevatedButton.icon(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(blackColor)),
-                          onPressed: () {
-                            setState(() {
-                              _sellerProductsUploadController
-                                  .multipleImagesList = [];
-                            });
-                          },
-                          icon: Icon(Icons.delete_forever),
-                          label: CustomTextComponet(
-                            isCenterText: true,
-                            isClickAble: true,
-                            fontColor: whiteColor,
-                            textTitle: "Delete Image",
-                          ))
-                    ],
-                  ),
-                ],
-              ),
+                            //Sub Category
+                            CustomTextComponet(
+                              textTitle: "Select Sub\nCategory Here",
+                              textPadding: EdgeInsets.all(4),
+                              maxLine: 2,
+                              fontWeight: regularBoldFontWeight,
+                              fontSize: regularTextSize,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: blackColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: DropdownButton<String>(
+                                dropdownColor: whiteColor,
+                                underline: SizedBox(),
+                                borderRadius: BorderRadius.circular(20),
+                                value: productCategoryProvider.subCategoryValue,
+                                onChanged: (String? newValue) {
+                                  productCategoryProvider
+                                      .setSubCategoryValue(newValue);
+                                },
+                                items: productCategoryProvider.subCategoryList
+                                    .map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: CustomTextComponet(
+                                      textTitle: "$value".toUpperCase(),
+                                      textPadding: EdgeInsets.only(left: 4),
+                                      fontWeight: regularBoldFontWeight,
+                                      fontSize: smallTextSize,
+                                      isCenterText: true,
+                                      isClickAble: true,
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              }),
               Divider(
                 color: cyanColor,
                 thickness: 2,
@@ -230,8 +179,14 @@ class _ProductUploadScreenState extends State<ProductUploadScreen> {
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
-                textEditingController:
-                    _sellerProductsUploadController.productNameController,
+                textEditingController: context
+                    .read<SellerProductsUploadController>()
+                    .productNameController,
+                onChanged: (value) {
+                  context
+                      .read<SellerProductsUploadController>()
+                      .setProductNameValue(value);
+                },
               ),
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
@@ -251,8 +206,14 @@ class _ProductUploadScreenState extends State<ProductUploadScreen> {
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
-                textEditingController:
-                    _sellerProductsUploadController.productQuantityController,
+                textEditingController: context
+                    .read<SellerProductsUploadController>()
+                    .productQuantityController,
+                onChanged: (value) {
+                  context
+                      .read<SellerProductsUploadController>()
+                      .setProductQuantityValue(value);
+                },
               ),
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
@@ -273,8 +234,14 @@ class _ProductUploadScreenState extends State<ProductUploadScreen> {
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
-                textEditingController:
-                    _sellerProductsUploadController.productPriceController,
+                textEditingController: context
+                    .read<SellerProductsUploadController>()
+                    .productPriceController,
+                onChanged: (value) {
+                  context
+                      .read<SellerProductsUploadController>()
+                      .setProductPriceValue(value);
+                },
               ),
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
@@ -295,8 +262,14 @@ class _ProductUploadScreenState extends State<ProductUploadScreen> {
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
-                textEditingController:
-                    _sellerProductsUploadController.productDiscountController,
+                textEditingController: context
+                    .read<SellerProductsUploadController>()
+                    .productDiscountController,
+                onChanged: (value) {
+                  context
+                      .read<SellerProductsUploadController>()
+                      .setProductDiscountValue(value);
+                },
               ),
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
@@ -317,97 +290,137 @@ class _ProductUploadScreenState extends State<ProductUploadScreen> {
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
-                textEditingController: _sellerProductsUploadController
+                textEditingController: context
+                    .read<SellerProductsUploadController>()
                     .productDescriptionController,
+                onChanged: (value) {
+                  context
+                      .read<SellerProductsUploadController>()
+                      .setProductDescriptionValue(value);
+                },
               ),
-              CustomTextComponet(
-                textTitle: "Logout",
-                onPressed: () => _authController.logoutSeller(context),
-                isClickAble: true,
-              )
             ],
           ),
         ),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              heroTag: null,
-              onPressed: () {
-                getImage(ImageSource.gallery, isMultipleImages: true);
-              },
-              backgroundColor: blackColor,
-              child: Icon(
-                Icons.photo_library,
-                color: whiteColor,
+        child: Consumer<SellerProductsUploadController>(
+            builder: (context, uploadProvider, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                heroTag: null,
+                onPressed: () {
+                  uploadProvider.getImage(ImageSource.gallery,
+                      isMultipleImages: true);
+                },
+                backgroundColor: blackColor,
+                child: Icon(
+                  Icons.photo_library,
+                  color: whiteColor,
+                ),
               ),
-            ),
-            CustomSizedBox(
-              width: customHeightWidth(context, width: true) * 0.05,
-            ),
-            FloatingActionButton(
-              heroTag: null,
-              backgroundColor:
-                  _sellerProductsUploadController.isValidateUpload()
-                      ? blackColor
-                      : greyColor,
-              onPressed: _sellerProductsUploadController.isValidateUpload()
-                  ? () async {
-                      dynamic sellerSid =
-                          await readFromSharedPreferences(sharedPrefSellerUid);
-                      _sellerProductsUploadController.uploadProduct(
-                        directoryName: productsDataDirectory,
-                        mainCategory:
-                            _sellerProductsUploadController.mainCategoryValue,
-                        subCategory:
-                            _sellerProductsUploadController.subCategoryValue,
-                        productName: _sellerProductsUploadController
-                            .productNameController.text,
-                        productDiscount: _sellerProductsUploadController
-                            .productDiscountController.text,
-                        productPrice: _sellerProductsUploadController
-                            .productPriceController.text,
-                        productDescription: _sellerProductsUploadController
-                            .productDescriptionController.text,
-                        productQuantity: _sellerProductsUploadController
-                            .productQuantityController.text,
-                        selleSId: sellerSid,
-                      );
-                      setState(() {
-                        _sellerProductsUploadController.mainCategoryValue =
-                            'MainCategory';
-                        _sellerProductsUploadController.subCategoryValue =
-                            'SubCategory';
-                        _sellerProductsUploadController.subCategoryList = [];
-                        _sellerProductsUploadController.multipleImagesList = [];
-                        _sellerProductsUploadController
-                            .productDescriptionController
-                            .clear();
-                        _sellerProductsUploadController
-                            .productDiscountController
-                            .clear();
-                        _sellerProductsUploadController
-                            .productQuantityController
-                            .clear();
-                        _sellerProductsUploadController.productPriceController
-                            .clear();
-                        _sellerProductsUploadController.productNameController
-                            .clear();
-                      });
-                      log("Pressed");
-                    }
-                  : () {},
-              child: Icon(
-                Icons.upload,
-                color: whiteColor,
+              CustomSizedBox(
+                width: customHeightWidth(context, width: true) * 0.05,
               ),
-            )
-          ],
-        ),
+              uploadProvider.isSubmitButtonVisible
+                  ? FloatingActionButton(
+                      heroTag: null,
+                      backgroundColor: blackColor,
+                      onPressed: () async {
+                        dynamic sellerSid = await readFromSharedPreferences(
+                            sharedPrefSellerUid);
+                        uploadProvider.uploadProduct(
+                          directoryName: productsDataDirectory,
+                          mainCategory: uploadProvider.mainCategoryValue,
+                          subCategory: uploadProvider.subCategoryValue,
+                          productName:
+                              uploadProvider.productNameController.text,
+                          productDiscount:
+                              uploadProvider.productDiscountController.text,
+                          productPrice:
+                              uploadProvider.productPriceController.text,
+                          productDescription:
+                              uploadProvider.productDescriptionController.text,
+                          productQuantity:
+                              uploadProvider.productQuantityController.text,
+                          selleSId: sellerSid,
+                        );
+                        uploadProvider.clearAll();
+                      },
+                      child: Icon(
+                        Icons.upload,
+                        color: whiteColor,
+                      ),
+                    )
+                  : SizedBox()
+            ],
+          );
+        }),
       ),
     );
   }
+}
+
+Widget displayMultipleImages(context, SellerProductsUploadController provider) {
+  return Container(
+    height: customHeightWidth(context, height: true) * 0.3,
+    width: customHeightWidth(context, width: true) * 0.5,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(30.0),
+      color: whiteColor,
+    ),
+    child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: provider.multipleImagesList!.length,
+        itemBuilder: (context, int index) {
+          return Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Stack(
+              children: [
+                AnimatedContainer(
+                  curve: Curves.easeInOutCubic,
+                  margin: EdgeInsets.all(10),
+                  duration: Duration(milliseconds: 500),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.file(
+                      File(provider.multipleImagesList![index].path),
+                      fit: BoxFit.fill,
+                      height: customHeightWidth(context, height: true) * 0.3,
+                      width: customHeightWidth(context, width: true) * 0.5,
+                      filterQuality: FilterQuality.high,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 160,
+                  top: 20,
+                  child: GestureDetector(
+                    onTap: () {
+                      provider.clearMultipleImageList();
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: whiteColor.withOpacity(0.5)),
+                      child: Center(
+                        child: CustomIconButtonComponet(
+                          icon: Icons.clear,
+                          iconColor: redColor,
+                          iconSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+  );
 }
