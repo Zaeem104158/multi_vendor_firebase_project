@@ -23,3 +23,10 @@ bool isLoginValidated({String? email, String? password}) {
   }
   return false;
 }
+
+bool isForgetPasswordValidated({String? email}) {
+  if (regEmailExp.hasMatch(email!)) {
+    return true;
+  }
+  return false;
+}

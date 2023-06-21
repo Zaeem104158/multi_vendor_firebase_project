@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
@@ -11,6 +10,7 @@ import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_prov
 import 'package:firebase_multi_vendor_project/views/store/store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CustomerBottomWidgetScreen extends StatelessWidget {
   CustomerBottomWidgetScreen({super.key});
@@ -73,27 +73,27 @@ class CustomerBottomWidgetScreen extends StatelessWidget {
                       icon: Icon(
                         Icons.home,
                       ),
-                      label: bottomHome),
+                      label: AppLocalizations.of(context)!.home),
                   BottomNavigationBarItem(
                       icon: Icon(
                         Icons.search,
                       ),
-                      label: bottomCategory),
+                      label: AppLocalizations.of(context)!.category),
                   BottomNavigationBarItem(
                       icon: Icon(
                         Icons.shop,
                       ),
-                      label: bottomShop),
+                      label: AppLocalizations.of(context)!.shop),
                   BottomNavigationBarItem(
                       icon: Icon(
                         Icons.shopping_cart,
                       ),
-                      label: bottomCart),
+                      label: AppLocalizations.of(context)!.cart),
                   BottomNavigationBarItem(
                       icon: Icon(
                         Icons.person,
                       ),
-                      label: bottomProfile)
+                      label: AppLocalizations.of(context)!.profile)
                 ]));
       }),
     );

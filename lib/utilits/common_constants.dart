@@ -6,12 +6,14 @@ import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/customer_bottom_widget_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/seller_bottom_widget_screen.dart.dart';
+import 'package:firebase_multi_vendor_project/views/splash/select_application_theme_and_language.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 //Application image paths
 const String appLogo_image = "assets/images/logo.png";
@@ -20,14 +22,7 @@ const String user_placeholder_image =
 //Shared Preference Stored Datas
 const String sharedPrefCustomerUid = 'customerUid';
 const String sharedPrefSellerUid = 'sellerUid';
-//DashBoard Bottom Names
-const String bottomHome = 'Home';
-const String bottomCategory = 'Category';
-const String bottomShop = 'Shop';
-const String bottomCart = 'Cart';
-const String bottomProfile = 'Profile';
-const String bottomDashBoard = 'DashBoard';
-const String bottomUpload = 'Upload';
+
 // Firebase Collection Name keys
 //customer keys
 const String customersDirectory = 'customers';
@@ -140,15 +135,22 @@ startTime(context) async {
     dynamic sellerJwt = await readFromSharedPreferences(sharedPrefSellerUid);
 
     if (customerJwt != null && customerJwt != 0) {
-      navigationPush(context, screenWidget: CustomerBottomWidgetScreen());
+      navigationPush(context,
+          removeUntil: false, screenWidget: CustomerBottomWidgetScreen());
     } else if (sellerJwt != null && sellerJwt != 0) {
-      navigationPush(context, screenWidget: SellerBottomWidgetScreen());
+      navigationPush(context,
+          removeUntil: false, screenWidget: SellerBottomWidgetScreen());
     } else {
-      navigationPush(context, screenWidget: CustomerSignUpScreen());
+      Future.delayed(const Duration(seconds: 3), () {
+        navigationPush(context,
+            removeUntil: false,
+            screenWidget: SelectApplicationThemeAndLanguage());
+      });
     }
   } catch (e) {
     Future.delayed(const Duration(), () {
-      navigationPush(context, screenWidget: CustomerSignUpScreen());
+      navigationPush(context,
+          removeUntil: false, screenWidget: CustomerSignUpScreen());
     });
   }
 }
@@ -291,3 +293,20 @@ List<Widget> indicators(imagesLength, currentIndex) {
     );
   });
 }
+
+List<String> title = [
+  "My store",
+  "Orders",
+  "Edit Profile",
+  "Manage Products",
+  "Balance",
+  "Statics"
+];
+List<IconData> iconItem = [
+  Icons.store,
+  Icons.shop_2_outlined,
+  Icons.edit,
+  Icons.settings,
+  Icons.attach_money,
+  Icons.show_chart
+];

@@ -74,6 +74,7 @@ class UiProvider extends ChangeNotifier {
   // ! Customer and seller Homescreen bottom navigationbar controller provider
   void updateBottomNavigationBarSelectedValue(int index) {
     bottomNavigationControlSelectedIndex = index;
+
     notifyListeners();
   }
 

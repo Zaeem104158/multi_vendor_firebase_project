@@ -10,6 +10,7 @@ import 'package:firebase_multi_vendor_project/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'views/provider/wishlist_provider/wishlist_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -51,58 +52,58 @@ void main() async {
         },
       ),
     ],
-    child: MyApp(),
+    child: MultiVendorApp(),
   ));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
+class MultiVendorApp extends StatelessWidget {
+  MultiVendorApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus!.unfocus();
-        }
-      },
-      child: Consumer<UiProvider>(builder: (context, uiProvider, child) {
-        return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            locale: uiProvider.locale,
-            supportedLocales: L10n.all,
-            // initialRoute: Page1.page1Name,
-            // routes: {
-            //   Page1.page1Name: (context) => Page1(),
-            //   // Page2.page2Name: (context) => Page2(),
-            //   // Page3.page3Name: (context) => Page3(),
-            // },
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            title: 'Flutter Demo',
-            builder: EasyLoading.init(),
-            theme: ThemeData(
-              inputDecorationTheme: InputDecorationTheme(
-                  counterStyle: TextStyle(
-                      color: blackColor, fontWeight: regularBoldFontWeight)),
-              fontFamily: 'RobotoMono',
-              primarySwatch: Colors.blue,
-            ),
-            darkTheme: ThemeData.dark(),
-            themeMode: uiProvider.themeMode == ThemeModeType.light
-                ? ThemeMode.light
-                : ThemeMode.dark,
-            home: SplashScreen());
-      }),
-    );
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus!.unfocus();
+          }
+        },
+        child: ScreenUtilInit(
+          designSize: const Size(360, 690),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              locale: context.watch<UiProvider>().locale,
+              supportedLocales: L10n.all,
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              home: SplashScreen(),
+              title: 'Flutter MultiVendor',
+              builder: EasyLoading.init(),
+              theme: ThemeData(
+                inputDecorationTheme: InputDecorationTheme(
+                    counterStyle: TextStyle(
+                        color: blackColor, fontWeight: regularBoldFontWeight)),
+                fontFamily: 'RobotoMono',
+                primarySwatch: Colors.blue,
+              ),
+              darkTheme: ThemeData.dark(),
+              themeMode:
+                  context.watch<UiProvider>().themeMode == ThemeModeType.light
+                      ? ThemeMode.light
+                      : ThemeMode.dark,
+            );
+          },
+        ));
   }
 }

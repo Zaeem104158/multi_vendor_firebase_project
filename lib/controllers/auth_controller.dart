@@ -1,16 +1,24 @@
+import 'dart:async';
 import 'dart:developer';
+
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
+import 'package:firebase_multi_vendor_project/views/auth/customer/login_customer_account_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
-import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_account.dart';
+import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_account_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
+import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/customer_bottom_widget_screen.dart';
+import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/seller_bottom_widget_screen.dart.dart';
 import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class AuthController extends ChangeNotifier {
   final TextEditingController emailTextEditingController =
@@ -21,22 +29,114 @@ class AuthController extends ChangeNotifier {
 
   final TextEditingController fullNameTextEditingController =
       TextEditingController();
-  File? image;
+
+  String _fullName = "";
+  String _email = "";
+  String _password = "";
+  File? _image;
+  final picker = ImagePicker();
   final FocusNode focusNode = FocusNode();
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
-  void getImage(ImageSource source) async {
-    final pickedImage = await ImagePicker().pickImage(source: source);
+  String get fullName => _fullName;
 
-    if (pickedImage != null) {
-      image = File(pickedImage.path);
-    }
+  void setFullNameValue(String value) {
+    _fullName = value;
     notifyListeners();
   }
 
+  String get email => _email;
+
+  void setEmailValue(String value) {
+    _email = value;
+    notifyListeners();
+  }
+
+  String get password => _password;
+
+  void setPasswordValue(String value) {
+    _password = value;
+    notifyListeners();
+  }
+
+  bool get isSignUpSubmitButtonVisible {
+    bool validate;
+    _fullName.isNotEmpty && _email.isNotEmpty && _password.isNotEmpty
+        ? validate = true
+        : validate = false;
+
+    return validate;
+  }
+
+  bool get isLoginSubmitButtonVisible {
+    bool validate;
+    _email.isNotEmpty && _password.isNotEmpty
+        ? validate = true
+        : validate = false;
+
+    return validate;
+  }
+
+  bool get isForgetPasswordSubmitButtonVisible {
+    bool validate;
+    _email.isNotEmpty ? validate = true : validate = false;
+
+    return validate;
+  }
+
+  clearAll() {
+    emailTextEditingController.clear();
+    passwordTextEditingController.clear();
+    fullNameTextEditingController.clear();
+    _email = "";
+    _password = "";
+    _fullName = "";
+    _image = null;
+  }
+
+  File? get image => _image;
+
+  void setImage(File? image) {
+    _image = image;
+    notifyListeners();
+  }
+
+  //! Get image to ui in customer and seller
+  Future getImage(context, ImageSource source,
+      {bool isMultipleImages = false}) async {
+    try {
+      if (!isMultipleImages) {
+        final pickedFile = await picker.pickImage(source: source);
+
+        if (pickedFile != null) {
+          setImage(File(pickedFile.path));
+        } else {
+          showSnack(
+              context, "${AppLocalizations.of(context)!.no_image_selected}}");
+        }
+      } else {
+        final pickedFiles = await picker.pickMultiImage();
+
+        if (pickedFiles.length != 0) {
+          // setMulipleImagesList(pickedFiles);
+        } else {
+          showSnack(
+              context, "${AppLocalizations.of(context)!.no_image_selected}}");
+          ;
+        }
+      }
+    } catch (error) {
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
+          isToast: false);
+    }
+
+    notifyListeners();
+  }
+
+  //! Customer and seller image upload in firebase storage.
   Future<String> uploadUserImageToFirebase(File imageFile, directory) async {
     // Create a unique filename for the image
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -55,132 +155,227 @@ class AuthController extends ChangeNotifier {
     return downloadUrl;
   }
 
-  //Customer function
-  signUpCustomer(
-      String fullName, String email, String password, File? imageFile) async {
-    loading();
-    //SingnUP method
-    UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    //Upload image url into Firebase Storage.
-    Future<String> downloadUrl =
-        uploadUserImageToFirebase(imageFile!, customerProfileImageDirectory);
-    // Future<String> is need to be set in string data type.
-    String imageDownloadUrl = await downloadUrl;
-    //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
-    await firestore
-        .collection(customersDirectory)
-        .doc(userCredential.user!.uid)
-        .set({
-      customersCollectionFieldCid: userCredential.user!.uid,
-      customersCollectionFieldFullName: fullName,
-      customersCollectionFieldEmail: email,
-      customersCollectionFieldImageFile: imageDownloadUrl,
-      customersCollectionFieldPhoneNumber: '',
-      customersCollectionFieldAddress: ''
-    });
-    dismissLoading();
+  //! Customer
+  signUpCustomer(context, String fullName, String email, String password,
+      File? imageFile) async {
+    try {
+      loading();
+      //SingnUP method
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      //Upload image url into Firebase Storage.
+      Future<String> downloadUrl =
+          uploadUserImageToFirebase(imageFile!, customerProfileImageDirectory);
+      // Future<String> is need to be set in string data type.
+      String imageDownloadUrl = await downloadUrl;
+      //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
+      await firestore
+          .collection(customersDirectory)
+          .doc(userCredential.user!.uid)
+          .set({
+        customersCollectionFieldCid: userCredential.user!.uid,
+        customersCollectionFieldFullName: fullName,
+        customersCollectionFieldEmail: email,
+        customersCollectionFieldImageFile: imageDownloadUrl,
+        customersCollectionFieldPhoneNumber: '',
+        customersCollectionFieldAddress: ''
+      });
+      closeSoftKeyBoard();
+      clearAll();
+      dismissLoading();
+      showMessage(AppLocalizations.of(context)!.account_create_successfully,
+          isToast: true);
+      Timer(Duration(seconds: 1), () {
+        navigationPush(context,
+            removeUntil: false, screenWidget: CustomerLoginScreen());
+      });
+      dismissLoading();
+    } catch (error) {
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
+          isToast: false);
+    }
+    notifyListeners();
   }
 
-  //Customer function
   loginCustomer(context, String email, String password) async {
     final uiProvider = Provider.of<UiProvider>(context, listen: false);
-    loading();
+
     uiProvider.updateBottomNavigationBarSelectedValue(0);
     try {
+      loading();
       UserCredential loginResponse = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       await saveToSharedPreferences(
           sharedPrefCustomerUid, loginResponse.user!.uid);
       await saveToSharedPreferences(sharedPrefSellerUid, null);
+      closeSoftKeyBoard();
+      clearAll();
+      dismissLoading();
+      Timer(Duration(seconds: 1), () {
+        navigationPush(context,
+            removeUntil: false, screenWidget: CustomerBottomWidgetScreen());
+      });
+      dismissLoading();
     } catch (error) {
-      log("$error");
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
+          isToast: false);
     }
-
-    dismissLoading();
-  }
-
-  //Seller function
-  signUpSeller(
-      String fullName, String email, String password, File? imageFile) async {
-    loading();
-    //SingnUP method
-    UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    //Upload image url into Firebase Storage.
-    Future<String> downloadUrl =
-        uploadUserImageToFirebase(imageFile!, sellerProfileImageDirectory);
-    // Future<String> is need to be set in string data type.
-    String imageDownloadUrl = await downloadUrl;
-    //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
-    await firestore
-        .collection(sellersDirectory)
-        .doc(userCredential.user!.uid)
-        .set({
-      sellerCollectionFieldSid: userCredential.user!.uid,
-      sellerCollectionFieldFullName: fullName,
-      sellerCollectionFieldEmail: email,
-      sellerCollectionFieldImageFile: imageDownloadUrl,
-      sellerCollectionFieldPhoneNumber: '',
-      sellerCollectionFieldAddress: ''
-    });
-    dismissLoading();
-  }
-
-  //Seller function
-  loginSeller(context, String email, String password) async {
-    final uiProvider = Provider.of<UiProvider>(context, listen: false);
-    loading();
-    uiProvider.updateBottomNavigationBarSelectedValue(0);
-    UserCredential loginResponse =
-        await auth.signInWithEmailAndPassword(email: email, password: password);
-
-    // ignore: unnecessary_null_comparison
-    if (loginResponse != null) {
-      await saveToSharedPreferences(
-          sharedPrefSellerUid, loginResponse.user!.uid);
-      await saveToSharedPreferences(sharedPrefCustomerUid, null);
-    }
-
-    dismissLoading();
+    notifyListeners();
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> userCustomerInfo() async {
-    loading();
-
-    dynamic jwt = await readFromSharedPreferences(sharedPrefCustomerUid);
-    String userJwt = jwt;
-    var collectionReference =
-        FirebaseFirestore.instance.collection(customersDirectory);
-    var profileData = collectionReference.doc(userJwt).get();
-    return profileData;
-  }
-
-  Future<DocumentSnapshot<Map<String, dynamic>>> userSellerInfo() async {
-    loading();
-    dynamic jwt = await readFromSharedPreferences(sharedPrefSellerUid);
-    String userJwt = jwt;
-    var collectionReference =
-        FirebaseFirestore.instance.collection(sellersDirectory);
-    var profileData = collectionReference.doc(userJwt).get();
+    var profileData;
+    try {
+      dynamic jwt = await readFromSharedPreferences(sharedPrefCustomerUid);
+      String userJwt = jwt;
+      var collectionReference =
+          FirebaseFirestore.instance.collection(customersDirectory);
+      profileData = collectionReference.doc(userJwt).get();
+    } catch (error) {
+      showMessage("Problem Here$error", isToast: false);
+    }
+    notifyListeners();
     return profileData;
   }
 
   Future<void> logoutCustomer(context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    loading();
-    await auth.signOut();
-    await saveToSharedPreferences(sharedPrefCustomerUid, null);
-    navigationPush(context, screenWidget: CustomerSignUpScreen());
-    dismissLoading();
+    try {
+      loading();
+      clearAll();
+      await auth.signOut();
+      await saveToSharedPreferences(sharedPrefCustomerUid, null);
+      navigationPush(context,
+          removeUntil: false, screenWidget: CustomerSignUpScreen());
+      dismissLoading();
+    } catch (error) {
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
+          isToast: false);
+    }
+
+    notifyListeners();
+  }
+
+  //!Seller
+
+  signUpSeller(context, String fullName, String email, String password,
+      File? imageFile) async {
+    try {
+      loading();
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      //Upload image url into Firebase Storage.
+      Future<String> downloadUrl =
+          uploadUserImageToFirebase(imageFile!, sellerProfileImageDirectory);
+      // Future<String> is need to be set in string data type.
+      String imageDownloadUrl = await downloadUrl;
+      //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
+      await firestore
+          .collection(sellersDirectory)
+          .doc(userCredential.user!.uid)
+          .set({
+        sellerCollectionFieldSid: userCredential.user!.uid,
+        sellerCollectionFieldFullName: fullName,
+        sellerCollectionFieldEmail: email,
+        sellerCollectionFieldImageFile: imageDownloadUrl,
+        sellerCollectionFieldPhoneNumber: '',
+        sellerCollectionFieldAddress: ''
+      });
+      closeSoftKeyBoard();
+      clearAll();
+      dismissLoading();
+      showMessage(AppLocalizations.of(context)!.account_create_successfully,
+          isToast: true);
+      Timer(Duration(seconds: 1), () {
+        navigationPush(context,
+            removeUntil: false, screenWidget: SellerLoginScreen());
+      });
+    } catch (error) {
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
+          isToast: false);
+    }
+    notifyListeners();
+  }
+
+  loginSeller(context, String email, String password) async {
+    final uiProvider = Provider.of<UiProvider>(context, listen: false);
+    uiProvider.updateBottomNavigationBarSelectedValue(0);
+    try {
+      loading();
+      UserCredential loginResponse = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      await saveToSharedPreferences(
+          sharedPrefSellerUid, loginResponse.user!.uid);
+      await saveToSharedPreferences(sharedPrefCustomerUid, null);
+
+      closeSoftKeyBoard();
+      clearAll();
+      dismissLoading();
+      Timer(Duration(seconds: 1), () {
+        navigationPush(context,
+            removeUntil: false, screenWidget: SellerBottomWidgetScreen());
+      });
+      dismissLoading();
+    } catch (error) {
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
+          isToast: false);
+    }
+    notifyListeners();
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> userSellerInfo() async {
+    var profileData;
+    try {
+      dynamic jwt = await readFromSharedPreferences(sharedPrefSellerUid);
+      String userJwt = jwt;
+      var collectionReference =
+          FirebaseFirestore.instance.collection(sellersDirectory);
+      profileData = collectionReference.doc(userJwt).get();
+    } catch (error) {
+      showMessage("$error", isToast: false);
+    }
+    notifyListeners();
+    return profileData;
   }
 
   Future<void> logoutSeller(context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    loading();
-    await auth.signOut();
-    await saveToSharedPreferences(sharedPrefSellerUid, null);
-    navigationPush(context, screenWidget: SellerLoginScreen());
-    dismissLoading();
+    try {
+      loading();
+      emailTextEditingController.clear();
+      passwordTextEditingController.clear();
+      await auth.signOut();
+      await saveToSharedPreferences(sharedPrefSellerUid, null);
+      navigationPush(context, screenWidget: SellerSignUpScreen());
+      dismissLoading();
+    } catch (error) {
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
+          isToast: false);
+    }
+    notifyListeners();
+  }
+
+  Future<void> resetPassword(context, user, String email) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    try {
+      loading();
+      await _auth.sendPasswordResetEmail(email: email);
+      clearAll();
+      dismissLoading();
+      showMessage(
+          "${AppLocalizations.of(context)!.verification_code_has_sent_to_the_mail}",
+          isToast: true);
+      user == "customer"
+          ? navigationPush(context,
+              removeUntil: false, screenWidget: CustomerLoginScreen())
+          : navigationPush(context,
+              removeUntil: false, screenWidget: SellerLoginScreen());
+      // Password reset email sent successfully
+    } catch (error) {
+      // An error occurred while attempting to send password reset email
+      showMessage("${AppLocalizations.of(context)!.something_went_wrong}",
+          isToast: false);
+    }
+    notifyListeners();
   }
 }

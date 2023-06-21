@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(48.0),
-      child: Image.asset(appLogo_image),
+      child: Image.asset(appLogo_image, fit: BoxFit.contain),
     );
   }
 }

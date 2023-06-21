@@ -28,6 +28,7 @@ class CustomTextFormFieldComponent extends StatelessWidget {
   final int? maxLine;
   final TextInputType? keyboardType;
   final bool isEmail;
+  final bool isNumber;
   final Function(String)? onChanged;
 
   CustomTextFormFieldComponent(
@@ -55,6 +56,7 @@ class CustomTextFormFieldComponent extends StatelessWidget {
       this.isValidate = true,
       this.isEmail = false,
       this.onChanged,
+      this.isNumber = false,
       this.keyboardType});
   @override
   Widget build(BuildContext context) {
@@ -112,15 +114,15 @@ class CustomTextFormFieldComponent extends StatelessWidget {
               ? (value) {
                   if (value == null) {
                     return "Empty input.";
-                  } else if (!regEmailExp.hasMatch(value)) {
-                    return "Invalide email.";
                   } else if (value.isEmpty) {
                     return "Empty input.";
+                  } else if (!regEmailExp.hasMatch(value)) {
+                    return "Invalide email.";
                   } else {
                     return null;
                   }
                 }
-              : isValidate && !isEmail
+              : isValidate && !isEmail && !isNumber
                   ? (value) {
                       if (value == null) {
                         return "Empty input.";
@@ -130,7 +132,17 @@ class CustomTextFormFieldComponent extends StatelessWidget {
                         return null;
                       }
                     }
-                  : null,
+                  : isValidate && !isEmail && isNumber
+                      ? (value) {
+                          if (value == null) {
+                            return "Empty input.";
+                          } else if (value.isEmpty) {
+                            return "Empty input.";
+                          } else {
+                            return null;
+                          }
+                        }
+                      : null,
         ),
       ),
     );

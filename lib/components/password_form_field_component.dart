@@ -26,6 +26,7 @@ class CustomPasswordFormFieldComponent extends StatelessWidget {
   final Color? enabledBorderColor;
   final bool isBorderEnable;
   final TextEditingController? textEditingController;
+  final Function(String)? onChanged;
 
   const CustomPasswordFormFieldComponent({
     this.padding = const EdgeInsets.all(8),
@@ -47,6 +48,7 @@ class CustomPasswordFormFieldComponent extends StatelessWidget {
     this.enabledBorderColor,
     this.isBorderEnable = false,
     this.textEditingController,
+    this.onChanged,
   });
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class CustomPasswordFormFieldComponent extends StatelessWidget {
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
+          onChanged: onChanged,
           decoration: InputDecoration(
               label: CustomTextComponet(
                   textTitle: formFieldLabel,

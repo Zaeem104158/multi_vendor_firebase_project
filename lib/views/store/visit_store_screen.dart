@@ -97,10 +97,11 @@ class VisitStoreScreen extends StatelessWidget {
         height: 60,
         width: 60,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: greyColor),
+            borderRadius: BorderRadius.circular(20),
+            color: blackColor.withOpacity(0.3)),
         child: CustomIconButtonComponet(
           icon: Icons.chat,
-          iconColor: redColor,
+          iconColor: whiteColor.withOpacity(1),
           iconSize: 30,
           onPressed: () async {
             //Do work

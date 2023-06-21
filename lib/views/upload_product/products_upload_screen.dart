@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
@@ -11,6 +10,7 @@ import 'package:firebase_multi_vendor_project/views/category/category_list/categ
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProductUploadScreen extends StatelessWidget {
   ProductUploadScreen({super.key});
@@ -49,7 +49,8 @@ class ProductUploadScreen extends StatelessWidget {
                                 child: CustomTextComponet(
                                   isClickAble: false,
                                   isCenterText: true,
-                                  textTitle: "You haven't pick\n\nany image",
+                                  textTitle: AppLocalizations.of(context)!
+                                      .you_have_not_pick_any_images,
                                   maxLine: 3,
                                   fontColor: blackColor,
                                   fontWeight: regularBoldFontWeight,
@@ -66,20 +67,21 @@ class ProductUploadScreen extends StatelessWidget {
                                     MaterialStatePropertyAll(blackColor)),
                             onPressed: () {
                               productCategoryProvider.clearAll();
-                              log("${productCategoryProvider.isSubmitButtonVisible}");
                             },
                             icon: Icon(Icons.delete_forever),
                             label: CustomTextComponet(
                               isCenterText: true,
                               isClickAble: true,
                               fontColor: whiteColor,
-                              textTitle: "Clear All",
+                              textTitle:
+                                  AppLocalizations.of(context)!.clear_all,
                             )),
                         Column(
                           children: [
                             //Main Category
                             CustomTextComponet(
-                              textTitle: "Select Category\nHere",
+                              textTitle: AppLocalizations.of(context)!
+                                  .select_category_here,
                               textPadding: EdgeInsets.all(4),
                               maxLine: 2,
                               fontWeight: regularBoldFontWeight,
@@ -116,7 +118,8 @@ class ProductUploadScreen extends StatelessWidget {
                             ),
                             //Sub Category
                             CustomTextComponet(
-                              textTitle: "Select Sub\nCategory Here",
+                              textTitle: AppLocalizations.of(context)!
+                                  .select_sub_category_here,
                               textPadding: EdgeInsets.all(4),
                               maxLine: 2,
                               fontWeight: regularBoldFontWeight,
@@ -165,7 +168,7 @@ class ProductUploadScreen extends StatelessWidget {
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
                 isBorderEnable: true,
-                formFieldLabel: "Product Name",
+                formFieldLabel: AppLocalizations.of(context)!.product_name,
                 maxLine: 2,
                 isEmail: false,
                 formFieldLabelColor: blackColor,
@@ -175,7 +178,8 @@ class ProductUploadScreen extends StatelessWidget {
                 formFieldHintColor: blackColor.withOpacity(0.4),
                 formFieldHintSize: 12,
                 formFieldHintWeight: FontWeight.bold,
-                formFieldhHintText: "Enter your product name",
+                formFieldhHintText:
+                    AppLocalizations.of(context)!.enter_your_product_name,
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
@@ -191,7 +195,7 @@ class ProductUploadScreen extends StatelessWidget {
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
                 isBorderEnable: true,
-                formFieldLabel: "Quantity",
+                formFieldLabel: AppLocalizations.of(context)!.product_quantity,
                 maxLine: 1,
                 isEmail: false,
                 keyboardType: TextInputType.number,
@@ -202,7 +206,8 @@ class ProductUploadScreen extends StatelessWidget {
                 formFieldHintColor: blackColor.withOpacity(0.4),
                 formFieldHintSize: 12,
                 formFieldHintWeight: FontWeight.bold,
-                formFieldhHintText: "Enter your product quantity",
+                formFieldhHintText:
+                    AppLocalizations.of(context)!.enter_your_product_quantity,
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
@@ -218,7 +223,7 @@ class ProductUploadScreen extends StatelessWidget {
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
                 isBorderEnable: true,
-                formFieldLabel: "Price",
+                formFieldLabel: AppLocalizations.of(context)!.product_price,
                 maxLenght: 10,
                 maxLine: 1,
                 isEmail: false,
@@ -230,7 +235,8 @@ class ProductUploadScreen extends StatelessWidget {
                 formFieldHintColor: blackColor.withOpacity(0.4),
                 formFieldHintSize: 12,
                 formFieldHintWeight: FontWeight.bold,
-                formFieldhHintText: "Enter your product price",
+                formFieldhHintText:
+                    AppLocalizations.of(context)!.enter_your_product_price,
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
@@ -246,7 +252,7 @@ class ProductUploadScreen extends StatelessWidget {
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
                 isBorderEnable: true,
-                formFieldLabel: "Discount",
+                formFieldLabel: AppLocalizations.of(context)!.product_discount,
                 maxLenght: 10,
                 maxLine: 1,
                 isEmail: false,
@@ -258,7 +264,8 @@ class ProductUploadScreen extends StatelessWidget {
                 formFieldHintColor: blackColor.withOpacity(0.4),
                 formFieldHintSize: 12,
                 formFieldHintWeight: FontWeight.bold,
-                formFieldhHintText: "Enter your discount price",
+                formFieldhHintText:
+                    AppLocalizations.of(context)!.enter_your_product_discount,
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,
@@ -274,7 +281,8 @@ class ProductUploadScreen extends StatelessWidget {
               CustomTextFormFieldComponent(
                 padding: EdgeInsets.all(16.0),
                 isBorderEnable: true,
-                formFieldLabel: "Description",
+                formFieldLabel:
+                    AppLocalizations.of(context)!.product_description,
                 maxLenght: 300,
                 maxLine: 5,
                 isEmail: false,
@@ -286,7 +294,8 @@ class ProductUploadScreen extends StatelessWidget {
                 formFieldHintColor: blackColor.withOpacity(0.4),
                 formFieldHintSize: 12,
                 formFieldHintWeight: FontWeight.bold,
-                formFieldhHintText: "Enter your product description",
+                formFieldhHintText: AppLocalizations.of(context)!
+                    .enter_your_product_description,
                 formFieldBorderRadius: 30.0,
                 focusedBorderColor: Colors.green,
                 focusedBorderWidth: 2,

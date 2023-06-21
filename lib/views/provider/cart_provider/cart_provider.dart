@@ -1,6 +1,7 @@
 import 'package:firebase_multi_vendor_project/models/productdata_view_model.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CartProvider extends ChangeNotifier {
   List<ProductDataViewModel> _list = [];
@@ -26,7 +27,7 @@ class CartProvider extends ChangeNotifier {
   void addItem(context, {required ProductDataViewModel productData}) {
     ProductDataViewModel product = productData;
     _list.add(product);
-    showSnack(context, "Product added in cart");
+    showSnack(context, AppLocalizations.of(context)!.product_added_in_cart);
     notifyListeners();
   }
 

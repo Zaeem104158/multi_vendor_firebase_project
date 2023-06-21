@@ -6,14 +6,15 @@ import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/email_password_validator.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
+import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/forget_password/forget_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class CustomerLoginScreen extends StatelessWidget {
-  CustomerLoginScreen({super.key});
+class SellerLoginScreen extends StatelessWidget {
+  SellerLoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class CustomerLoginScreen extends StatelessWidget {
               padding: REdgeInsets.all(16.0),
               child: CustomTextComponet(
                 textTitle:
-                    AppLocalizations.of(context)!.sign_in_to_Customers_account,
+                    AppLocalizations.of(context)!.sign_in_to_sellers_account,
                 fontFamily: regularTextFontFamily,
                 fontSize: regularTextSize.sp,
                 fontWeight: regularFontWeight,
@@ -107,7 +108,7 @@ class CustomerLoginScreen extends StatelessWidget {
                                   .passwordTextEditingController
                                   .text)
                       ? () {
-                          context.read<AuthController>().loginCustomer(
+                          context.read<AuthController>().loginSeller(
                               context,
                               context
                                   .read<AuthController>()
@@ -165,7 +166,7 @@ class CustomerLoginScreen extends StatelessWidget {
                     onPressed: () {
                       navigationPush(context,
                           screenWidget: ForgetPasswordScreen(
-                            user: "customer",
+                            user: "seller",
                           ));
                     },
                     textTitle: AppLocalizations.of(context)!.click_here,

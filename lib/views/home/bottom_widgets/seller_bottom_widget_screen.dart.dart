@@ -11,11 +11,10 @@ import 'package:firebase_multi_vendor_project/views/dashboard/seller_dashboard_s
 import 'package:firebase_multi_vendor_project/views/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SellerBottomWidgetScreen extends StatelessWidget {
   SellerBottomWidgetScreen({super.key});
-
-  final AuthController authController = AuthController();
 
   final List<Widget> screens = [
     HomeScreen(),
@@ -38,7 +37,8 @@ class SellerBottomWidgetScreen extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     //Seller Upload textEditing Controller Dispose.
-                    context.read<SellerProductsUploadController>().dispose();
+                    // context.read<SellerProductsUploadController>().dispose();
+
                     exit(0);
                   },
                   child: const Text('Yes'),
@@ -70,33 +70,34 @@ class SellerBottomWidgetScreen extends StatelessWidget {
               onTap: (index) {
                 pageControllerProvider
                     .updateBottomNavigationBarSelectedValue(index);
+                dismissLoading();
               },
               items: [
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.home,
                     ),
-                    label: bottomHome),
+                    label: AppLocalizations.of(context)!.home),
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.search,
                     ),
-                    label: bottomCategory),
+                    label: AppLocalizations.of(context)!.category),
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.shop,
                     ),
-                    label: bottomShop),
+                    label: AppLocalizations.of(context)!.shop),
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.dashboard,
                     ),
-                    label: bottomDashBoard),
+                    label: AppLocalizations.of(context)!.dashboard),
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.upload_file,
                     ),
-                    label: bottomUpload)
+                    label: AppLocalizations.of(context)!.upload)
               ]),
           body: screens[
               pageControllerProvider.bottomNavigationControlSelectedIndex],

@@ -7,6 +7,7 @@ import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/store/visit_store_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
@@ -22,7 +23,7 @@ class StoreScreen extends StatelessWidget {
         elevation: 0.0,
         backgroundColor: blueGreyColor.shade100.withOpacity(0.5),
         title: CustomTextComponet(
-          textTitle: "Store",
+          textTitle: AppLocalizations.of(context)!.store,
           isCenterText: true,
           fontWeight: regularBoldFontWeight,
           fontSize: largeTextSize,

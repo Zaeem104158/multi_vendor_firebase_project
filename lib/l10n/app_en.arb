@@ -1,20 +1,250 @@
 {
-    "language": "English",
+    "language": "Language Mode",
     "@language": {
         "description":"The Current language"
         },
-    "light": "Light",
+    "light": "Light Mode",
     "@light": {
         "description":"This is light theme"
         },
-    "dark": "Dark",
+    "on": "On",
+    "@on": {
+        "description":"This is light theme"
+        },
+    "dark": "Dark Mode",
     "@dark": {
         "description":"This is dark theme"
         },
     "searchBarTitle": "What are you looking for?",
     "@searchBarTitle": {
         "description":"What are you looking for?"
-        }
-        
-
+        },
+    "store": "Store",
+    "@store": {
+        "description":"This is store."
+        },
+    "dashboard":"DashBoard",
+    "@dashboard": {
+        "description":"This is dashboard."
+        },   
+    "upload": "Upload",
+    "@upload": {
+        "description":"This is upload."
+        },
+    "shop": "Shop",
+    "@shop": {
+        "description":"This is shop."
+        },  
+    "profile": "Profile",
+    "@profile": {
+        "description":"This is profile."
+        },
+    "home": "Home",
+    "@home": {
+        "description":"This is home."
+        },    
+    "cart": "Cart",
+    "@cart": {
+        "description":"This is cart."
+        },
+    "category": "Category",
+    "@category": {
+        "description":"This is category."
+        },
+    "you_have_not_pick_any_images": "You haven't pick ant images",
+    "@you_have_not_pick_any_images": {
+        "description":"This is Upload images."
+        },  
+    "clear_all":"Clear",
+    "@clear_all": {
+        "description":"This is Clear all."
+        },
+    "select_category_here":"Select Category\nHere",
+    "@select_category_here": {
+        "description":"This is Main Category."
+        },
+    "select_sub_category_here":"Select Sub\nCategory Here",
+    "@select_sub_category_here": {
+        "description":"This is Sub Category."
+        },
+    "product_name":"Product Name",
+    "@product_name": {
+        "description":"This is Product name."
+        },
+    "product_price":"Product Price",
+    "@product_price": {
+        "description":"This is Product price."
+        },
+    "product_quantity":"Product Quantity",
+    "@product_quantity": {
+        "description":"This is Product quantity."
+        },
+    "product_discount":"Product Discount",
+    "@product_discount": {
+        "description":"This is Product discount."
+        },
+    "product_description":"Product Description",
+    "@product_description": {
+        "description":"This is Product description."
+        },
+    "enter_your_product_name":"Enter your product name",
+    "@enter_your_product_name": {
+        "description":"Enter your product name."
+        },
+    "enter_your_product_quantity":"Enter your product quantity",
+    "@enter_your_product_quantity": {
+        "description":"Enter your product quantity."
+        },
+    "enter_your_product_price":"Enter your product price",
+    "@enter_your_product_price": {
+        "description":"Enter your product price."
+        },
+    "enter_your_product_discount":"Enter your product discount",
+    "@enter_your_product_discount": {
+        "description":"Enter your product discount."
+        },
+    "enter_your_product_description":"Enter your product description",
+    "@enter_your_product_description": {
+        "description":"Enter your product description."
+        },
+    "regular_price":"Regular Price:",
+    "@regular_price": {
+        "description":"This is discount price."
+        },
+    "discount_price":"Discount Price:",  
+    "@discount_price": {
+        "description":"This is discount price."
+        },
+    "tk_title":"Tk",  
+    "@tk_title": {
+        "description":"This is tk title."
+        },  
+    "new_title":"New",  
+    "@new_title": {
+        "description":"This is new."
+        },
+    "product_description":"Product Description",
+    "@product_description": {
+        "description":"This is product description."
+        },
+    "similar_products":"Similar Products",
+    "@similar_products": {
+        "description":"This is similer product."
+        },    
+    "details":"Details:",
+    "@details": {
+        "description":"This is details."
+        },
+    "products_in_stock": "products in stock",
+    "@products_in_stock": {
+        "description":"This is products in stock."
+        },
+    "add_to_cart":"Add to Cart",
+    "@add_to_cart": {
+        "description":"This is add to cart."
+        },
+    "already_product_added":"Already product added",   
+    "@already_product_added": {
+        "description":"This is snackbar about Already product added."
+        },
+    "product_added_in_cart":"Product added in cart",  
+    "@product_added_in_cart": {
+        "description":"This is snackbar about Product added in cart."
+        },
+    "full_name":"Full Name",
+    "@full_name": {
+        "description":"This is full name."
+        },
+    "email":"Email",
+    "@email": {
+        "description":"This is email."
+        },
+    "password":"Password",    
+    "@password": {
+        "description":"This is password."
+        },    
+    "enter_your_full_name":"Enter your full name",
+    "@enter_your_full_name": {
+        "description":"This is enter your full name."
+        },
+    "enter_your_email":"Enter your email",
+    "@enter_your_email": {
+        "description":"This is enter your email."
+        },
+    "enter_your_password":"Enter your password", 
+    "@enter_your_password": {
+        "description":"This is enter your password."
+        },   
+    "already_have_a_sellers_account":"Already have a seller's account?",    
+    "@already_have_a_sellers_account": {
+        "description":"This is already have a seller's account."
+        },
+    "already_have_a_customers_account":"Already have a customer's account?",    
+    "@already_have_a_customers_account": {
+        "description":"This is already have a customer's account."
+        },
+    "create_sellers_account":"Create Seller's Account",  
+    "@create_sellers_account": {
+        "description":"This is create_seller's_account."
+        },
+    "create_customers_account":"Create Customer's Account",  
+    "@create_customers_account": {
+        "description":"This is create_customer's_account."
+        },
+    "login":"Login",
+    "@login": {
+        "description":"This is login."
+        },
+    "sign_up":"Sign Up",
+    "@sign_up": {
+        "description":"This is sign up."
+        },
+    "or":"Or",
+    "@or": {
+        "description":"This is or."
+        },
+    "submit": "Submit",
+    "@submit": {
+        "description":"This is submit."
+        },
+    "account_create_successfully":"Account create successfully",
+    "@account_create_successfully": {
+        "description":"This is account create successfully."
+        },
+    "account_create_successfully":"Account create successfully",
+    "@account_create_successfully": {
+        "description":"This is account create successfully."
+        },
+    "something_went_wrong":"Something went wrong,issue:",
+    "@something_went_wrong":{
+        "description":"This is something went wrong."
+        },
+    "sign_in_to_Customers_account":"Sign in to Customer's Account",
+    "@sign_in_to_Customers_account":{
+        "description":"This is something went wrong."
+        },
+    "sign_in_to_sellers_account":"Sign in to Seller's Account",
+    "@sign_in_to_sellers_account":{
+        "description":"This is something went wrong."
+        },
+    "no_image_selected":"No image selected",
+    "@no_image_selected":{
+        "description":"This is something went wrong."
+        },
+    "forget_passwowrd":"Forget Passwowrd?",
+    "@forget_passwowrd":{
+        "description":"This is something went wrong."
+        },
+    "click_here":"Click Here",
+    "@click_here":{
+        "description":"This is something went wrong."
+        },
+    "enter_your_email_for_reset_your_password":"Enter your email for reset your password.",
+    "@enter_your_email_for_reset_your_password":{
+        "description":"This is something went wrong."
+        },
+    "verification_code_has_sent_to_the_mail":"Verification code has sent to the mail.",
+    "@verification_code_has_sent_to_the_mail":{
+        "description":"This is something went wrong."
+        }                                  
 }

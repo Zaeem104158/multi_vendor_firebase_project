@@ -14,6 +14,7 @@ import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/wishlist/wishlist_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -22,13 +23,12 @@ class CustomerProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController authController = AuthController();
     UiProvider uiProvider = Provider.of<UiProvider>(context);
     final flag = L10n.getFlag(Localizations.localeOf(context).languageCode);
     final locale = uiProvider.locale;
 
     return FutureBuilder(
-        future: authController.userCustomerInfo(),
+        future: context.read<AuthController>().userCustomerInfo(),
         builder: ((context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
             return CustomTextComponet(
@@ -46,7 +46,6 @@ class CustomerProfileScreen extends StatelessWidget {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             final profileData = UserInfoModelClass.fromMap(data);
-            dismissLoading();
             return Scaffold(
               backgroundColor: greyColor.shade300,
               body: CustomScrollView(
@@ -203,7 +202,7 @@ class CustomerProfileScreen extends StatelessWidget {
                         ),
                         CustomBoxContainer(
                           height:
-                              customHeightWidth(context, height: true) / 3.8,
+                              customHeightWidth(context, height: true) / 2.2,
                           padding: EdgeInsets.all(24),
                           color: whiteColor,
                           borderRadius: BorderRadius.circular(15.0),
@@ -285,7 +284,7 @@ class CustomerProfileScreen extends StatelessWidget {
                         ),
                         CustomBoxContainer(
                           height:
-                              customHeightWidth(context, height: true) / 2.5,
+                              customHeightWidth(context, height: true) / 1.6,
                           padding: EdgeInsets.all(24),
                           color: whiteColor,
                           borderRadius: BorderRadius.circular(15.0),
@@ -322,8 +321,9 @@ class CustomerProfileScreen extends StatelessWidget {
                                 color: cyanColor,
                               ),
                               GestureDetector(
-                                onTap: () =>
-                                    authController.logoutCustomer(context),
+                                onTap: () => context
+                                    .read<AuthController>()
+                                    .logoutCustomer(context),
                                 child: ListTile(
                                   title: CustomTextComponet(
                                     isClickAble: true,
@@ -423,7 +423,11 @@ class CustomerProfileScreen extends StatelessWidget {
               ),
             );
           }
-          return Container();
+          return Center(
+            child: CircularProgressIndicator(
+              color: cyanColor,
+            ),
+          );
         }));
   }
 }

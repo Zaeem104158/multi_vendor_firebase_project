@@ -40,6 +40,7 @@ class SellerProductsUploadController extends ChangeNotifier {
 
 //Muilty Image getter and setter
   File? get image => _image;
+
   void setImage(File? image) {
     _image = image;
     notifyListeners();
@@ -49,6 +50,7 @@ class SellerProductsUploadController extends ChangeNotifier {
 
   void setMulipleImagesList(List<XFile> pickedFiles) {
     _multipleImagesList = pickedFiles;
+
     notifyListeners();
   }
 
@@ -74,6 +76,7 @@ class SellerProductsUploadController extends ChangeNotifier {
     } catch (e) {
       log("Something went wrong");
     }
+
     notifyListeners();
   }
 
@@ -81,6 +84,7 @@ class SellerProductsUploadController extends ChangeNotifier {
   String get mainCategoryValue => _mainCategoryValue;
   void setMainCategoryValue(String? value) {
     _mainCategoryValue = value!;
+
     notifyListeners();
   }
 
@@ -88,6 +92,7 @@ class SellerProductsUploadController extends ChangeNotifier {
   String get subCategoryValue => _subCategoryValue;
   void setSubCategoryValue(String? value) {
     _subCategoryValue = value!;
+
     notifyListeners();
   }
 
@@ -95,6 +100,7 @@ class SellerProductsUploadController extends ChangeNotifier {
   List<String> get subCategoryList => _subCategoryList;
   void setSubCategoryList(List<String> value) {
     _subCategoryList = value;
+
     notifyListeners();
   }
 
@@ -118,6 +124,7 @@ class SellerProductsUploadController extends ChangeNotifier {
     }
     setMainCategoryValue(value);
     setSubCategoryValue("SubCategory");
+
     notifyListeners();
   }
 
@@ -133,6 +140,7 @@ class SellerProductsUploadController extends ChangeNotifier {
 
   void setProductDescriptionValue(String value) {
     _productDescription = value;
+
     notifyListeners();
   }
 
@@ -140,6 +148,7 @@ class SellerProductsUploadController extends ChangeNotifier {
 
   void setProductPriceValue(String value) {
     _productPrice = value;
+
     notifyListeners();
   }
 
@@ -147,6 +156,7 @@ class SellerProductsUploadController extends ChangeNotifier {
 
   void setProductQuantityValue(String value) {
     _productQuantity = value;
+
     notifyListeners();
   }
 
@@ -154,6 +164,7 @@ class SellerProductsUploadController extends ChangeNotifier {
 
   void setProductDiscountValue(String value) {
     _productDiscount = value;
+
     notifyListeners();
   }
 
@@ -169,6 +180,7 @@ class SellerProductsUploadController extends ChangeNotifier {
             _multipleImagesList!.length != 0
         ? validate = true
         : validate = false;
+
     return validate;
   }
 
@@ -191,6 +203,7 @@ class SellerProductsUploadController extends ChangeNotifier {
       downloadUrl = await snapshot.ref.getDownloadURL();
       downloadUrlList.add(downloadUrl);
     }
+
     return downloadUrlList;
   }
 
@@ -251,6 +264,7 @@ class SellerProductsUploadController extends ChangeNotifier {
   // Clear Images
   void clearMultipleImageList() {
     _multipleImagesList = [];
+
     notifyListeners();
   }
 
@@ -270,6 +284,7 @@ class SellerProductsUploadController extends ChangeNotifier {
     _productQuantity = '';
     _productDiscount = '';
     _productDescription = '';
+
     notifyListeners();
   }
 
@@ -280,6 +295,7 @@ class SellerProductsUploadController extends ChangeNotifier {
     productQuantityController.dispose();
     productPriceController.dispose();
     productNameController.dispose();
+
     super.dispose();
   }
 }

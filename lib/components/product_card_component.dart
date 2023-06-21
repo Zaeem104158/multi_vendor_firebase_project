@@ -12,6 +12,7 @@ import 'package:firebase_multi_vendor_project/views/provider/wishlist_provider/w
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/src/iterable_extensions.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProductCardComponent extends StatelessWidget {
   final int? productDataLength;
@@ -127,8 +128,10 @@ class ProductCardComponent extends StatelessWidget {
                               children: [
                                 CustomTextComponet(
                                   textTitle: data.productDiscount == "0"
-                                      ? "Regular Price:"
-                                      : "Discount Price:",
+                                      ? AppLocalizations.of(context)!
+                                          .regular_price
+                                      : AppLocalizations.of(context)!
+                                          .discount_price,
                                   isCenterText: false,
                                   isClickAble: false,
                                   fontWeight: regularBoldFontWeight,
@@ -147,7 +150,8 @@ class ProductCardComponent extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         CustomTextComponet(
-                                          textTitle: "\$${data.productPrice}",
+                                          textTitle:
+                                              "${AppLocalizations.of(context)!.tk_title} ${data.productPrice}",
                                           isCenterText: false,
                                           isClickAble: false,
                                           fontWeight: regularFontWeight,
@@ -162,7 +166,8 @@ class ProductCardComponent extends StatelessWidget {
                                         ),
                                         data.productDiscount != "0"
                                             ? CustomTextComponet(
-                                                textTitle: "\$$discountPrice",
+                                                textTitle:
+                                                    "${AppLocalizations.of(context)!.tk_title} $discountPrice",
                                                 isCenterText: false,
                                                 isClickAble: false,
                                                 fontWeight: regularFontWeight,
@@ -249,7 +254,7 @@ class ProductCardComponent extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: CustomTextComponet(
-                            textTitle: "New",
+                            textTitle: AppLocalizations.of(context)!.new_title,
                             isCenterText: true,
                             fontSize: mediumTextSize,
                             fontColor: whiteColor,

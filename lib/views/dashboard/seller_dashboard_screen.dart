@@ -1,33 +1,13 @@
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
+import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class SellerDashBoardScreen extends StatefulWidget {
+class SellerDashBoardScreen extends StatelessWidget {
   SellerDashBoardScreen({super.key});
 
-  @override
-  State<SellerDashBoardScreen> createState() => _SellerDashBoardScreenState();
-}
-
-class _SellerDashBoardScreenState extends State<SellerDashBoardScreen> {
-  final AuthController _authController = AuthController();
-  List<String> title = [
-    "My store",
-    "Orders",
-    "Edit Profile",
-    "Manage Products",
-    "Balance",
-    "Statics"
-  ];
-  List<IconData> iconItem = [
-    Icons.store,
-    Icons.shop_2_outlined,
-    Icons.edit,
-    Icons.settings,
-    Icons.attach_money,
-    Icons.show_chart
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,12 +45,9 @@ class _SellerDashBoardScreenState extends State<SellerDashBoardScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            _authController.logoutSeller(context);
-                            //                CustomTextComponet(
-                            //   textTitle: "Logout",
-                            //   onPressed: () => _authController.logoutSeller(context),
-                            //   isClickAble: true,
-                            // )
+                            context
+                                .read<AuthController>()
+                                .logoutSeller(context);
                           },
                           child: CustomTextComponet(
                             isClickAble: true,

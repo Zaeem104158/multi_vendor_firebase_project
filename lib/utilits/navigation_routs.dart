@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-void navigationPush(BuildContext context, {required Widget screenWidget}) {
+void navigationPush(BuildContext context,
+    {required Widget screenWidget, bool removeUntil = true}) {
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => screenWidget,
@@ -20,7 +21,8 @@ void navigationPush(BuildContext context, {required Widget screenWidget}) {
     );
   }
 
-  Navigator.push(context, _createRoute());
+  Navigator.pushAndRemoveUntil(
+      context, _createRoute(), (context) => removeUntil);
 }
 
 void navigationPop(

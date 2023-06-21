@@ -18,6 +18,7 @@ import 'package:firebase_multi_vendor_project/views/store/visit_store_screen.dar
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/src/iterable_extensions.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   ProductDetailsScreen({super.key});
@@ -114,7 +115,7 @@ class ProductDetailsScreen extends StatelessWidget {
                       isCenter: true,
                       withTextDivider: true,
                       onlyDivider: false,
-                      text: "Product Description",
+                      text: AppLocalizations.of(context)!.product_description,
                       thickness: 1,
                       color: greyColor,
                       textPadding: EdgeInsets.all(16),
@@ -134,7 +135,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         children: [
                           CustomTextComponet(
                             textTitle:
-                                "BDT \$${uiProvider.productData!.productPrice}",
+                                "${AppLocalizations.of(context)!.tk_title}${uiProvider.productData!.productPrice}",
                             fontWeight: regularBoldFontWeight,
                             fontColor: greyColor,
                             isCenterText: true,
@@ -212,7 +213,7 @@ class ProductDetailsScreen extends StatelessWidget {
                               BorderRadius.all(Radius.circular(30.0))),
                       child: CustomTextComponet(
                         textTitle:
-                            "${uiProvider.productData!.productInstock} products in stock",
+                            "${uiProvider.productData!.productInstock} ${AppLocalizations.of(context)!.products_in_stock}",
                         fontWeight: regularBoldFontWeight,
                         fontColor: whiteColor,
                         isCenterText: true,
@@ -234,8 +235,9 @@ class ProductDetailsScreen extends StatelessWidget {
                         ),
                         child: CustomTextComponet(
                           textTitle:
-                              "Details:\n${uiProvider.productData!.productDescription}",
+                              "${AppLocalizations.of(context)!.details} ${uiProvider.productData!.productDescription}",
                           fontWeight: regularBoldFontWeight,
+                          maxLine: 10,
                           fontColor: whiteColor,
                           isCenterText: false,
                           isClickAble: false,
@@ -252,7 +254,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     isCenter: true,
                     withTextDivider: true,
                     onlyDivider: false,
-                    text: "Similler Product",
+                    text: AppLocalizations.of(context)!.similar_products,
                     thickness: 1,
                     color: greyColor,
                     textPadding: EdgeInsets.all(0),
@@ -356,7 +358,8 @@ class ProductDetailsScreen extends StatelessWidget {
                           : hashCode;
                     });
                     hasProduct
-                        ? showSnack(context, "Already product added")
+                        ? showSnack(context,
+                            AppLocalizations.of(context)!.already_product_added)
                         : Provider.of<CartProvider>(context, listen: false)
                             .addItem(
                                 context,
@@ -386,7 +389,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   child: CustomTextComponet(
                     isCenterText: true,
                     isClickAble: true,
-                    textTitle: "Add to Cart",
+                    textTitle: AppLocalizations.of(context)!.add_to_cart,
                     fontColor: whiteColor,
                     fontSize: regularTextSize,
                   )),
