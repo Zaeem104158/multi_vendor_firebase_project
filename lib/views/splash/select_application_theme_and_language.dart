@@ -105,8 +105,10 @@ class SelectApplicationThemeAndLanguage extends StatelessWidget {
       ),
       GestureDetector(
         onTap: () {
-          navigationPush(context,
-              removeUntil: false, screenWidget: CustomerSignUpScreen());
+          Future.delayed(const Duration(milliseconds: 01), () {
+            navigationPush(context,
+                removeUntil: false, screenWidget: CustomerSignUpScreen());
+          });
         },
         child: Container(
           height: 50.0,

@@ -246,5 +246,9 @@
     "verification_code_has_sent_to_the_mail":"Verification code has sent to the mail.",
     "@verification_code_has_sent_to_the_mail":{
         "description":"This is something went wrong."
-        }                                  
+        },
+    "email_is_not_verified":"email is not verified yet.",
+    "@email_is_not_verified":{
+        "description":"This is something went wrong."
+        }                                      
 }

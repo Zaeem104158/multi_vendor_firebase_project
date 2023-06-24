@@ -59,5 +59,6 @@
     "forget_passwowrd":"পাসওয়ার্ড ভুলে গেছেন?",
     "click_here":"এখানে ক্লিক করুন",
     "enter_your_email_for_reset_your_password":"আপনার পাসওয়ার্ড রিসেট করার জন্য আপনার ইমেল লিখুন.",
-    "verification_code_has_sent_to_the_mail":"যাচাইকরণ কোড মেইলে পাঠানো হয়েছে"
+    "verification_code_has_sent_to_the_mail":"যাচাইকরণ কোড মেইলে পাঠানো হয়েছে",
+    "email_is_not_verified":"ইমেল এখনও যাচাই করা হয় নি"
 }

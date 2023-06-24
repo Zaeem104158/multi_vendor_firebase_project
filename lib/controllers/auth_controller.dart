@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/login_customer_account_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/email_verification_screen/email_verification_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/seller/login_seller_account_screen.dart';
 import 'package:firebase_multi_vendor_project/views/auth/seller/signup_seller_account.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/customer_bottom_widget_screen.dart';
@@ -95,6 +94,7 @@ class AuthController extends ChangeNotifier {
     _password = "";
     _fullName = "";
     _image = null;
+    notifyListeners();
   }
 
   File? get image => _image;
@@ -104,7 +104,7 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
-  //! Get image to ui in customer and seller
+  //! Get image to ui for customer and seller
   Future getImage(context, ImageSource source,
       {bool isMultipleImages = false}) async {
     try {
@@ -161,33 +161,41 @@ class AuthController extends ChangeNotifier {
     try {
       loading();
       //SingnUP method
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      // UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+      //     email: email, password: password);
+      // User? user = userCredential.user;
+      // if (user != null && user.emailVerified == false) {
+      //   await user.sendEmailVerification();
+      // }
       //Upload image url into Firebase Storage.
       Future<String> downloadUrl =
           uploadUserImageToFirebase(imageFile!, customerProfileImageDirectory);
       // Future<String> is need to be set in string data type.
       String imageDownloadUrl = await downloadUrl;
       //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
-      await firestore
-          .collection(customersDirectory)
-          .doc(userCredential.user!.uid)
-          .set({
-        customersCollectionFieldCid: userCredential.user!.uid,
-        customersCollectionFieldFullName: fullName,
-        customersCollectionFieldEmail: email,
-        customersCollectionFieldImageFile: imageDownloadUrl,
-        customersCollectionFieldPhoneNumber: '',
-        customersCollectionFieldAddress: ''
-      });
+      log('${emailTextEditingController.text} ${passwordTextEditingController.text}');
+      // saveToSharedPreferences('currentEmail', emailTextEditingController.text);
+      // saveToSharedPreferences(
+      //     'currentPassword', passwordTextEditingController.text);
+      // await firestore
+      //     .collection(customersDirectory)
+      //     .doc(userCredential.user!.uid)
+      //     .set({
+      //   customersCollectionFieldCid: userCredential.user!.uid,
+      //   customersCollectionFieldFullName: fullName,
+      //   customersCollectionFieldEmail: email,
+      //   customersCollectionFieldImageFile: imageDownloadUrl,
+      //   customersCollectionFieldPhoneNumber: '',
+      //   customersCollectionFieldAddress: ''
+      // });
       closeSoftKeyBoard();
-      clearAll();
+
       dismissLoading();
       showMessage(AppLocalizations.of(context)!.account_create_successfully,
           isToast: true);
       Timer(Duration(seconds: 1), () {
         navigationPush(context,
-            removeUntil: false, screenWidget: CustomerLoginScreen());
+            removeUntil: false, screenWidget: EmailVerificationScreen());
       });
       dismissLoading();
     } catch (error) {
@@ -197,26 +205,55 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> getEmailVerified(context,
+      {String? email, String? password}) async {
+    bool isEmailVerified = false;
+
+    if (email != '' && password != '') {
+      log("In Auth controller: $email $password");
+      UserCredential loginResponse = await auth.signInWithEmailAndPassword(
+          email: email!, password: password!);
+      isEmailVerified = await loginResponse.user!.emailVerified;
+      log("$isEmailVerified");
+    } else {
+      showMessage(
+        AppLocalizations.of(context)!.something_went_wrong,
+        isToast: false,
+      );
+    }
+    return isEmailVerified;
+  }
+
   loginCustomer(context, String email, String password) async {
     final uiProvider = Provider.of<UiProvider>(context, listen: false);
-
     uiProvider.updateBottomNavigationBarSelectedValue(0);
+
     try {
       loading();
       UserCredential loginResponse = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      await saveToSharedPreferences(
-          sharedPrefCustomerUid, loginResponse.user!.uid);
-      await saveToSharedPreferences(sharedPrefSellerUid, null);
-      closeSoftKeyBoard();
-      clearAll();
-      dismissLoading();
-      Timer(Duration(seconds: 1), () {
-        navigationPush(context,
-            removeUntil: false, screenWidget: CustomerBottomWidgetScreen());
-      });
+      log("$loginResponse");
+
+      if (loginResponse.user!.emailVerified == true) {
+        await saveToSharedPreferences(
+            sharedPrefCustomerUid, loginResponse.user!.uid);
+        await saveToSharedPreferences(sharedPrefSellerUid, null);
+        closeSoftKeyBoard();
+        clearAll();
+        dismissLoading();
+        Timer(Duration(seconds: 1), () {
+          navigationPush(context,
+              removeUntil: false, screenWidget: CustomerBottomWidgetScreen());
+        });
+      } else {
+        Timer(Duration(seconds: 1), () {
+          navigationPush(context,
+              removeUntil: true, screenWidget: EmailVerificationScreen());
+        });
+      }
       dismissLoading();
     } catch (error) {
+      log("$error");
       showMessage("${AppLocalizations.of(context)!.something_went_wrong}$error",
           isToast: false);
     }
@@ -232,7 +269,7 @@ class AuthController extends ChangeNotifier {
           FirebaseFirestore.instance.collection(customersDirectory);
       profileData = collectionReference.doc(userJwt).get();
     } catch (error) {
-      showMessage("Problem Here$error", isToast: false);
+      showMessage("$error", isToast: false);
     }
     notifyListeners();
     return profileData;

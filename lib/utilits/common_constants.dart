@@ -1,9 +1,12 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
+import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/auth/customer/signup_customer_screen.dart';
+import 'package:firebase_multi_vendor_project/views/auth/email_verification_screen/email_verification_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/customer_bottom_widget_screen.dart';
 import 'package:firebase_multi_vendor_project/views/home/bottom_widgets/seller_bottom_widget_screen.dart.dart';
 import 'package:firebase_multi_vendor_project/views/splash/select_application_theme_and_language.dart';
@@ -11,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -128,6 +132,18 @@ readFromSharedPreferences(String key) async {
 
 // Start Time check weather the user is already log in or not.
 startTime(context) async {
+  String email = await readFromSharedPreferences('currentEmail') ?? '';
+  String password = await readFromSharedPreferences('currentPassword') ?? '';
+  bool isEmailVerified = false;
+  log("$email $password");
+  final provider = Provider.of<AuthController>(context, listen: false);
+  if (email != "" && password != "") {
+    isEmailVerified = await provider.getEmailVerified(context,
+        email: email, password: password);
+  } else {
+    isEmailVerified = false;
+  }
+
   try {
     //Reading Shared Preference customerUid data.
     dynamic customerJwt =
@@ -140,7 +156,11 @@ startTime(context) async {
     } else if (sellerJwt != null && sellerJwt != 0) {
       navigationPush(context,
           removeUntil: false, screenWidget: SellerBottomWidgetScreen());
+    } else if (!isEmailVerified) {
+      navigationPush(context,
+          removeUntil: false, screenWidget: EmailVerificationScreen());
     } else {
+      //Here
       Future.delayed(const Duration(seconds: 3), () {
         navigationPush(context,
             removeUntil: false,
