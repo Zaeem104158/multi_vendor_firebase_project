@@ -20,6 +20,8 @@ const regularBoldFontWeight = FontWeight.bold;
 
 //Icon Size
 const double smallIconSize = 12.0;
+const double listTileMediumIconSize = 25.0;
+const double listTileSmallIconSize = 18.0;
 const double mediumIconSize = 35.0;
 
 //Color

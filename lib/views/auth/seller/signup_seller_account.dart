@@ -74,6 +74,8 @@ class SellerSignUpScreen extends StatelessWidget {
                     Column(
                       children: [
                         Container(
+                          height: 45.sp,
+                          width: 50.sp,
                           decoration: BoxDecoration(
                               color: blackColor.withOpacity(0.4),
                               borderRadius: BorderRadius.only(
@@ -93,6 +95,8 @@ class SellerSignUpScreen extends StatelessWidget {
                               customHeightWidth(context, height: true) / 100,
                         ),
                         Container(
+                          height: 45.sp,
+                          width: 50.sp,
                           decoration: BoxDecoration(
                               color: blackColor.withOpacity(0.4),
                               borderRadius: BorderRadius.only(

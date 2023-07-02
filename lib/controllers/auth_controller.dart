@@ -151,7 +151,6 @@ class AuthController extends ChangeNotifier {
     // Wait for the upload task to complete and return the download URL
     final TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
     final String downloadUrl = await snapshot.ref.getDownloadURL();
-
     return downloadUrl;
   }
 
@@ -161,12 +160,12 @@ class AuthController extends ChangeNotifier {
     try {
       loading();
       //SingnUP method
-      // UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-      //     email: email, password: password);
-      // User? user = userCredential.user;
-      // if (user != null && user.emailVerified == false) {
-      //   await user.sendEmailVerification();
-      // }
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = userCredential.user;
+      if (user != null && user.emailVerified == false) {
+        await user.sendEmailVerification();
+      }
       //Upload image url into Firebase Storage.
       Future<String> downloadUrl =
           uploadUserImageToFirebase(imageFile!, customerProfileImageDirectory);
@@ -174,20 +173,20 @@ class AuthController extends ChangeNotifier {
       String imageDownloadUrl = await downloadUrl;
       //Create cloud database with a collection name user and set fields fullName, email, imageFile who are signUP.
       log('${emailTextEditingController.text} ${passwordTextEditingController.text}');
-      // saveToSharedPreferences('currentEmail', emailTextEditingController.text);
-      // saveToSharedPreferences(
-      //     'currentPassword', passwordTextEditingController.text);
-      // await firestore
-      //     .collection(customersDirectory)
-      //     .doc(userCredential.user!.uid)
-      //     .set({
-      //   customersCollectionFieldCid: userCredential.user!.uid,
-      //   customersCollectionFieldFullName: fullName,
-      //   customersCollectionFieldEmail: email,
-      //   customersCollectionFieldImageFile: imageDownloadUrl,
-      //   customersCollectionFieldPhoneNumber: '',
-      //   customersCollectionFieldAddress: ''
-      // });
+      saveToSharedPreferences('currentEmail', emailTextEditingController.text);
+      saveToSharedPreferences(
+          'currentPassword', passwordTextEditingController.text);
+      await firestore
+          .collection(customersDirectory)
+          .doc(userCredential.user!.uid)
+          .set({
+        customersCollectionFieldCid: userCredential.user!.uid,
+        customersCollectionFieldFullName: fullName,
+        customersCollectionFieldEmail: email,
+        customersCollectionFieldImageFile: imageDownloadUrl,
+        customersCollectionFieldPhoneNumber: '',
+        customersCollectionFieldAddress: ''
+      });
       closeSoftKeyBoard();
 
       dismissLoading();
@@ -210,11 +209,9 @@ class AuthController extends ChangeNotifier {
     bool isEmailVerified = false;
 
     if (email != '' && password != '') {
-      log("In Auth controller: $email $password");
       UserCredential loginResponse = await auth.signInWithEmailAndPassword(
           email: email!, password: password!);
       isEmailVerified = await loginResponse.user!.emailVerified;
-      log("$isEmailVerified");
     } else {
       showMessage(
         AppLocalizations.of(context)!.something_went_wrong,
@@ -271,8 +268,56 @@ class AuthController extends ChangeNotifier {
     } catch (error) {
       showMessage("$error", isToast: false);
     }
+
     notifyListeners();
     return profileData;
+  }
+
+  TextEditingController updatePhoneNumberEditingController =
+      TextEditingController();
+  TextEditingController updateAddressEditingController =
+      TextEditingController();
+  TextEditingController updateFullNameEditingController =
+      TextEditingController();
+  void updateCustomerInfo({Map<Object, Object?>? data}) async {
+    dynamic jwt = await readFromSharedPreferences(sharedPrefCustomerUid);
+    String userJwt = jwt;
+    var collectionReference =
+        FirebaseFirestore.instance.collection(customersDirectory);
+    if (data != null || data != "") {
+      try {
+        loading();
+        await collectionReference.doc(userJwt).update(data!);
+        dismissLoading();
+        updatePhoneNumberEditingController.clear();
+        updateAddressEditingController.clear();
+        updateFullNameEditingController.clear();
+        showMessage("Successfully updateed", isToast: true);
+      } catch (error) {
+        dismissLoading();
+        showMessage("$error", isToast: false);
+      }
+    } else {}
+    notifyListeners();
+  }
+
+  void deleteThenUpdateImage(context, {String? imageFilePath}) async {
+    // String fileUrl = imageFilePath!; // Replace with the actual file URL or path
+    // Reference storageReference = FirebaseStorage.instance.refFromURL(fileUrl);
+    // storageReference.delete();
+
+    getImage(context, ImageSource.camera);
+    Future.delayed(Duration(seconds: 30), () async {
+      Future<String> downloadUrl =
+          uploadUserImageToFirebase(image!, customerProfileImageDirectory);
+      String imagePath = await downloadUrl;
+      Map<Object, Object?> data = {
+        customersCollectionFieldImageFile: imagePath
+      };
+      updateCustomerInfo(data: data);
+    });
+
+    notifyListeners();
   }
 
   Future<void> logoutCustomer(context) async {

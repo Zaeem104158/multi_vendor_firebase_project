@@ -2,6 +2,7 @@ import 'package:firebase_multi_vendor_project/components/text_component.dart';
 import 'package:firebase_multi_vendor_project/utilits/email_password_validator.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextFormFieldComponent extends StatelessWidget {
   final EdgeInsets? padding;
@@ -29,7 +30,12 @@ class CustomTextFormFieldComponent extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool isEmail;
   final bool isNumber;
+  final bool isLable;
+  final TextInputAction textInputAction;
+  final double? inputFontSize;
+  final Color? inputFontColor;
   final Function(String)? onChanged;
+  final EdgeInsetsGeometry contentPadding;
 
   CustomTextFormFieldComponent(
       {this.padding = const EdgeInsets.all(8),
@@ -46,6 +52,7 @@ class CustomTextFormFieldComponent extends StatelessWidget {
       this.formFieldHintWeight = regularFontWeight,
       this.formFieldHintHeight = null,
       this.isBorderEnable = false,
+      this.isLable = true,
       this.focusedBorderColor,
       this.focusedBorderWidth,
       this.enabledBorderWidth,
@@ -57,6 +64,10 @@ class CustomTextFormFieldComponent extends StatelessWidget {
       this.isEmail = false,
       this.onChanged,
       this.isNumber = false,
+      this.textInputAction = TextInputAction.next,
+      this.inputFontSize = regularTextSize,
+      this.inputFontColor = blackColor,
+      this.contentPadding = const EdgeInsets.all(0),
       this.keyboardType});
   @override
   Widget build(BuildContext context) {
@@ -65,35 +76,42 @@ class CustomTextFormFieldComponent extends StatelessWidget {
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
+          style: TextStyle(fontSize: inputFontSize, color: inputFontColor),
           keyboardType: keyboardType,
-          textInputAction: TextInputAction.next,
+          textInputAction: textInputAction,
           maxLength: maxLenght,
           maxLines: maxLine,
           onChanged: onChanged,
           decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: isBorderEnable == true
-                  ? BorderRadius.circular(formFieldBorderRadius ?? 0.0)
-                  : BorderRadius.circular(0.0),
-              borderSide: BorderSide(
-                  color: enabledBorderColor ?? blackColor,
-                  width: enabledBorderWidth ?? 1.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: isBorderEnable == true
-                  ? BorderRadius.circular(formFieldBorderRadius ?? 0.0)
-                  : BorderRadius.circular(0.0),
-              borderSide: BorderSide(
-                  color: focusedBorderColor ?? blackColor,
-                  width: focusedBorderWidth ?? 1.0),
-            ),
-            label: CustomTextComponet(
-                textTitle: formFieldLabel,
-                fontColor: formFieldLabelColor,
-                fontSize: formFieldLabelSize,
-                fontWeight: formFieldLabelWeight,
-                fontHeight: formFieldLabelHeight,
-                textPadding: formFieldLabelPadding),
+            enabledBorder: isBorderEnable == true
+                ? OutlineInputBorder(
+                    borderRadius: isBorderEnable == true
+                        ? BorderRadius.circular(formFieldBorderRadius ?? 0.0)
+                        : BorderRadius.circular(0.0),
+                    borderSide: BorderSide(
+                        color: enabledBorderColor ?? blackColor,
+                        width: enabledBorderWidth ?? 1.0),
+                  )
+                : null,
+            focusedBorder: isBorderEnable == true
+                ? OutlineInputBorder(
+                    borderRadius: isBorderEnable == true
+                        ? BorderRadius.circular(formFieldBorderRadius ?? 0.0)
+                        : BorderRadius.circular(0.0),
+                    borderSide: BorderSide(
+                        color: focusedBorderColor ?? blackColor,
+                        width: focusedBorderWidth ?? 1.0),
+                  )
+                : null,
+            label: isLable
+                ? CustomTextComponet(
+                    textTitle: formFieldLabel,
+                    fontColor: formFieldLabelColor,
+                    fontSize: formFieldLabelSize,
+                    fontWeight: formFieldLabelWeight,
+                    fontHeight: formFieldLabelHeight,
+                    textPadding: formFieldLabelPadding)
+                : null,
             hintText: formFieldhHintText,
             hintStyle: TextStyle(
               color: formFieldHintColor,
@@ -103,11 +121,12 @@ class CustomTextFormFieldComponent extends StatelessWidget {
               height: formFieldHintHeight,
               overflow: TextOverflow.ellipsis,
             ),
+            // contentPadding: contentPadding,
             border: isBorderEnable == true
                 ? OutlineInputBorder(
                     borderRadius:
                         BorderRadius.circular(formFieldBorderRadius ?? 0.0))
-                : InputBorder.none,
+                : UnderlineInputBorder(),
           ),
           controller: textEditingController,
           validator: isValidate && isEmail

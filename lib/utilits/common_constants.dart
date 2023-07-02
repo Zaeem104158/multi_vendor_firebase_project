@@ -135,7 +135,6 @@ startTime(context) async {
   String email = await readFromSharedPreferences('currentEmail') ?? '';
   String password = await readFromSharedPreferences('currentPassword') ?? '';
   bool isEmailVerified = false;
-  log("$email $password");
   final provider = Provider.of<AuthController>(context, listen: false);
   if (email != "" && password != "") {
     isEmailVerified = await provider.getEmailVerified(context,
@@ -156,7 +155,7 @@ startTime(context) async {
     } else if (sellerJwt != null && sellerJwt != 0) {
       navigationPush(context,
           removeUntil: false, screenWidget: SellerBottomWidgetScreen());
-    } else if (!isEmailVerified) {
+    } else if (isEmailVerified) {
       navigationPush(context,
           removeUntil: false, screenWidget: EmailVerificationScreen());
     } else {

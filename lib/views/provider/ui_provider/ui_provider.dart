@@ -88,4 +88,29 @@ class UiProvider extends ChangeNotifier {
     isPasswordVisible = !isPasswordVisible;
     notifyListeners();
   }
+
+  // ! Profile Screen
+  bool isPhoneNumberEdit = false;
+  void setIsPhoneNumberEdit() {
+    isPhoneNumberEdit = !isPhoneNumberEdit;
+    notifyListeners();
+  }
+
+  bool isImageEdit = false;
+  void setImageEdit() {
+    isImageEdit = !isImageEdit;
+    notifyListeners();
+  }
+
+  bool isAddressEdit = false;
+  void setAddressEdit() {
+    isAddressEdit = !isAddressEdit;
+    notifyListeners();
+  }
+
+  bool isFullNameEdit = false;
+  void setFullNameEdit() {
+    isFullNameEdit = !isFullNameEdit;
+    notifyListeners();
+  }
 }

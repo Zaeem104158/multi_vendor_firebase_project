@@ -14,6 +14,7 @@ import 'package:firebase_multi_vendor_project/views/home/gallery_widgets/women_g
 import 'package:firebase_multi_vendor_project/views/search/customer_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -72,12 +73,12 @@ class HomeScreen extends StatelessWidget {
                       textTitle: AppLocalizations.of(context)!.searchBarTitle,
                       isClickAble: true,
                       textPadding: EdgeInsets.only(left: 8, top: 2),
-                      fontSize: 16.0,
+                      fontSize: smallTextSize.sp,
                     ),
                     CustomIconButtonComponet(
                       icon: Icons.search,
                       iconPadding: EdgeInsets.all(2.0),
-                      iconSize: 24.0,
+                      iconSize: smallIconSize.sp,
                     )
                   ]),
             ),
