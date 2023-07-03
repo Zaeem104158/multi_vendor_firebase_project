@@ -98,24 +98,35 @@ class CustomerProfileScreen extends StatelessWidget {
                                         height: 120.sp,
                                         width: 120.sp,
                                         decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(100.sp),
-                                            gradient: LinearGradient(
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                                transform: GradientRotation(
-                                                    math.pi / 4),
-                                                colors: [
-                                                  cyanColor.withOpacity(0.8),
-                                                  blackColor.withOpacity(0.5)
-                                                ]),
-                                            boxShadow: [
-                                              for (int i = 1; i < 10; i++)
-                                                BoxShadow(
-                                                    color: cyanColor,
-                                                    blurRadius: 5.0,
-                                                    offset: Offset(0, 0))
-                                            ]),
+                                          //border: GradientBoxBorder(),
+                                          borderRadius:
+                                              BorderRadius.circular(100.sp),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            transform:
+                                                GradientRotation(math.pi),
+                                            colors: [
+                                              Colors.redAccent,
+                                              Colors.greenAccent,
+                                              Colors.blueAccent,
+                                            ],
+                                          ),
+                                          //    boxShadow: [
+                                          //   BoxShadow(
+                                          //       color: Colors.redAccent,
+                                          //       blurRadius: 10.0.sp,
+                                          //       offset: Offset(0, 0)),
+                                          //   BoxShadow(
+                                          //       color: Colors.greenAccent,
+                                          //       blurRadius: 10.0.sp,
+                                          //       offset: Offset(0, 0)),
+                                          //   BoxShadow(
+                                          //       color: Colors.blueAccent,
+                                          //       blurRadius: 10.0.sp,
+                                          //       offset: Offset(0, 0))
+                                          // ]
+                                        ),
                                         child: Center(
                                           child: ClipRRect(
                                             clipBehavior:
