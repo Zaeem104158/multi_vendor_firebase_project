@@ -17,7 +17,6 @@ class SelectApplicationThemeAndLanguage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UiProvider uiProvider = Provider.of<UiProvider>(context);
-    final flag = L10n.getFlag(Localizations.localeOf(context).languageCode);
     final locale = uiProvider.locale;
 
     return SafeArea(

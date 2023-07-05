@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
@@ -17,7 +16,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 //Application image paths
 const String appLogo_image = "assets/images/logo.png";

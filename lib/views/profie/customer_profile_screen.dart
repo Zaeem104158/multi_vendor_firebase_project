@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -907,22 +906,3 @@ class CustomerProfileScreen extends StatelessWidget {
         }));
   }
 }
-
-// class LanguageWidget extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     final locale = Localizations.localeOf(context);
-//     final flag = L10n.getFlag(locale.languageCode);
-
-//     return Center(
-//       child: CircleAvatar(
-//         backgroundColor: Colors.white,
-//         radius: 72,
-//         child: Text(
-//           flag,
-//           style: TextStyle(fontSize: 80),
-//         ),
-//       ),
-//     );
-//   }
-// }

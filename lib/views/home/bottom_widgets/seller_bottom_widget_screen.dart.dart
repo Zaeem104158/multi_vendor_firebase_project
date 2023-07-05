@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
-import 'package:firebase_multi_vendor_project/controllers/products_upload_controller.dart';
 import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/store/store_screen.dart';
 import 'package:firebase_multi_vendor_project/views/upload_product/products_upload_screen.dart';

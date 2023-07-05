@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:firebase_multi_vendor_project/controllers/auth_controller.dart';
-import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/cart/cart_screen.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_screen.dart';

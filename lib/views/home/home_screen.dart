@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:firebase_multi_vendor_project/components/animated_background_component.dart';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
-import 'package:firebase_multi_vendor_project/components/wave_clipper.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_list/category_list.dart';

@@ -302,9 +302,9 @@ class AuthController extends ChangeNotifier {
   }
 
   void deleteThenUpdateImage(context, {String? imageFilePath}) async {
-    // String fileUrl = imageFilePath!; // Replace with the actual file URL or path
-    // Reference storageReference = FirebaseStorage.instance.refFromURL(fileUrl);
-    // storageReference.delete();
+    String fileUrl = imageFilePath!; // Replace with the actual file URL or path
+    Reference storageReference = FirebaseStorage.instance.refFromURL(fileUrl);
+    storageReference.delete();
 
     getImage(context, ImageSource.camera);
     Future.delayed(Duration(seconds: 30), () async {
