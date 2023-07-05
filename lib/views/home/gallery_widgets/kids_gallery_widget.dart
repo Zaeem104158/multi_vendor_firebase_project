@@ -33,6 +33,7 @@ class KidsGalleryWidget extends StatelessWidget {
         if (snapshot.data!.docs.isEmpty) {
           return CustomTextComponet(
             textTitle: "This category\nhas not data yet.",
+            maxLine: 3,
             fontSize: largeTextSize,
             fontWeight: regularBoldFontWeight,
             fontColor: redColor.withOpacity(0.5),

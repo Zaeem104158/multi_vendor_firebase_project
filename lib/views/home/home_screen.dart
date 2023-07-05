@@ -1,6 +1,10 @@
+import 'dart:developer';
+
+import 'package:firebase_multi_vendor_project/components/animated_background_component.dart';
 import 'package:firebase_multi_vendor_project/components/design_component.dart';
 import 'package:firebase_multi_vendor_project/components/icon_button_component.dart';
 import 'package:firebase_multi_vendor_project/components/text_component.dart';
+import 'package:firebase_multi_vendor_project/components/wave_clipper.dart';
 import 'package:firebase_multi_vendor_project/utilits/navigation_routs.dart';
 import 'package:firebase_multi_vendor_project/utilits/style.dart';
 import 'package:firebase_multi_vendor_project/views/category/category_list/category_list.dart';
@@ -16,8 +20,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> _animation;
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(seconds: 3),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 00, end: -50).animate(_controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.stop();
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,15 +122,22 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: TabBarView(children: [
-          MenGalleryWidget(),
-          WomenGalleryWidget(),
-          KidsGalleryWidget(),
-          ElectornicsGalleryWidget(),
-          ShoesGalleryWidget(),
-          BeautyGalleryWidget(),
-          AccessoriesGalleryWidget(),
-        ]),
+        body: Container(
+          child: Stack(
+            children: [
+              AnimatedBackground(_animation),
+              TabBarView(children: [
+                MenGalleryWidget(),
+                WomenGalleryWidget(),
+                KidsGalleryWidget(),
+                ElectornicsGalleryWidget(),
+                ShoesGalleryWidget(),
+                BeautyGalleryWidget(),
+                AccessoriesGalleryWidget(),
+              ]),
+            ],
+          ),
+        ),
       ),
     );
   }

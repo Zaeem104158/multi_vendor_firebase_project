@@ -28,7 +28,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     String email = await readFromSharedPreferences('currentEmail') ?? '';
     String password = await readFromSharedPreferences('currentPassword') ?? '';
 
-    Timer.periodic(Duration(minutes: 5), (timer) async {
+    Timer.periodic(Duration(minutes: 1), (timer) async {
       log("Here run bug");
       log("$email $password");
       bool isVerified = await provider.getEmailVerified(context,

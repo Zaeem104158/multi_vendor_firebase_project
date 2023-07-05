@@ -2,6 +2,7 @@ import 'package:firebase_multi_vendor_project/l10n/l10n.dart';
 import 'package:firebase_multi_vendor_project/models/productdata_model_class.dart';
 import 'package:firebase_multi_vendor_project/utilits/common_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UiProvider extends ChangeNotifier {
@@ -112,5 +113,37 @@ class UiProvider extends ChangeNotifier {
   void setFullNameEdit() {
     isFullNameEdit = !isFullNameEdit;
     notifyListeners();
+  }
+
+  // late AnimationController _controller;
+  // late Animation<double> _animation;
+
+  // AnimationProvider() {
+  //   _controller = AnimationController(
+  //     vsync: TickerProviderImpl(),
+  //     duration: Duration(seconds: 1),
+  //   );
+
+  //   _animation = CurvedAnimation(
+  //     parent: _controller,
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
+
+  // Animation<double> get animation => _animation;
+
+  // void startAnimation() {
+  //   if (_controller.isCompleted) {
+  //     _controller.reverse();
+  //   } else {
+  //     _controller.forward();
+  //   }
+  // }
+}
+
+class TickerProviderImpl extends TickerProvider {
+  @override
+  Ticker createTicker(TickerCallback onTick) {
+    return Ticker(onTick);
   }
 }
