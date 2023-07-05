@@ -10,6 +10,7 @@ import 'package:firebase_multi_vendor_project/views/home/product_details_screen/
 import 'package:firebase_multi_vendor_project/views/provider/ui_provider/ui_provider.dart';
 import 'package:firebase_multi_vendor_project/views/provider/wishlist_provider/wishlist_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -38,7 +39,7 @@ class ProductCardComponent extends StatelessWidget {
             (productDataLength! / gridProductRow!).ceil() *
             (1 / gridAspectRatio!);
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: REdgeInsets.all(16.0),
       child: SizedBox(
         height: calcHeight,
         width: screenWidth!,
@@ -70,15 +71,15 @@ class ProductCardComponent extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: whiteColor,
-                        borderRadius: BorderRadius.circular(20.0),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: Colors.grey.withOpacity(0.5),
-                        //     spreadRadius: 5,
-                        //     blurRadius: 10,
-                        //     offset: Offset(0, 3), // changes position of shadow
-                        //   ),
-                        // ],
+                        borderRadius: BorderRadius.circular(20.0.sp),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5.sp,
+                            blurRadius: 10,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,22 +87,22 @@ class ProductCardComponent extends StatelessWidget {
                           //Product Image
                           ClipRRect(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0.sp)),
                             child: Container(
                               constraints: BoxConstraints(
-                                  minHeight: 100, maxHeight: 250),
+                                  minHeight: 100.sp, maxHeight: 250.sp),
                               child: CachedNetworkImage(
                                   imageUrl: data.productImageFile![0],
                                   color: Colors.black.withOpacity(0.2),
                                   colorBlendMode: BlendMode.darken,
-                                  height: 200,
-                                  width: 250,
+                                  height: 200.sp,
+                                  width: 250.sp,
                                   progressIndicatorBuilder: (context, url,
                                           downloadProgress) =>
                                       SizedBox(
                                           //height: 80,
                                           child: Padding(
-                                        padding: const EdgeInsets.all(0.0),
+                                        padding: REdgeInsets.all(0.0),
                                         child: Center(
                                           child: CircularProgressIndicator(
                                               value: downloadProgress.progress,
@@ -117,12 +118,12 @@ class ProductCardComponent extends StatelessWidget {
                             isCenterText: true,
                             isClickAble: false,
                             fontWeight: regularFontWeight,
-                            fontSize: regularTextSize,
-                            textPadding: EdgeInsets.all(4),
+                            fontSize: regularTextSize.sp,
+                            textPadding: REdgeInsets.all(4),
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: REdgeInsets.only(right: 18.0, left: 4),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -135,8 +136,8 @@ class ProductCardComponent extends StatelessWidget {
                                   isCenterText: false,
                                   isClickAble: false,
                                   fontWeight: regularBoldFontWeight,
-                                  fontSize: smallTextSize,
-                                  textPadding: EdgeInsets.all(0),
+                                  fontSize: smallTextSize.sp,
+                                  textPadding: REdgeInsets.all(0),
                                   fontColor: data.productDiscount == "0"
                                       ? blackColor.withOpacity(0.8)
                                       : redColor.shade900,
@@ -155,8 +156,8 @@ class ProductCardComponent extends StatelessWidget {
                                           isCenterText: false,
                                           isClickAble: false,
                                           fontWeight: regularFontWeight,
-                                          fontSize: regularTextSize,
-                                          textPadding: EdgeInsets.all(0),
+                                          fontSize: regularTextSize.sp,
+                                          textPadding: REdgeInsets.all(0),
                                           textDecoration:
                                               data.productDiscount == "0"
                                                   ? TextDecoration.none
@@ -171,9 +172,9 @@ class ProductCardComponent extends StatelessWidget {
                                                 isCenterText: false,
                                                 isClickAble: false,
                                                 fontWeight: regularFontWeight,
-                                                fontSize: regularTextSize,
+                                                fontSize: regularTextSize.sp,
                                                 textPadding:
-                                                    EdgeInsets.all(0.0),
+                                                    REdgeInsets.all(0.0),
                                                 fontColor: redColor.shade500,
                                               )
                                             : SizedBox(),
@@ -190,7 +191,7 @@ class ProductCardComponent extends StatelessWidget {
                                           ? Icons.favorite
                                           : Icons.favorite_outline,
                                       iconColor: redColor,
-                                      iconSize: mediumIconSize,
+                                      iconSize: mediumIconSize.sp,
                                       iconPadding: EdgeInsets.zero,
                                       onPressed: () {
                                         bool hasProduct = false;
@@ -247,16 +248,16 @@ class ProductCardComponent extends StatelessWidget {
                   data.productNew!
                       ? Positioned(
                           child: Container(
-                          height: 30,
-                          width: 60,
+                          height: 30.sp,
+                          width: 60.sp,
                           decoration: BoxDecoration(
                             color: redColor,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.sp),
                           ),
                           child: CustomTextComponet(
                             textTitle: AppLocalizations.of(context)!.new_title,
                             isCenterText: true,
-                            fontSize: mediumTextSize,
+                            fontSize: smallTextSize.sp,
                             fontColor: whiteColor,
                           ),
                         ))
