@@ -142,6 +142,33 @@ class SellerLoginScreen extends StatelessWidget {
                   child: CustomTextComponet(
                     textTitle: AppLocalizations.of(context)!.login,
                     isClickAble: true,
+                    onPressed: 
+                    
+                    context
+                                .watch<AuthController>()
+                                .isLoginSubmitButtonVisible &&
+                            isLoginValidated(
+                                email: context
+                                    .read<AuthController>()
+                                    .emailTextEditingController
+                                    .text,
+                                password: context
+                                    .read<AuthController>()
+                                    .passwordTextEditingController
+                                    .text)?(){
+                                      context
+                                    .read<AuthController>().loginSeller(context, context
+                                    .read<AuthController>()
+                                    .emailTextEditingController
+                                    .text, context
+                                    .read<AuthController>()
+                                    .passwordTextEditingController
+                                    .text);
+                                    }
+                                    :
+                    (){
+
+                    },
                   ),
                 ),
               ),

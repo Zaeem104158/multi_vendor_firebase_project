@@ -142,8 +142,7 @@ class CustomerLoginScreen extends StatelessWidget {
                   child: CustomTextComponet(
                     textTitle: AppLocalizations.of(context)!.login,
                     isClickAble: true,
-                    onPressed: (){
-                         context.read<AuthController>()
+                    onPressed:context.read<AuthController>()
                                 .isLoginSubmitButtonVisible &&
                             isLoginValidated(
                                 email: context
@@ -153,15 +152,16 @@ class CustomerLoginScreen extends StatelessWidget {
                                 password: context
                                     .read<AuthController>()
                                     .passwordTextEditingController
-                                    .text) ? 
+                                    .text)? (){
+                          
                                     context.read<AuthController>().loginCustomer(context, context
                                     .read<AuthController>()
                                     .emailTextEditingController
                                     .text, context
                                     .read<AuthController>()
                                     .passwordTextEditingController
-                                    .text): (){};
-                    },
+                                    .text);
+                    }:(){}
                   ),
                 ),
               ),
